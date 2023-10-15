@@ -9,7 +9,7 @@ return [
         ],
     ],
     'seeder_patterns' => [
-        'Modules/*/Database/Seeders/*.php',
+        'Modules/*/Database/Seeders/*DatabaseSeeder.php',
     ],
     'route_patterns' => [
         'Modules/*/Routes/*.php',

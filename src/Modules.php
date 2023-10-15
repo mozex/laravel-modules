@@ -10,7 +10,7 @@ class Modules
     use FindsSeeder;
 
     /**
-     * @return Collection<array-key, array{module: string, path: string}>
+     * @return Collection<array-key, array{module: string, path: string, order: int}>
      */
     public function getModulesAssets(array $patterns): Collection
     {
@@ -41,9 +41,11 @@ class Modules
                 return [
                     'module' => mb_strtolower($result[1]),
                     'path' => $path,
+                    'order' => (int) (config('modules.modules', [])[$result[1]]['order'] ?? 9999),
                 ];
             })
-            ->filter($this->isModuleActive(...));
+            ->filter($this->isModuleActive(...))
+            ->sortBy('order');
     }
 
     public function isModuleActive(array $asset): bool

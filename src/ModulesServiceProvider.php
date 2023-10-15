@@ -2,6 +2,8 @@
 
 namespace Mozex\Modules;
 
+use Illuminate\Contracts\Container\BindingResolutionException;
+use Illuminate\Contracts\Foundation\CachesConfiguration;
 use Mozex\Modules\Concerns\SupportsCommand;
 use Mozex\Modules\Concerns\SupportsConfig;
 use Mozex\Modules\Concerns\SupportsFactory;
@@ -51,5 +53,20 @@ class ModulesServiceProvider extends PackageServiceProvider
     public function packageRegistered(): void
     {
         $this->registerHelpers();
+    }
+
+    /**
+     * @throws BindingResolutionException
+     */
+    protected function mergeConfigWithProiorityFrom(string $path, string $key): void
+    {
+        if (! ($this->app instanceof CachesConfiguration && $this->app->configurationIsCached())) {
+            $config = $this->app->make('config');
+
+            $config->set($key, array_merge(
+                $config->get($key, []),
+                require $path
+            ));
+        }
     }
 }

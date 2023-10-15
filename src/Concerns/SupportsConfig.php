@@ -17,7 +17,7 @@ trait SupportsConfig
                     $asset['path'] => config_path("{$targetFileName}.php"),
                 ], 'config');
 
-                $this->mergeConfigFrom(
+                $this->mergeConfigWithProiorityFrom(
                     $asset['path'],
                     $fileName === 'config' ? $asset['module'] : $fileName
                 );
