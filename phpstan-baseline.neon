@@ -1,0 +1,16 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Call to static method resources\\(\\) on an unknown class Laravel\\\\Nova\\\\Nova\\.$#"
+			count: 1
+			path: src/ModulesServiceProvider.php
+
+		-
+			message: "#^Class Laravel\\\\Nova\\\\Actions\\\\ActionResource not found\\.$#"
+			count: 1
+			path: src/ModulesServiceProvider.php
+
+		-
+			message: "#^Class Laravel\\\\Nova\\\\Resource not found\\.$#"
+			count: 1
+			path: src/ModulesServiceProvider.php
