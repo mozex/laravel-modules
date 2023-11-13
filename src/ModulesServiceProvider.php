@@ -11,6 +11,7 @@ use Mozex\Modules\Concerns\SupportsHelpers;
 use Mozex\Modules\Concerns\SupportsLivewire;
 use Mozex\Modules\Concerns\SupportsMigration;
 use Mozex\Modules\Concerns\SupportsNova;
+use Mozex\Modules\Concerns\SupportsPolicy;
 use Mozex\Modules\Concerns\SupportsRoutes;
 use Mozex\Modules\Concerns\SupportsTranslation;
 use Mozex\Modules\Concerns\SupportsView;
@@ -26,6 +27,7 @@ class ModulesServiceProvider extends PackageServiceProvider
     use SupportsLivewire;
     use SupportsMigration;
     use SupportsNova;
+    use SupportsPolicy;
     use SupportsRoutes;
     use SupportsTranslation;
     use SupportsView;
@@ -42,6 +44,7 @@ class ModulesServiceProvider extends PackageServiceProvider
         $this->bootRoutes();
         $this->bootMigrations();
         $this->bootFactories();
+        $this->bootPolicies();
         $this->bootTranslations();
         $this->bootConfigs();
         $this->bootViews();
