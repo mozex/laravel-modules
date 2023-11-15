@@ -41,7 +41,9 @@ return [
         'Modules/*/Helpers/*.php',
         'Modules/*/Helpers.php',
     ],
-
+    'kernel_patterns' => [
+        'Modules/*/Console/Kernel.php',
+    ],
     'api_middleware' => [
         'api',
     ],
