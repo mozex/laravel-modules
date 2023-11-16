@@ -4,10 +4,12 @@ namespace Mozex\Modules;
 
 use Illuminate\Support\Collection;
 use Mozex\Modules\Concerns\FindsSeeder;
+use Mozex\Modules\Concerns\GetsSchedules;
 
 class Modules
 {
     use FindsSeeder;
+    use GetsSchedules;
 
     /**
      * @return Collection<array-key, array{module: string, path: string, order: int}>

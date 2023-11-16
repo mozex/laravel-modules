@@ -4,7 +4,6 @@ namespace Mozex\Modules;
 
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Contracts\Foundation\CachesConfiguration;
-use Mozex\Modules\Concerns\SupportSchedules;
 use Mozex\Modules\Concerns\SupportsCommand;
 use Mozex\Modules\Concerns\SupportsConfig;
 use Mozex\Modules\Concerns\SupportsFactory;
@@ -21,7 +20,6 @@ use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 class ModulesServiceProvider extends PackageServiceProvider
 {
-    use SupportSchedules;
     use SupportsCommand;
     use SupportsConfig;
     use SupportsFactory;
@@ -53,7 +51,6 @@ class ModulesServiceProvider extends PackageServiceProvider
         $this->bootCommands();
         $this->bootNova();
         $this->bootLivewire();
-        $this->bootSchedules();
     }
 
     public function packageRegistered(): void
