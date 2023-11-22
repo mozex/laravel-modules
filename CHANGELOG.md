@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-modules` will be documented in this file.
 
+## 1.2.1 - 2023-11-16
+
+- Fix schedule loading
+
 ## 1.2.0 - 2023-11-15
 
 - Support Schedules
