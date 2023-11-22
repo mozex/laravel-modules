@@ -41,6 +41,9 @@ return [
         'Modules/*/Helpers/*.php',
         'Modules/*/Helpers.php',
     ],
+    'service_provider_patterns' => [
+        'Modules/*/Providers/*.php',
+    ],
     'kernel_patterns' => [
         'Modules/*/Console/Kernel.php',
     ],

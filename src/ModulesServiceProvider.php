@@ -13,6 +13,7 @@ use Mozex\Modules\Concerns\SupportsMigration;
 use Mozex\Modules\Concerns\SupportsNova;
 use Mozex\Modules\Concerns\SupportsPolicy;
 use Mozex\Modules\Concerns\SupportsRoutes;
+use Mozex\Modules\Concerns\SupportsServiceProviders;
 use Mozex\Modules\Concerns\SupportsTranslation;
 use Mozex\Modules\Concerns\SupportsView;
 use Spatie\LaravelPackageTools\Package;
@@ -29,6 +30,7 @@ class ModulesServiceProvider extends PackageServiceProvider
     use SupportsNova;
     use SupportsPolicy;
     use SupportsRoutes;
+    use SupportsServiceProviders;
     use SupportsTranslation;
     use SupportsView;
 
@@ -56,6 +58,7 @@ class ModulesServiceProvider extends PackageServiceProvider
     public function packageRegistered(): void
     {
         $this->registerHelpers();
+        $this->registerServicePorviders();
     }
 
     /**
