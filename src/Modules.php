@@ -2,72 +2,67 @@
 
 namespace Mozex\Modules;
 
-use Illuminate\Support\Collection;
-use Mozex\Modules\Concerns\FindsSeeder;
-use Mozex\Modules\Concerns\GetsSchedules;
+use Mozex\Modules\Enums\AssetType;
+use Spatie\Regex\Regex;
 
 class Modules
 {
-    use FindsSeeder;
-    use GetsSchedules;
+    public string $base_path;
 
-    /**
-     * @return Collection<array-key, array{module: string, path: string, order: int}>
-     */
-    public function getModulesAssets(array $patterns): Collection
+    public function __construct()
     {
-        $assets = collect();
-
-        foreach ($patterns as $pattern) {
-            if (is_array($pattern)) {
-                $flags = $pattern['flags'] ?? 0;
-                $pattern = $pattern['pattern'];
-            }
-
-            $assets->push(
-                ...glob(
-                    pattern: base_path($pattern),
-                    flags: $flags ?? 0
-                )
-            );
-        }
-
-        return $assets
-            ->map(function (string $path) {
-                preg_match(
-                    '/Modules\/(.*?)\//',
-                    $path,
-                    $result
-                );
-
-                return [
-                    'module' => mb_strtolower($result[1]),
-                    'path' => $path,
-                    'order' => (int) (config('modules.modules', [])[$result[1]]['order'] ?? 9999),
-                ];
-            })
-            ->filter($this->isModuleActive(...))
-            ->sortBy('order');
+        $this->base_path = base_path();
     }
 
-    public function isModuleActive(array $asset): bool
+    public function setBasePath(string $path): void
     {
-        $module = config('modules.modules', [])[$asset['module']] ?? null;
-
-        if (empty($module) || ! is_array($module) || ! isset($module['active'])) {
-            return true;
-        }
-
-        return $module['active'];
+        $this->base_path = $path;
     }
 
-    public function makeNamespaceForAsset(array $asset): string
+    public function basePath(string $path = ''): string
     {
-        return str($asset['path'])
-            ->after(realpath(base_path()).DIRECTORY_SEPARATOR)
-            ->replace(['/', '.php'], ['\\', ''])
-            ->explode('\\')
-            ->map(ucfirst(...))
-            ->implode('\\');
+        return sprintf(
+            '%s/%s',
+            rtrim($this->base_path, '/'),
+            ltrim($path, '/')
+        );
+    }
+
+    public function modulesPath(string $path = ''): string
+    {
+        return $this->basePath(
+            sprintf(
+                '%s/%s',
+                config('modules.modules_directory'),
+                ltrim($path, '/')
+            )
+        );
+    }
+
+    public function moduleNameFromNamespace(string $namespace): string
+    {
+        return Regex::match(
+            pattern: '/'.config('modules.modules_directory').'\\\\(.*?)\\\\/',
+            subject: $namespace
+        )->groupOr(1, '');
+    }
+
+    public function moduleNameFromPath(string $path): ?string
+    {
+        return Regex::match(
+            pattern: '/'.config('modules.modules_directory').'\/(.*?)\//',
+            subject: $path
+        )->groupOr(1, '');
+    }
+
+    public function seeders(): array
+    {
+        if (AssetType::Seeders->isDeactive()) {
+            return [];
+        }
+
+        return AssetType::Seeders->scout()->collect()
+            ->pluck('namespace')
+            ->toArray();
     }
 }

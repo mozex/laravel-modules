@@ -1,6 +1,11 @@
 parameters:
 	ignoreErrors:
 		-
+			message: "#^Unsafe usage of new static\\(\\)\\.$#"
+			count: 1
+			path: src/Contracts/BaseScout.php
+
+		-
 			message: "#^Call to static method resources\\(\\) on an unknown class Laravel\\\\Nova\\\\Nova\\.$#"
 			count: 1
 			path: src/ModulesServiceProvider.php
@@ -8,9 +13,9 @@ parameters:
 		-
 			message: "#^Class Laravel\\\\Nova\\\\Actions\\\\ActionResource not found\\.$#"
 			count: 1
-			path: src/ModulesServiceProvider.php
+			path: src/Scouts/NovaResourcesScout.php
 
 		-
 			message: "#^Class Laravel\\\\Nova\\\\Resource not found\\.$#"
 			count: 1
-			path: src/ModulesServiceProvider.php
+			path: src/Scouts/NovaResourcesScout.php

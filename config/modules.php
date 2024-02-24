@@ -1,58 +1,117 @@
 <?php
 
+use Mozex\Modules\Enums\AssetType;
+
 return [
-    'migration_patterns' => [
-        'Modules/*/Database/Migrations',
-        [
-            'pattern' => 'Modules/*/Database/Migrations/*',
-            'flags' => GLOB_ONLYDIR,
+    'modules_directory' => 'Modules',
+    'modules_namespace' => 'Modules\\',
+    'assets' => [
+        AssetType::Commands->value => [
+            'active' => true,
+            'patterns' => [
+                '*/Console/Commands',
+            ],
+        ],
+        AssetType::Migrations->value => [
+            'active' => true,
+            'patterns' => [
+                '*/Database/Migrations',
+            ],
+        ],
+        AssetType::Helpers->value => [
+            'active' => true,
+            'patterns' => [
+                '*/Helpers/*.php',
+                '*/Helpers.php',
+            ],
+        ],
+        AssetType::ServiceProviders->value => [
+            'active' => true,
+            'patterns' => [
+                '*/Providers',
+            ],
+        ],
+        AssetType::Seeders->value => [
+            'active' => true,
+            'patterns' => [
+                '*/Database/Seeders',
+            ],
+        ],
+        AssetType::Translations->value => [
+            'active' => true,
+            'patterns' => [
+                '*/Resources/lang',
+            ],
+        ],
+        AssetType::Schedules->value => [
+            'active' => true,
+            'patterns' => [
+                '*/Console',
+            ],
+        ],
+        AssetType::Configs->value => [
+            'active' => true,
+            'patterns' => [
+                '*/Config/*.php',
+            ],
+        ],
+        AssetType::Views->value => [
+            'active' => true,
+            'patterns' => [
+                '*/Resources/views',
+            ],
+        ],
+        AssetType::Routes->value => [
+            'active' => true,
+            'patterns' => [
+                '*/Routes/*.php',
+            ],
+            'groups' => [
+                'api' => [
+                    'prefix' => 'api',
+                    'middlewares' => ['api'],
+                ],
+                'web' => [
+                    'middlewares' => ['web'],
+                ],
+                //                'localized' => [
+                //                    'middlewares' => [
+                //                        'web',
+                //                        'localeSessionRedirect',
+                //                        'localizationRedirect',
+                //                    ],
+                //                    'prefix' => LaravelLocalization::setLocale()
+                //                ]
+            ],
+        ],
+        AssetType::Models->value => [
+            'namespace' => 'Models\\',
+        ],
+        AssetType::Factories->value => [
+            'active' => true,
+            'namespace' => 'Database\\Factories\\',
+        ],
+        AssetType::Policies->value => [
+            'active' => true,
+            'namespace' => 'Policies\\',
+        ],
+        AssetType::LivewireComponents->value => [
+            'active' => false,
+            'patterns' => [
+                '*/Livewire',
+            ],
+        ],
+        AssetType::NovaResources->value => [
+            'active' => false,
+            'patterns' => [
+                '*/Nova',
+            ],
         ],
     ],
-    'seeder_patterns' => [
-        'Modules/*/Database/Seeders/*DatabaseSeeder.php',
+    'modules' => [
+        // 'Shared' => [
+        //     'active' => true,
+        //     'order' => 1, // Optional
+        // ],
     ],
-    'route_patterns' => [
-        'Modules/*/Routes/*.php',
-        'routes/Modules/*/*.php',
-    ],
-    'view_patterns' => [
-        'Modules/*/Resources/views',
-        'resources/Modules/*/views',
-    ],
-    'translation_patterns' => [
-        'Modules/*/Resources/lang',
-        'resources/Modules/*/lang',
-        'lang/Modules/*/',
-    ],
-    'config_patterns' => [
-        'Modules/*/Config/*.php',
-        'config/Modules/*/*.php',
-    ],
-    'command_patterns' => [
-        'Modules/*/Console/Commands/*.php',
-    ],
-    'nova_resource_patterns' => [
-        'Modules/*/Nova/*.php',
-    ],
-    'livewire_component_patterns' => [
-        'Modules/*/Livewire/*.php',
-    ],
-    'helper_patterns' => [
-        'Modules/*/Helpers/*.php',
-        'Modules/*/Helpers.php',
-    ],
-    'service_provider_patterns' => [
-        'Modules/*/Providers/*.php',
-    ],
-    'kernel_patterns' => [
-        'Modules/*/Console/Kernel.php',
-    ],
-    'api_middleware' => [
-        'api',
-    ],
-    'default_middleware' => [
-        'web',
-    ],
-    'route_groups' => [],
-    'modules' => [],
 ];

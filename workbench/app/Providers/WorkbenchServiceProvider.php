@@ -1,25 +1,19 @@
 <?php
 
-namespace Workbench\App\Providers;
+namespace App\Providers;
 
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Mozex\Modules\Facades\Modules;
 
 class WorkbenchServiceProvider extends ServiceProvider
 {
-    /**
-     * Register services.
-     */
     public function register(): void
     {
-        //
+        Modules::setBasePath(__DIR__.'/../../');
     }
 
-    /**
-     * Bootstrap services.
-     */
     public function boot(): void
     {
-        Route::view('/', 'welcome');
+
     }
 }
