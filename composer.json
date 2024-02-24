@@ -28,7 +28,7 @@
         "livewire/livewire": "^3.4",
         "nunomaduro/collision": "^7.8|^8.1",
         "orchestra/testbench": "^8.21|^9.0",
-        "pestphp/pest": "^2.20",
+        "pestphp/pest": "^2.31",
         "pestphp/pest-plugin-laravel": "^2.0",
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan-deprecation-rules": "^1.0",
