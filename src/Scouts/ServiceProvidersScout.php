@@ -23,6 +23,7 @@ class ServiceProvidersScout extends ModuleClassScout
             ->classes()
             ->extending(ServiceProvider::class)
             ->custom(fn (DiscoveredClass $structure) => ! $structure->isAbstract)
+            ->full()
             ->sortBy(Sort::Name);
     }
 }

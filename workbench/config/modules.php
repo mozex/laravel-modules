@@ -1,6 +1,39 @@
 <?php
 
+use Mozex\Modules\Enums\AssetType;
+
 return [
+    AssetType::Routes->value => [
+        'active' => true,
+        'patterns' => [
+            '*/Routes/*.php',
+        ],
+        'groups' => [
+            'api' => [
+                'prefix' => 'api',
+                'middlewares' => ['api'],
+            ],
+            'web' => [
+                'middlewares' => ['web'],
+            ],
+            'custom' => [
+                'prefix' => 'custom',
+                'middlewares' => ['web', 'api'],
+            ],
+        ],
+    ],
+    AssetType::LivewireComponents->value => [
+        'active' => true,
+        'patterns' => [
+            '*/Livewire',
+        ],
+    ],
+    AssetType::NovaResources->value => [
+        'active' => true,
+        'patterns' => [
+            '*/Nova',
+        ],
+    ],
     'modules' => [
         'First' => [
             'active' => true,

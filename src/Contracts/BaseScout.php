@@ -7,6 +7,7 @@ use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\Facades\Modules;
 use Spatie\StructureDiscoverer\Cache\DiscoverCacheDriver;
 use Spatie\StructureDiscoverer\Cache\FileDiscoverCacheDriver;
+use Spatie\StructureDiscoverer\Data\DiscoveredClass;
 
 abstract class BaseScout
 {
@@ -34,15 +35,21 @@ abstract class BaseScout
 
     public function get(): array
     {
+        if ($this->asset()->isDeactive()) {
+            return [];
+        }
+
         if ($this->isCached()) {
-            return $this->cacheDriver()->get($this->identifier());
+            return $this->cacheDriver()->get(
+                $this->identifier()
+            );
         }
 
         return $this->getWithoutCache();
     }
 
     /**
-     * @return Collection<int, array{module: string, path?: string, namespace?: string}>
+     * @return Collection<int, array{module: string, path: string, namespace?: string}>
      */
     public function collect(): Collection
     {
@@ -51,6 +58,10 @@ abstract class BaseScout
 
     public function cache(): array
     {
+        if ($this->asset()->isDeactive()) {
+            return [];
+        }
+
         $structures = $this->getWithoutCache();
 
         $this->cacheDriver()->put(
@@ -63,14 +74,18 @@ abstract class BaseScout
 
     public function clear(): static
     {
-        $this->cacheDriver()->forget($this->identifier());
+        $this->cacheDriver()->forget(
+            $this->identifier()
+        );
 
         return $this;
     }
 
     public function isCached(): bool
     {
-        return $this->cacheDriver()->has($this->identifier());
+        return $this->cacheDriver()->has(
+            $this->identifier()
+        );
     }
 
     protected function patterns(): array
@@ -84,19 +99,16 @@ abstract class BaseScout
     {
         return collect($result)
             ->map(
-                function (string $item) {
-                    if ((is_dir($item) || is_file($item)) && ! class_exists($item)) {
-                        return [
-                            'module' => Modules::moduleNameFromPath($item),
-                            'path' => realpath($item),
-                        ];
-                    }
-
-                    return [
-                        'module' => Modules::moduleNameFromNamespace($item),
-                        'namespace' => $item,
-                    ];
-                }
+                fn (string|DiscoveredClass $item) => $item instanceof DiscoveredClass
+                    ? [
+                        'module' => Modules::moduleNameFromNamespace($item->namespace),
+                        'path' => realpath($item->file),
+                        'namespace' => $item->getFcqn(),
+                    ]
+                    : [
+                        'module' => Modules::moduleNameFromPath($item),
+                        'path' => realpath($item),
+                    ]
             )
             ->sortBy(
                 fn (array $asset) => (int) (config('modules.modules', [])[$asset['module']]['order'] ?? 9999)

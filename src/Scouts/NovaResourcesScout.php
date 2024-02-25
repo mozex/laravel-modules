@@ -27,6 +27,7 @@ class NovaResourcesScout extends ModuleClassScout
                 fn (DiscoveredClass $structure) => ! $structure->isAbstract
                     && ! in_array(ActionResource::class, $structure->extendsChain)
             )
+            ->full()
             ->sortBy(Sort::Name);
     }
 }

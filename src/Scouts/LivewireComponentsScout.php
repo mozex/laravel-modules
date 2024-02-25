@@ -23,6 +23,7 @@ class LivewireComponentsScout extends ModuleClassScout
             ->classes()
             ->extending(Component::class)
             ->custom(fn (DiscoveredClass $structure) => ! $structure->isAbstract)
+            ->full()
             ->sortBy(Sort::Name);
     }
 }

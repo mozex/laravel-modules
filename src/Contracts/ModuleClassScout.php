@@ -10,12 +10,12 @@ abstract class ModuleClassScout extends BaseScout
     public function getWithoutCache(): array
     {
         try {
-            $result = $this->definition()->getWithoutCache();
+            return $this->transform(
+                $this->definition()->getWithoutCache()
+            );
         } catch (DirectoryNotFoundException) {
             return [];
         }
-
-        return $this->transform($result);
     }
 
     abstract protected function definition(): Discover;

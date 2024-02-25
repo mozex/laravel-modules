@@ -54,11 +54,11 @@ enum AssetType: string
     }
 
     /**
-     * @return array{active?: bool, patterns?: array<array-key, string>, namespace?: string, groups?: array}
+     * @return array{active?: bool, patterns?: array<array-key, string>, namespace?: string, groups?: array, priority?: bool}
      */
     public function config(): array
     {
-        return config('modules.assets')[$this->value] ?? [];
+        return config('modules')[$this->value] ?? [];
     }
 
     public function isActive(): bool
@@ -72,7 +72,7 @@ enum AssetType: string
     }
 
     /**
-     * @return array<array-key, string>
+     * @return ?array<array-key, string>
      */
     public function patterns(): ?array
     {

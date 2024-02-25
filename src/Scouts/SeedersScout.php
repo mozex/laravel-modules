@@ -28,6 +28,7 @@ class SeedersScout extends ModuleClassScout
             )
             ->extending(Seeder::class)
             ->custom(fn (DiscoveredClass $structure) => ! $structure->isAbstract)
+            ->full()
             ->sortBy(Sort::Name);
     }
 }

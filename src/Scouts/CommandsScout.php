@@ -23,6 +23,7 @@ class CommandsScout extends ModuleClassScout
             ->classes()
             ->extending(Command::class)
             ->custom(fn (DiscoveredClass $structure) => ! $structure->isAbstract)
+            ->full()
             ->sortBy(Sort::Name);
     }
 }

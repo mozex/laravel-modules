@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Str;
 use Laravel\Nova\Nova;
 use Livewire\Livewire;
 use Mozex\Modules\Commands\CacheCommand;
@@ -39,6 +38,7 @@ class ModulesServiceProvider extends PackageServiceProvider
         $this->bootTranslations();
         $this->bootConfigs();
         $this->bootViews();
+        $this->bootModels();
         $this->bootFactories();
         $this->bootPolicies();
         $this->bootRoutes();
@@ -109,10 +109,18 @@ class ModulesServiceProvider extends PackageServiceProvider
                 ->each(function (array $asset) use ($config): void {
                     $key = File::name($asset['path']);
 
-                    $config->set($key, array_merge(
-                        $config->get($key, []),
-                        require $asset['path']
-                    ));
+                    $config->set(
+                        key: $key,
+                        value: AssetType::Configs->config()['priority']
+                            ? array_merge(
+                                $config->get($key, []),
+                                require $asset['path']
+                            )
+                            : array_merge(
+                                require $asset['path'],
+                                $config->get($key, [])
+                            )
+                    );
                 });
         }
     }
@@ -125,8 +133,43 @@ class ModulesServiceProvider extends PackageServiceProvider
 
         AssetType::Views->scout()->collect()
             ->each(function (array $asset): void {
-                $this->loadViewsFrom($asset['path'], $asset['module']);
+                $this->loadViewsFrom($asset['path'], strtolower($asset['module']));
             });
+    }
+
+    protected function bootModels(): void
+    {
+        if (AssetType::Models->isDeactive()) {
+            return;
+        }
+
+        Factory::guessModelNamesUsing(function (Factory $factory) {
+            if ($module = Modules::moduleNameFromNamespace(get_class($factory))) {
+                return sprintf(
+                    '%s%s\\%s%s',
+                    config('modules.modules_namespace'),
+                    $module,
+                    AssetType::Models->config()['namespace'],
+                    str(get_class($factory))->after(
+                        sprintf(
+                            '%s%s\\%s',
+                            config('modules.modules_namespace'),
+                            $module,
+                            AssetType::Factories->config()['namespace']
+                        )
+                    )->replaceLast('Factory', '')
+                );
+            }
+
+            try {
+                (new ReflectionProperty(Factory::class, 'modelNameResolver'))
+                    ->setValue(null);
+
+                return $factory->modelName();
+            } finally {
+                $this->bootModels();
+            }
+        });
     }
 
     protected function bootFactories(): void
@@ -142,9 +185,8 @@ class ModulesServiceProvider extends PackageServiceProvider
                     config('modules.modules_namespace'),
                     $module,
                     AssetType::Factories->config()['namespace'],
-                    Str::after(
-                        subject: $modelName,
-                        search: sprintf(
+                    str($modelName)->after(
+                        sprintf(
                             '%s%s\\%s',
                             config('modules.modules_namespace'),
                             $module,
@@ -154,10 +196,14 @@ class ModulesServiceProvider extends PackageServiceProvider
                 );
             }
 
-            (new ReflectionProperty(Factory::class, 'factoryNameResolver'))
-                ->setValue(null);
+            try {
+                (new ReflectionProperty(Factory::class, 'factoryNameResolver'))
+                    ->setValue(null);
 
-            return Factory::resolveFactoryName($modelName);
+                return Factory::resolveFactoryName($modelName);
+            } finally {
+                $this->bootFactories();
+            }
         });
     }
 
@@ -174,9 +220,8 @@ class ModulesServiceProvider extends PackageServiceProvider
                     config('modules.modules_namespace'),
                     $module,
                     AssetType::Policies->config()['namespace'],
-                    Str::after(
-                        subject: $modelName,
-                        search: sprintf(
+                    str($modelName)->after(
+                        sprintf(
                             '%s%s\\%s',
                             config('modules.modules_namespace'),
                             $module,
@@ -186,14 +231,18 @@ class ModulesServiceProvider extends PackageServiceProvider
                 );
             }
 
-            $gate = $this->app->make(GateInstance::class);
+            try {
+                $gate = $this->app->make(GateInstance::class);
 
-            (new ReflectionProperty($gate, 'guessPolicyNamesUsingCallback'))
-                ->setValue($gate, null);
+                (new ReflectionProperty($gate, 'guessPolicyNamesUsingCallback'))
+                    ->setValue($gate, null);
 
-            $reflection = (new ReflectionMethod($gate, 'guessPolicyName'));
+                $reflection = (new ReflectionMethod($gate, 'guessPolicyName'));
 
-            return $reflection->invoke($gate, $modelName);
+                return $reflection->invoke($gate, $modelName);
+            } finally {
+                $this->bootPolicies();
+            }
         });
     }
 

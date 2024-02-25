@@ -2,6 +2,8 @@
 
 namespace Mozex\Modules\Contracts;
 
+use Illuminate\Support\Facades\File;
+
 abstract class ModuleDirectoryScout extends BaseScout
 {
     public function getWithoutCache(): array
@@ -10,7 +12,7 @@ abstract class ModuleDirectoryScout extends BaseScout
 
         collect($this->patterns())
             ->each(fn (string $pattern) => $assets->push(
-                ...glob(
+                ...File::glob(
                     pattern: $pattern,
                     flags: GLOB_ONLYDIR
                 )
