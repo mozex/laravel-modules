@@ -30,7 +30,7 @@ test('scout will select correct classes', function () {
 
 it('can register schedules', function () {
     $schedules = collect(app(Schedule::class)->events())
-        ->select('command')
+        ->pluck('command')
         ->flatten()
         ->toArray();
 
