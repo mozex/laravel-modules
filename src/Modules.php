@@ -28,6 +28,14 @@ class Modules
         );
     }
 
+    public function moduleNameFromNamespace(string $namespace): string
+    {
+        return Regex::match(
+            pattern: '/'.config('modules.modules_directory').'\\\\(.*?)\\\\/',
+            subject: $namespace
+        )->groupOr(1, '');
+    }
+
     public function modulesPath(string $path = ''): string
     {
         return $this->basePath(
@@ -37,14 +45,6 @@ class Modules
                 ltrim($path, '/')
             )
         );
-    }
-
-    public function moduleNameFromNamespace(string $namespace): string
-    {
-        return Regex::match(
-            pattern: '/'.config('modules.modules_directory').'\\\\(.*?)\\\\/',
-            subject: $namespace
-        )->groupOr(1, '');
     }
 
     public function moduleNameFromPath(string $path): ?string
