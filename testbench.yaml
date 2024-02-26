@@ -1,0 +1,8 @@
+providers:
+  - Livewire\LivewireServiceProvider
+  - App\Providers\WorkbenchServiceProvider
+  - Mozex\Modules\ModulesServiceProvider
+
+workbench:
+  discovers:
+    config: true
