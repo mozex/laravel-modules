@@ -111,4 +111,10 @@ return [
             '*/Nova',
         ],
     ],
+    AssetType::Listeners->value => [
+        'active' => true,
+        'patterns' => [
+            '*/Listeners',
+        ],
+    ],
 ];

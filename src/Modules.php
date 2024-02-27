@@ -51,7 +51,7 @@ class Modules
     {
         return Regex::match(
             pattern: '/'.config('modules.modules_directory').'\/(.*?)\//',
-            subject: $path
+            subject: str($path)->replace('\\', '/')->toString()
         )->groupOr(1, '');
     }
 

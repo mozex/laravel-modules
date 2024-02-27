@@ -2,6 +2,8 @@ providers:
   - Livewire\LivewireServiceProvider
   - App\Providers\WorkbenchServiceProvider
   - Mozex\Modules\ModulesServiceProvider
+  - App\Providers\EventServiceProvider
+  - Mozex\Modules\ModulesEventServiceProvider
 
 workbench:
   discovers:

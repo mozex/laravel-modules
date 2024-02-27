@@ -7,6 +7,7 @@ use Mozex\Modules\Scouts\BladeComponentsScout;
 use Mozex\Modules\Scouts\CommandsScout;
 use Mozex\Modules\Scouts\ConfigsScout;
 use Mozex\Modules\Scouts\HelpersScout;
+use Mozex\Modules\Scouts\ListenersScout;
 use Mozex\Modules\Scouts\LivewireComponentsScout;
 use Mozex\Modules\Scouts\MigrationsScout;
 use Mozex\Modules\Scouts\NovaResourcesScout;
@@ -35,6 +36,7 @@ enum AssetType: string
     case Factories = 'factories';
     case Policies = 'policies';
     case Models = 'models';
+    case Listeners = 'listeners';
 
     public function scout(): ?BaseScout
     {
@@ -52,6 +54,7 @@ enum AssetType: string
             self::Routes => RoutesScout::create(),
             self::LivewireComponents => LivewireComponentsScout::create(),
             self::NovaResources => NovaResourcesScout::create(),
+            self::Listeners => ListenersScout::create(),
             default => null,
         };
     }

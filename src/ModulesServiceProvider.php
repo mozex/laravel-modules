@@ -6,6 +6,7 @@ use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Contracts\Auth\Access\Gate as GateInstance;
 use Illuminate\Contracts\Foundation\CachesConfiguration;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Foundation\Events\DiscoverEvents;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Gate;
@@ -20,6 +21,7 @@ use ReflectionMethod;
 use ReflectionProperty;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
+use SplFileInfo;
 
 class ModulesServiceProvider extends PackageServiceProvider
 {
@@ -45,6 +47,7 @@ class ModulesServiceProvider extends PackageServiceProvider
         $this->bootPolicies();
         $this->bootRoutes();
         $this->bootSchedules();
+        $this->bootListeners();
         $this->bootLivewire();
         $this->bootNova();
     }
@@ -297,6 +300,37 @@ class ModulesServiceProvider extends PackageServiceProvider
         });
     }
 
+    protected function bootListeners(): void
+    {
+        if (AssetType::Listeners->isDeactive()) {
+            return;
+        }
+
+        DiscoverEvents::guessClassNamesUsing(function (SplFileInfo $file, $basePath) {
+            if (Modules::moduleNameFromPath($file->getRealPath())) {
+                return str($file->getRealPath())
+                    ->after(realpath(Modules::basePath()).DIRECTORY_SEPARATOR)
+                    ->before('.php')
+                    ->replace(DIRECTORY_SEPARATOR, '\\')
+                    ->ucfirst()
+                    ->toString();
+            }
+
+            try {
+                $discoverEvent = $this->app->make(DiscoverEvents::class);
+
+                (new ReflectionProperty($discoverEvent, 'guessClassNamesUsingCallback'))
+                    ->setValue(null);
+
+                $reflection = (new ReflectionMethod($discoverEvent, 'classFromFile'));
+
+                return $reflection->invoke($discoverEvent, $file, $basePath);
+            } finally {
+                $this->bootListeners();
+            }
+        });
+    }
+
     protected function bootLivewire(): void
     {
         if (! class_exists(Livewire::class)) {
@@ -372,7 +406,7 @@ class ModulesServiceProvider extends PackageServiceProvider
                         ->replace('/', '\/').'\//',
                     ''
                 )
-                ->replaceLast('.php', '')
+                ->before('.php')
                 ->explode('/')
                 ->filter();
 
