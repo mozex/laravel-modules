@@ -149,11 +149,7 @@ class ModulesServiceProvider extends PackageServiceProvider
             ->each(function (array $asset): void {
                 Blade::component(
                     class: $asset['namespace'],
-                    alias: sprintf(
-                        '%s::%s',
-                        strtolower($asset['module']),
-                        $this->getViewName($asset, AssetType::BladeComponents)
-                    )
+                    alias: $this->getViewName($asset, AssetType::BladeComponents)
                 );
             });
     }
@@ -384,17 +380,25 @@ class ModulesServiceProvider extends PackageServiceProvider
                 continue;
             }
 
-            return $sub
-                ->map(
-                    fn (string $view) => str($view)
-                        ->replaceMatches('/(?<! )[A-Z]/', '-$0')
-                        ->replaceFirst('-', '')
-                        ->lower()
-                        ->toString()
-                )
-                ->implode('.');
+            return sprintf(
+                '%s::%s',
+                strtolower($asset['module']),
+                $sub
+                    ->map(
+                        fn (string $view) => str($view)
+                            ->replaceMatches('/(?<! )[A-Z]/', '-$0')
+                            ->replaceFirst('-', '')
+                            ->lower()
+                            ->toString()
+                    )
+                    ->implode('.')
+            );
         }
 
-        return strtolower(class_basename($asset['namespace']));
+        return sprintf(
+            '%s::%s',
+            strtolower($asset['module']),
+            strtolower(class_basename($asset['namespace']))
+        );
     }
 }

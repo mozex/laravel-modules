@@ -37,17 +37,17 @@ it('can register livewire components', function () {
         });
 
     expect(Blade::render(
-        string: '<livewire:teams/>',
+        string: '<livewire:first::teams/>',
         deleteCachedView: true
     ))
         ->toContain('Teams Livewire Component')
         ->and(Blade::render(
-            string: '<livewire:list-users/>',
+            string: '<livewire:second::list-users/>',
             deleteCachedView: true
         ))
         ->toContain('List Users Livewire Component')
         ->and(Blade::render(
-            string: '<livewire:nested.nested-users/>',
+            string: '<livewire:first::nested.nested-users/>',
             deleteCachedView: true
         ))
         ->toContain('Nested Users Livewire Component');
