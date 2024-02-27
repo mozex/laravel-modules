@@ -35,4 +35,20 @@ it('can register livewire components', function () {
         ->each(function (array $asset) use ($components) {
             expect($components->getName($asset['namespace']))->not->toBeNull();
         });
+
+    expect(Blade::render(
+        string: '<livewire:teams/>',
+        deleteCachedView: true
+    ))
+        ->toContain('Teams Livewire Component')
+        ->and(Blade::render(
+            string: '<livewire:list-users/>',
+            deleteCachedView: true
+        ))
+        ->toContain('List Users Livewire Component')
+        ->and(Blade::render(
+            string: '<livewire:nested.nested-users/>',
+            deleteCachedView: true
+        ))
+        ->toContain('Nested Users Livewire Component');
 });

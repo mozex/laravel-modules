@@ -21,6 +21,9 @@
             <clover outputFile="build/logs/clover.xml"/>
         </report>
     </coverage>
+    <php>
+        <env name="APP_KEY" value="base64:Ftfzwdew7YHs1KzQvIOAoLAV/0VajVmSYPlUEmJm95A="/>
+    </php>
     <logging>
         <junit outputFile="build/report.junit.xml"/>
     </logging>

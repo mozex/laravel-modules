@@ -22,6 +22,13 @@ return [
             ],
         ],
     ],
+    AssetType::BladeComponents->value => [
+        'active' => true,
+        'patterns' => [
+            '*/View/Components',
+            '*/Components',
+        ],
+    ],
     AssetType::LivewireComponents->value => [
         'active' => true,
         'patterns' => [

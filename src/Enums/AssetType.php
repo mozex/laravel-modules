@@ -3,6 +3,7 @@
 namespace Mozex\Modules\Enums;
 
 use Mozex\Modules\Contracts\BaseScout;
+use Mozex\Modules\Scouts\BladeComponentsScout;
 use Mozex\Modules\Scouts\CommandsScout;
 use Mozex\Modules\Scouts\ConfigsScout;
 use Mozex\Modules\Scouts\HelpersScout;
@@ -27,6 +28,7 @@ enum AssetType: string
     case Schedules = 'schedules';
     case Configs = 'configs';
     case Views = 'views';
+    case BladeComponents = 'blade-components';
     case Routes = 'routes';
     case LivewireComponents = 'livewire-components';
     case NovaResources = 'nova-resources';
@@ -46,6 +48,7 @@ enum AssetType: string
             self::Schedules => SchedulesScout::create(),
             self::Configs => ConfigsScout::create(),
             self::Views => ViewsScout::create(),
+            self::BladeComponents => BladeComponentsScout::create(),
             self::Routes => RoutesScout::create(),
             self::LivewireComponents => LivewireComponentsScout::create(),
             self::NovaResources => NovaResourcesScout::create(),

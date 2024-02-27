@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Blade;
 use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\Facades\Modules;
 use Mozex\Modules\Scouts\ViewsScout;
@@ -33,4 +34,26 @@ it('can load views', function () {
             expect($views)->toHaveKey(strtolower($asset['module']))
                 ->and($views[strtolower($asset['module'])])->toHaveCount(1)->toContain($asset['path']);
         });
+
+    expect(view('first::first')->render())
+        ->toContain('First Page')
+        ->and(view('second::second')->render())
+        ->toContain('Second Page')
+        ->and(view('second::pages.page')->render())
+        ->toContain('Nested Page')
+        ->and(Blade::render(
+            string: '<x-first::input/>',
+            deleteCachedView: true
+        ))
+        ->toContain('Input Component')
+        ->and(Blade::render(
+            string: '<x-second::checkbox/>',
+            deleteCachedView: true
+        ))
+        ->toContain('Checkbox Component')
+        ->and(Blade::render(
+            string: '<x-second::button.submit/>',
+            deleteCachedView: true
+        ))
+        ->toContain('Submit Component');
 });

@@ -66,6 +66,12 @@ return [
             '*/Resources/views',
         ],
     ],
+    AssetType::BladeComponents->value => [
+        'active' => true,
+        'patterns' => [
+            '*/View/Components',
+        ],
+    ],
     AssetType::Routes->value => [
         'active' => true,
         'patterns' => [

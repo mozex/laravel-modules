@@ -6,6 +6,7 @@ use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Contracts\Auth\Access\Gate as GateInstance;
 use Illuminate\Contracts\Foundation\CachesConfiguration;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
@@ -38,6 +39,7 @@ class ModulesServiceProvider extends PackageServiceProvider
         $this->bootTranslations();
         $this->bootConfigs();
         $this->bootViews();
+        $this->bootBladeComponents();
         $this->bootModels();
         $this->bootFactories();
         $this->bootPolicies();
@@ -134,6 +136,25 @@ class ModulesServiceProvider extends PackageServiceProvider
         AssetType::Views->scout()->collect()
             ->each(function (array $asset): void {
                 $this->loadViewsFrom($asset['path'], strtolower($asset['module']));
+            });
+    }
+
+    protected function bootBladeComponents(): void
+    {
+        if (AssetType::BladeComponents->isDeactive()) {
+            return;
+        }
+
+        AssetType::BladeComponents->scout()->collect()
+            ->each(function (array $asset): void {
+                Blade::component(
+                    class: $asset['namespace'],
+                    alias: sprintf(
+                        '%s::%s',
+                        strtolower($asset['module']),
+                        $this->getViewName($asset, AssetType::BladeComponents)
+                    )
+                );
             });
     }
 
@@ -248,6 +269,10 @@ class ModulesServiceProvider extends PackageServiceProvider
 
     protected function bootRoutes(): void
     {
+        if ($this->app->routesAreCached()) {
+            return;
+        }
+
         if (AssetType::Routes->isDeactive()) {
             return;
         }
@@ -289,7 +314,7 @@ class ModulesServiceProvider extends PackageServiceProvider
         AssetType::LivewireComponents->scout()->collect()
             ->each(function (array $asset): void {
                 Livewire::component(
-                    str(class_basename($asset['namespace']))->kebab()->toString(),
+                    $this->getViewName($asset, AssetType::LivewireComponents),
                     $asset['namespace']
                 );
             });
@@ -336,5 +361,40 @@ class ModulesServiceProvider extends PackageServiceProvider
             ->each(function (array $asset) {
                 $this->app->register($asset['namespace']);
             });
+    }
+
+    protected function getViewName(array $asset, AssetType $type): string
+    {
+        foreach ($type->patterns() as $pattern) {
+            $sub = str(realpath($asset['path']))
+                ->replaceFirst(realpath(Modules::modulesPath()), '')
+                ->replace('\\', '/')
+                ->replaceFirst('/', '')
+                ->replaceMatches(
+                    '/'.str($pattern)
+                        ->replaceFirst('*', '.*?')
+                        ->replace('/', '\/').'\//',
+                    ''
+                )
+                ->replaceLast('.php', '')
+                ->explode('/')
+                ->filter();
+
+            if ($sub->first() === $asset['module'] && $sub->count() > 1) {
+                continue;
+            }
+
+            return $sub
+                ->map(
+                    fn (string $view) => str($view)
+                        ->replaceMatches('/(?<! )[A-Z]/', '-$0')
+                        ->replaceFirst('-', '')
+                        ->lower()
+                        ->toString()
+                )
+                ->implode('.');
+        }
+
+        return strtolower(class_basename($asset['namespace']));
     }
 }
