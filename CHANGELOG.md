@@ -2,6 +2,12 @@
 
 All notable changes to `laravel-modules` will be documented in this file.
 
+## 2.0.1 - 2024-02-28
+
+* add "as" for routes
+
+**Full Changelog**: https://github.com/mozex/laravel-modules/compare/2.0.0...2.0.1
+
 ## 2.0.0 - 2024-02-28
 
 ### What's Changed
