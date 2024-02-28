@@ -1,14 +1,10 @@
 # Laravel Modules
 
-[//]: # ([![Latest Version on Packagist]&#40;https://img.shields.io/packagist/v/mozex/laravel-modules.svg?style=flat-square&#41;]&#40;https://packagist.org/packages/mozex/laravel-modules&#41;)
-[//]: # ([![GitHub Tests Action Status]&#40;https://img.shields.io/github/actions/workflow/status/mozex/laravel-modules/tests.yml?branch=main&label=Tests&style=flat-square&#41;]&#40;https://github.com/mozex/laravel-modules/actions/workflows/tests.yml&#41;)
-[//]: # ([![GitHub Code Style Action Status]&#40;https://img.shields.io/github/actions/workflow/status/mozex/laravel-modules/code-styling.yml?branch=main&label=Code%20Styling&style=flat-square&#41;]&#40;https://github.com/mozex/laravel-modules/actions/workflows/code-styling.yml&#41;)
-[//]: # ([![GitHub Code Analysis Action Status]&#40;https://img.shields.io/github/actions/workflow/status/mozex/laravel-modules/code-analysis.yml?branch=main&label=Code%20Analysis&style=flat-square&#41;]&#40;https://github.com/mozex/laravel-modules/actions/workflows/code-analysis.yml&#41;)
-[//]: # ([![Total Downloads]&#40;https://img.shields.io/packagist/dt/mozex/laravel-modules.svg?style=flat-square&#41;]&#40;https://packagist.org/packages/mozex/laravel-modules&#41;)
-
-[![Tests](https://github.com/mozex/laravel-modules/actions/workflows/tests.yml/badge.svg)](https://github.com/mozex/laravel-modules/actions/workflows/tests.yml)
-[![Code Styling](https://github.com/mozex/laravel-modules/actions/workflows/code-styling.yml/badge.svg)](https://github.com/mozex/laravel-modules/actions/workflows/code-styling.yml)
-[![Code Analysis](https://github.com/mozex/laravel-modules/actions/workflows/code-analysis.yml/badge.svg)](https://github.com/mozex/laravel-modules/actions/workflows/code-analysis.yml)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/mozex/laravel-modules.svg?style=flat-square)](https://packagist.org/packages/mozex/laravel-modules)
+[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/mozex/laravel-modules/tests.yml?branch=main&label=Tests&style=flat-square)](https://github.com/mozex/laravel-modules/actions/workflows/tests.yml)
+[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/mozex/laravel-modules/code-styling.yml?branch=main&label=Code%20Styling&style=flat-square)](https://github.com/mozex/laravel-modules/actions/workflows/code-styling.yml)
+[![GitHub Code Analysis Action Status](https://img.shields.io/github/actions/workflow/status/mozex/laravel-modules/code-analysis.yml?branch=main&label=Code%20Analysis&style=flat-square)](https://github.com/mozex/laravel-modules/actions/workflows/code-analysis.yml)
+[![Total Downloads](https://img.shields.io/packagist/dt/mozex/laravel-modules.svg?style=flat-square)](https://packagist.org/packages/mozex/laravel-modules)
 
 This package allows you to manage your Laravel application modules.
 
