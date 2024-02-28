@@ -3,24 +3,14 @@
 use Mozex\Modules\Enums\AssetType;
 
 return [
-    AssetType::Routes->value => [
-        'active' => true,
-        'patterns' => [
-            '*/Routes/*.php',
+    'modules' => [
+        'First' => [
+            'active' => true,
+            'order' => 2,
         ],
-        'groups' => [
-            'api' => [
-                'prefix' => 'api',
-                'middlewares' => ['api'],
-            ],
-            'web' => [
-                'middlewares' => ['web'],
-            ],
-            'custom' => [
-                'prefix' => 'custom',
-                'as' => 'custom::',
-                'middlewares' => ['web', 'api'],
-            ],
+        'Second' => [
+            'active' => true,
+            'order' => 1,
         ],
     ],
     AssetType::BladeComponents->value => [
@@ -40,16 +30,6 @@ return [
         'active' => true,
         'patterns' => [
             '*/Nova',
-        ],
-    ],
-    'modules' => [
-        'First' => [
-            'active' => true,
-            'order' => 2,
-        ],
-        'Second' => [
-            'active' => true,
-            'order' => 1,
         ],
     ],
 ];

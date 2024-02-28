@@ -55,10 +55,10 @@ return [
     ],
     AssetType::Configs->value => [
         'active' => true,
-        'priority' => true,
         'patterns' => [
             '*/Config/*.php',
         ],
+        'priority' => true,
     ],
     AssetType::Views->value => [
         'active' => true,
@@ -76,15 +76,6 @@ return [
         'active' => true,
         'patterns' => [
             '*/Routes/*.php',
-        ],
-        'groups' => [
-            'api' => [
-                'prefix' => 'api',
-                'middlewares' => ['api'],
-            ],
-            'web' => [
-                'middlewares' => ['web'],
-            ],
         ],
     ],
     AssetType::Models->value => [

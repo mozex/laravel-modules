@@ -9,9 +9,50 @@ class Modules
 {
     public string $base_path;
 
+    public array $routeGroups = [];
+
     public function __construct()
     {
         $this->setBasePath();
+
+        $this->routeGroup(
+            name: 'api',
+            prefix: 'api',
+            middleware: ['api']
+        );
+
+        $this->routeGroup(
+            name: 'web',
+            middleware: ['web'],
+        );
+    }
+
+    /**
+     * @param  array<string, mixed>  $args
+     */
+    public function routeGroup(string|callable $name, ...$args): void
+    {
+        $this->routeGroups[$name] = $args;
+    }
+
+    /**
+     * @return array<string, array<string, mixed>>
+     */
+    public function getRouteGroups(): array
+    {
+        return $this->routeGroups;
+    }
+
+    public function getRouteGroup(string $name): array
+    {
+        if (! isset($this->getRouteGroups()[$name])) {
+            return [];
+        }
+
+        return collect($this->getRouteGroups()[$name])
+            ->filter()
+            ->map(fn ($value) => is_callable($value) ? $value() : $value)
+            ->toArray();
     }
 
     public function setBasePath(?string $path = null): void

@@ -278,12 +278,12 @@ class ModulesServiceProvider extends PackageServiceProvider
 
         AssetType::Routes->scout()->collect()
             ->each(function (array $asset): void {
-                $group = File::name($asset['path']);
-
-                Route::middleware(AssetType::Routes->config()['groups'][$group]['middlewares'] ?? [])
-                    ->as(AssetType::Routes->config()['groups'][$group]['as'] ?? '')
-                    ->prefix(AssetType::Routes->config()['groups'][$group]['prefix'] ?? '')
-                    ->group($asset['path']);
+                Route::group(
+                    attributes: Modules::getRouteGroup(
+                        name: File::name($asset['path'])
+                    ),
+                    routes: $asset['path']
+                );
             });
     }
 
