@@ -2,6 +2,27 @@
 
 All notable changes to `laravel-modules` will be documented in this file.
 
+## 2.0.0 - 2024-02-28
+
+### What's Changed
+
+* refactoring
+* add caching support
+* add support for Model name guessing
+* improve Scheduling
+* add support for Blade Components
+* fix livewire naming
+* improve routes
+* improve factories
+* improve policies
+* improve views
+* improve configs
+* add tests
+* add support for Laravel 11
+* add support for listeners
+
+**Full Changelog**: https://github.com/mozex/laravel-modules/compare/1.3.0...2.0.0
+
 ## 1.3.0 - 2023-11-22
 
 - Support Service Providers
