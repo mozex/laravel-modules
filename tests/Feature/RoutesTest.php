@@ -72,10 +72,10 @@ it('can load routes', function (bool $cache) {
         ->getPrefix()->toBeEmpty()
         ->gatherMiddleware()->toBeEmpty()
         ->and(route('undefined-second'))->toBe('http://localhost/undefined-second')
-        ->and(Route::getRoutes()->getByName('custom-second'))->not->toBeNull()
+        ->and(Route::getRoutes()->getByName('custom::custom-second'))->not->toBeNull()
         ->getPrefix()->toBe('custom')
         ->gatherMiddleware()->toHaveCount(2)->toContain('web', 'api')
-        ->and(route('custom-second'))->toBe('http://localhost/custom/custom-second');
+        ->and(route('custom::custom-second'))->toBe('http://localhost/custom/custom-second');
 
     if ($cache) {
         $discoverer->clear();

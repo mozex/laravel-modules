@@ -18,6 +18,7 @@ return [
             ],
             'custom' => [
                 'prefix' => 'custom',
+                'as' => 'custom::',
                 'middlewares' => ['web', 'api'],
             ],
         ],

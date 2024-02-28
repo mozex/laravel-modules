@@ -281,6 +281,7 @@ class ModulesServiceProvider extends PackageServiceProvider
                 $group = File::name($asset['path']);
 
                 Route::middleware(AssetType::Routes->config()['groups'][$group]['middlewares'] ?? [])
+                    ->as(AssetType::Routes->config()['groups'][$group]['as'] ?? '')
                     ->prefix(AssetType::Routes->config()['groups'][$group]['prefix'] ?? '')
                     ->group($asset['path']);
             });
