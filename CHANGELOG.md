@@ -2,6 +2,12 @@
 
 All notable changes to `laravel-modules` will be documented in this file.
 
+## 2.1.0 - 2024-02-28
+
+* add support for defining route groups
+
+**Full Changelog**: https://github.com/mozex/laravel-modules/compare/2.0.1...2.1.0
+
 ## 2.0.1 - 2024-02-28
 
 * add "as" for routes
