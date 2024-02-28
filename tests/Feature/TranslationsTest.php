@@ -10,27 +10,60 @@ test('scout will not collect when disabled', function () {
         false
     );
 
-    expect(TranslationsScout::create()->get())->toHaveCount(0);
+    $discoverer = TranslationsScout::create();
+
+    expect($discoverer->get())->toHaveCount(0);
+
+    $discoverer->cache();
+
+    expect($discoverer->get())->toHaveCount(0);
+
+    $discoverer->clear();
 });
 
-test('scout has correct structure', function () {
-    expect(TranslationsScout::create()->get())
+test('discovering will work', function (bool $cache) {
+    $discoverer = TranslationsScout::create();
+
+    if ($cache) {
+        $discoverer->cache();
+    }
+
+    $collection = $discoverer->collect();
+
+    expect($collection)
         ->each->toHaveKeys(['module', 'path'])
-        ->not->toHaveKey('namespace');
-});
-
-test('scout will select correct paths', function () {
-    expect(TranslationsScout::create()->collect()->pluck('path'))
+        ->not->toHaveKey('namespace')
+        ->and($collection->pluck('path'))
         ->toContain(realpath(Modules::modulesPath('First/Resources/lang')))
         ->toContain(realpath(Modules::modulesPath('Second/Resources/lang')));
-});
 
-it('can load translations', function () {
+    if ($cache) {
+        $discoverer->clear();
+    }
+})->with([
+    'without cache' => false,
+    'with cache' => true,
+]);
+
+it('can load translations', function (bool $cache) {
+    $discoverer = TranslationsScout::create();
+
+    if ($cache) {
+        $discoverer->cache();
+    }
+
     $loader = app('translator')->getLoader();
 
-    TranslationsScout::create()->collect()
+    $discoverer->collect()
         ->each(function (array $asset) use ($loader) {
             expect($loader->namespaces())->toHaveKey($asset['module'])->toContain($asset['path'])
                 ->and($loader->jsonPaths())->toContain($asset['path']);
         });
-});
+
+    if ($cache) {
+        $discoverer->clear();
+    }
+})->with([
+    'without cache' => false,
+    'with cache' => true,
+]);

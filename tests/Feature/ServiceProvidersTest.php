@@ -12,26 +12,59 @@ test('scout will not collect when disabled', function () {
         false
     );
 
-    expect(ServiceProvidersScout::create()->get())->toHaveCount(0);
+    $discoverer = ServiceProvidersScout::create();
+
+    expect($discoverer->get())->toHaveCount(0);
+
+    $discoverer->cache();
+
+    expect($discoverer->get())->toHaveCount(0);
+
+    $discoverer->clear();
 });
 
-test('scout has correct structure', function () {
-    expect(ServiceProvidersScout::create()->get())
-        ->each->toHaveKeys(['module', 'path', 'namespace']);
-});
+test('discovering will work', function (bool $cache) {
+    $discoverer = ServiceProvidersScout::create();
 
-test('scout will select correct classes', function () {
-    expect(ServiceProvidersScout::create()->collect()->pluck('namespace'))
+    if ($cache) {
+        $discoverer->cache();
+    }
+
+    $collection = $discoverer->collect();
+
+    expect($collection)
+        ->each->toHaveKeys(['module', 'path', 'namespace'])
+        ->and($collection->pluck('namespace'))
         ->toContain(UserServiceProvider::class)
         ->toContain(TeamServiceProvider::class)
         ->not->toContain(WrongServiceProvider::class);
-});
 
-it('can register service providers', function () {
+    if ($cache) {
+        $discoverer->clear();
+    }
+})->with([
+    'without cache' => false,
+    'with cache' => true,
+]);
+
+it('can register service providers', function (bool $cache) {
+    $discoverer = ServiceProvidersScout::create();
+
+    if ($cache) {
+        $discoverer->cache();
+    }
+
     $serviceProviders = app()->getLoadedProviders();
 
-    ServiceProvidersScout::create()->collect()
+    $discoverer->collect()
         ->each(function (array $asset) use ($serviceProviders) {
             expect($serviceProviders)->toHaveKey($asset['namespace']);
         });
-});
+
+    if ($cache) {
+        $discoverer->clear();
+    }
+})->with([
+    'without cache' => false,
+    'with cache' => true,
+]);

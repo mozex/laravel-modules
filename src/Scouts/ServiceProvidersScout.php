@@ -5,9 +5,7 @@ namespace Mozex\Modules\Scouts;
 use Illuminate\Support\ServiceProvider;
 use Mozex\Modules\Contracts\ModuleClassScout;
 use Mozex\Modules\Enums\AssetType;
-use Spatie\StructureDiscoverer\Data\DiscoveredClass;
 use Spatie\StructureDiscoverer\Discover;
-use Spatie\StructureDiscoverer\Enums\Sort;
 
 class ServiceProvidersScout extends ModuleClassScout
 {
@@ -18,12 +16,7 @@ class ServiceProvidersScout extends ModuleClassScout
 
     protected function definition(): Discover
     {
-        return Discover::in(...$this->patterns())
-            ->parallel()
-            ->classes()
-            ->extending(ServiceProvider::class)
-            ->custom(fn (DiscoveredClass $structure) => ! $structure->isAbstract)
-            ->full()
-            ->sortBy(Sort::Name);
+        return parent::definition()
+            ->extending(ServiceProvider::class);
     }
 }

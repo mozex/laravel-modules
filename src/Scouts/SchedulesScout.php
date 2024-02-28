@@ -8,7 +8,6 @@ use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\Facades\Modules;
 use Spatie\StructureDiscoverer\Data\DiscoveredClass;
 use Spatie\StructureDiscoverer\Discover;
-use Spatie\StructureDiscoverer\Enums\Sort;
 
 class SchedulesScout extends ModuleClassScout
 {
@@ -19,19 +18,14 @@ class SchedulesScout extends ModuleClassScout
 
     protected function definition(): Discover
     {
-        return Discover::in(...$this->patterns())
-            ->parallel()
-            ->classes()
+        return parent::definition()
             ->extending(ConsoleKernel::class)
             ->custom(
-                fn (DiscoveredClass $structure) => ! $structure->isAbstract
-                    && $structure->name === 'Kernel'
+                fn (DiscoveredClass $structure) => $structure->name === 'Kernel'
                     && str_ends_with(
                         $structure->namespace,
                         Modules::moduleNameFromNamespace($structure->namespace).'\\Console'
                     )
-            )
-            ->full()
-            ->sortBy(Sort::Name);
+            );
     }
 }

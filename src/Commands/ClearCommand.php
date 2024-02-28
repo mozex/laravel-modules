@@ -4,8 +4,7 @@ namespace Mozex\Modules\Commands;
 
 use Illuminate\Console\Command;
 use Mozex\Modules\Contracts\BaseScout;
-use Spatie\StructureDiscoverer\Data\DiscoveredClass;
-use Spatie\StructureDiscoverer\Discover;
+use Mozex\Modules\Enums\AssetType;
 
 use function Laravel\Prompts\progress;
 
@@ -19,22 +18,11 @@ class ClearCommand extends Command
     {
         progress(
             label: 'Clearing Modules Cache',
-            steps: Discover::in(__DIR__.'/../')
-                ->classes()
-                ->extending(BaseScout::class)
-                ->custom(fn (DiscoveredClass $structure) => ! $structure->isAbstract)
-                ->get(),
-            callback: function (string $scout, $progress) {
-                /** @var BaseScout $discoverer */
-                $discoverer = app($scout);
+            steps: AssetType::activeScouts(),
+            callback: function (BaseScout $scout, $progress) {
+                $progress->label("Clearing {$scout->asset()->title()}");
 
-                if ($discoverer->asset()->isDeactive()) {
-                    return;
-                }
-
-                $progress->label("Clearing {$discoverer->asset()->title()}");
-
-                $discoverer->cacheDriver()->forget($discoverer->identifier());
+                $scout->clear();
             },
         );
     }

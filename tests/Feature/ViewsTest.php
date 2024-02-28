@@ -11,25 +11,51 @@ test('scout will not collect when disabled', function () {
         false
     );
 
-    expect(ViewsScout::create()->get())->toHaveCount(0);
+    $discoverer = ViewsScout::create();
+
+    expect($discoverer->get())->toHaveCount(0);
+
+    $discoverer->cache();
+
+    expect($discoverer->get())->toHaveCount(0);
+
+    $discoverer->clear();
 });
 
-test('scout has correct structure', function () {
-    expect(ViewsScout::create()->get())
+test('discovering will work', function (bool $cache) {
+    $discoverer = ViewsScout::create();
+
+    if ($cache) {
+        $discoverer->cache();
+    }
+
+    $collection = $discoverer->collect();
+
+    expect($collection)
         ->each->toHaveKeys(['module', 'path'])
-        ->not->toHaveKey('namespace');
-});
-
-test('scout will select correct paths', function () {
-    expect(ViewsScout::create()->collect()->pluck('path'))
+        ->not->toHaveKey('namespace')
+        ->and($collection->pluck('path'))
         ->toContain(realpath(Modules::modulesPath('First/Resources/views')))
         ->toContain(realpath(Modules::modulesPath('Second/Resources/views')));
-});
 
-it('can load views', function () {
+    if ($cache) {
+        $discoverer->clear();
+    }
+})->with([
+    'without cache' => false,
+    'with cache' => true,
+]);
+
+it('can load views', function (bool $cache) {
+    $discoverer = ViewsScout::create();
+
+    if ($cache) {
+        $discoverer->cache();
+    }
+
     $views = app('view')->getFinder()->getHints();
 
-    ViewsScout::create()->collect()
+    $discoverer->collect()
         ->each(function (array $asset) use ($views) {
             expect($views)->toHaveKey(strtolower($asset['module']))
                 ->and($views[strtolower($asset['module'])])->toHaveCount(1)->toContain($asset['path']);
@@ -56,4 +82,11 @@ it('can load views', function () {
             deleteCachedView: true
         ))
         ->toContain('Submit Component');
-});
+
+    if ($cache) {
+        $discoverer->clear();
+    }
+})->with([
+    'without cache' => false,
+    'with cache' => true,
+]);

@@ -10,26 +10,59 @@ test('scout will not collect when disabled', function () {
         false
     );
 
-    expect(MigrationsScout::create()->get())->toHaveCount(0);
+    $discoverer = MigrationsScout::create();
+
+    expect($discoverer->get())->toHaveCount(0);
+
+    $discoverer->cache();
+
+    expect($discoverer->get())->toHaveCount(0);
+
+    $discoverer->clear();
 });
 
-test('scout has correct structure', function () {
-    expect(MigrationsScout::create()->get())
+test('discovering will work', function (bool $cache) {
+    $discoverer = MigrationsScout::create();
+
+    if ($cache) {
+        $discoverer->cache();
+    }
+
+    $collection = $discoverer->collect();
+
+    expect($collection)
         ->each->toHaveKeys(['module', 'path'])
-        ->not->toHaveKey('namespace');
-});
-
-test('scout will select correct paths', function () {
-    expect(MigrationsScout::create()->collect()->pluck('path'))
+        ->not->toHaveKey('namespace')
+        ->and($collection->pluck('path'))
         ->toContain(realpath(Modules::modulesPath('First/Database/Migrations')))
         ->toContain(realpath(Modules::modulesPath('Second/Database/Migrations')));
-});
 
-it('can load migrations', function () {
+    if ($cache) {
+        $discoverer->clear();
+    }
+})->with([
+    'without cache' => false,
+    'with cache' => true,
+]);
+
+it('can load migrations', function (bool $cache) {
+    $discoverer = MigrationsScout::create();
+
+    if ($cache) {
+        $discoverer->cache();
+    }
+
     $migrations = app('migrator')->paths();
 
-    MigrationsScout::create()->collect()
+    $discoverer->collect()
         ->each(function (array $asset) use ($migrations) {
             expect($migrations)->toContain($asset['path']);
         });
-});
+
+    if ($cache) {
+        $discoverer->clear();
+    }
+})->with([
+    'without cache' => false,
+    'with cache' => true,
+]);

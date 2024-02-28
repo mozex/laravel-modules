@@ -24,12 +24,22 @@ abstract class BaseScout
     public function cacheDriver(): DiscoverCacheDriver
     {
         return new FileDiscoverCacheDriver(
-            directory: Modules::basePath('bootstrap/cache'),
+            directory: $this->cachePath(),
             serialize: false,
-            filename: sprintf(
-                'modules-%s.php',
-                $this->asset()->value,
-            ),
+            filename: $this->cacheFile(),
+        );
+    }
+
+    public function cachePath(): string
+    {
+        return Modules::basePath('bootstrap/cache');
+    }
+
+    public function cacheFile(): string
+    {
+        return sprintf(
+            'modules-%s.php',
+            $this->asset()->value,
         );
     }
 

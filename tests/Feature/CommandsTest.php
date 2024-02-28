@@ -14,28 +14,61 @@ test('scout will not collect when disabled', function () {
         false
     );
 
-    expect(CommandsScout::create()->get())->toHaveCount(0);
+    $discoverer = CommandsScout::create();
+
+    expect($discoverer->get())->toHaveCount(0);
+
+    $discoverer->cache();
+
+    expect($discoverer->get())->toHaveCount(0);
+
+    $discoverer->clear();
 });
 
-test('scout has correct structure', function () {
-    expect(CommandsScout::create()->get())
-        ->each->toHaveKeys(['module', 'path', 'namespace']);
-});
+test('discovering will work', function (bool $cache) {
+    $discoverer = CommandsScout::create();
 
-test('scout will select correct classes', function () {
-    expect(CommandsScout::create()->collect()->pluck('namespace'))
+    if ($cache) {
+        $discoverer->cache();
+    }
+
+    $collection = $discoverer->collect();
+
+    expect($collection)
+        ->each->toHaveKeys(['module', 'path', 'namespace'])
+        ->and($collection->pluck('namespace'))
         ->toContain(FirstValidCommand::class)
         ->toContain(SecondValidCommand::class)
         ->toContain(ChainedCommand::class)
         ->not->toContain(WrongCommand::class)
         ->not->toContain(BaseCommand::class);
-});
 
-it('can register commands', function () {
+    if ($cache) {
+        $discoverer->clear();
+    }
+})->with([
+    'without cache' => false,
+    'with cache' => true,
+]);
+
+it('can register commands', function (bool $cache) {
+    $discoverer = CommandsScout::create();
+
+    if ($cache) {
+        $discoverer->cache();
+    }
+
     $commands = Artisan::all();
 
-    CommandsScout::create()->collect()
+    $discoverer->collect()
         ->each(function (array $asset) use ($commands) {
             expect($commands)->toHaveKey((new $asset['namespace'])->getName());
         });
-});
+
+    if ($cache) {
+        $discoverer->clear();
+    }
+})->with([
+    'without cache' => false,
+    'with cache' => true,
+]);

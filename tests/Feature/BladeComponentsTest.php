@@ -14,26 +14,52 @@ test('scout will not collect when disabled', function () {
         false
     );
 
-    expect(BladeComponentsScout::create()->get())->toHaveCount(0);
+    $discoverer = BladeComponentsScout::create();
+
+    expect($discoverer->get())->toHaveCount(0);
+
+    $discoverer->cache();
+
+    expect($discoverer->get())->toHaveCount(0);
+
+    $discoverer->clear();
 });
 
-test('scout has correct structure', function () {
-    expect(BladeComponentsScout::create()->get())
-        ->each->toHaveKeys(['module', 'path', 'namespace']);
-});
+test('discovering will work', function (bool $cache) {
+    $discoverer = BladeComponentsScout::create();
 
-test('scout will select correct classes', function () {
-    expect(BladeComponentsScout::create()->collect()->pluck('namespace'))
+    if ($cache) {
+        $discoverer->cache();
+    }
+
+    $collection = $discoverer->collect();
+
+    expect($collection)
+        ->each->toHaveKeys(['module', 'path', 'namespace'])
+        ->and($collection->pluck('namespace'))
         ->toContain(Filter::class)
         ->toContain(Search::class)
         ->toContain(Loading::class)
         ->not->toContain(WrongComponent::class);
-});
 
-it('can load blade components', function () {
+    if ($cache) {
+        $discoverer->clear();
+    }
+})->with([
+    'without cache' => false,
+    'with cache' => true,
+]);
+
+it('can load blade components', function (bool $cache) {
+    $discoverer = BladeComponentsScout::create();
+
+    if ($cache) {
+        $discoverer->cache();
+    }
+
     $components = Blade::getClassComponentAliases();
 
-    BladeComponentsScout::create()->collect()
+    $discoverer->collect()
         ->each(function (array $asset) use ($components) {
             expect($components)->toContain($asset['namespace']);
         });
@@ -63,4 +89,11 @@ it('can load blade components', function () {
             deleteCachedView: true
         ))
         ->toContain('Loading Component');
-});
+
+    if ($cache) {
+        $discoverer->clear();
+    }
+})->with([
+    'without cache' => false,
+    'with cache' => true,
+]);

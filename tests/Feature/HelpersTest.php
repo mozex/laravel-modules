@@ -10,24 +10,57 @@ test('scout will not collect when disabled', function () {
         false
     );
 
-    expect(HelpersScout::create()->get())->toHaveCount(0);
+    $discoverer = HelpersScout::create();
+
+    expect($discoverer->get())->toHaveCount(0);
+
+    $discoverer->cache();
+
+    expect($discoverer->get())->toHaveCount(0);
+
+    $discoverer->clear();
 });
 
-test('scout has correct structure', function () {
-    expect(HelpersScout::create()->get())
+test('discovering will work', function (bool $cache) {
+    $discoverer = HelpersScout::create();
+
+    if ($cache) {
+        $discoverer->cache();
+    }
+
+    $collection = $discoverer->collect();
+
+    expect($collection)
         ->each->toHaveKeys(['module', 'path'])
-        ->not->toHaveKey('namespace');
-});
-
-test('scout will select correct files', function () {
-    expect(HelpersScout::create()->collect()->pluck('path'))
+        ->not->toHaveKey('namespace')
+        ->and($collection->pluck('path'))
         ->toContain(realpath(Modules::modulesPath('First/Helpers/Shared.php')))
         ->toContain(realpath(Modules::modulesPath('Second/Helpers/testing.php')));
-});
 
-it('can register helpers', function () {
+    if ($cache) {
+        $discoverer->clear();
+    }
+})->with([
+    'without cache' => false,
+    'with cache' => true,
+]);
+
+it('can register helpers', function (bool $cache) {
+    $discoverer = HelpersScout::create();
+
+    if ($cache) {
+        $discoverer->cache();
+    }
+
     expect(firstHelper())
         ->toBe('First Helper')
         ->and(secondHelper())
         ->toBe('Second Helper');
-});
+
+    if ($cache) {
+        $discoverer->clear();
+    }
+})->with([
+    'without cache' => false,
+    'with cache' => true,
+]);

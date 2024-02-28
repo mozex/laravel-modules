@@ -13,18 +13,38 @@ test('scout will not collect when disabled', function () {
         false
     );
 
-    expect(NovaResourcesScout::create()->get())->toHaveCount(0);
+    $discoverer = NovaResourcesScout::create();
+
+    expect($discoverer->get())->toHaveCount(0);
+
+    $discoverer->cache();
+
+    expect($discoverer->get())->toHaveCount(0);
+
+    $discoverer->clear();
 });
 
-test('scout has correct structure', function () {
-    expect(NovaResourcesScout::create()->get())
-        ->each->toHaveKeys(['module', 'path', 'namespace']);
-});
+test('discovering will work', function (bool $cache) {
+    $discoverer = NovaResourcesScout::create();
 
-test('scout will select correct classes', function () {
-    expect(NovaResourcesScout::create()->collect()->pluck('namespace'))
+    if ($cache) {
+        $discoverer->cache();
+    }
+
+    $collection = $discoverer->collect();
+
+    expect($collection)
+        ->each->toHaveKeys(['module', 'path', 'namespace'])
+        ->and($collection->pluck('namespace'))
         ->toContain(User::class)
         ->toContain(Team::class)
         ->not->toContain(ActionUser::class)
         ->not->toContain(WrongResource::class);
-});
+
+    if ($cache) {
+        $discoverer->clear();
+    }
+})->with([
+    'without cache' => false,
+    'with cache' => true,
+]);

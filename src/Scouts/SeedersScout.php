@@ -7,9 +7,7 @@ use Mozex\Modules\Contracts\ModuleClassScout;
 use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\Facades\Modules;
 use Spatie\StructureDiscoverer\Data\DiscoveredClass;
-use Spatie\StructureDiscoverer\Data\DiscoveredStructure;
 use Spatie\StructureDiscoverer\Discover;
-use Spatie\StructureDiscoverer\Enums\Sort;
 
 class SeedersScout extends ModuleClassScout
 {
@@ -20,15 +18,10 @@ class SeedersScout extends ModuleClassScout
 
     protected function definition(): Discover
     {
-        return Discover::in(...$this->patterns())
-            ->parallel()
-            ->classes()
-            ->custom(
-                fn (DiscoveredStructure $structure) => $structure->name == Modules::moduleNameFromNamespace($structure->namespace).'DatabaseSeeder'
-            )
+        return parent::definition()
             ->extending(Seeder::class)
-            ->custom(fn (DiscoveredClass $structure) => ! $structure->isAbstract)
-            ->full()
-            ->sortBy(Sort::Name);
+            ->custom(
+                fn (DiscoveredClass $structure) => $structure->name == Modules::moduleNameFromNamespace($structure->namespace).'DatabaseSeeder'
+            );
     }
 }

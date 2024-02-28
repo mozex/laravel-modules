@@ -9,7 +9,7 @@ class WorkbenchServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        Modules::setBasePath(__DIR__.'/../../');
+        Modules::setBasePath(dirname(__DIR__, 2));
     }
 
     public function boot(): void

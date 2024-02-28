@@ -4,8 +4,7 @@ namespace Mozex\Modules\Commands;
 
 use Illuminate\Console\Command;
 use Mozex\Modules\Contracts\BaseScout;
-use Spatie\StructureDiscoverer\Data\DiscoveredClass;
-use Spatie\StructureDiscoverer\Discover;
+use Mozex\Modules\Enums\AssetType;
 
 use function Laravel\Prompts\progress;
 
@@ -19,24 +18,13 @@ class CacheCommand extends Command
     {
         progress(
             label: 'Caching Modules',
-            steps: Discover::in(__DIR__.'/../')
-                ->classes()
-                ->extending(BaseScout::class)
-                ->custom(fn (DiscoveredClass $structure) => ! $structure->isAbstract)
-                ->get(),
-            callback: function (string $scout, $progress) {
-                /** @var BaseScout $discoverer */
-                $discoverer = app($scout);
+            steps: AssetType::activeScouts(),
+            callback: function (BaseScout $scout, $progress) {
+                $progress->label("Caching {$scout->asset()->title()}");
 
-                if ($discoverer->asset()->isDeactive()) {
-                    return;
-                }
+                $scout->clear();
 
-                $progress->label("Caching {$discoverer->asset()->title()}");
-
-                $discoverer->cacheDriver()->forget($discoverer->identifier());
-
-                $discoverer->cache();
+                $scout->cache();
             },
         );
     }

@@ -2,6 +2,7 @@
 
 namespace Mozex\Modules\Enums;
 
+use Illuminate\Support\Collection;
 use Mozex\Modules\Contracts\BaseScout;
 use Mozex\Modules\Scouts\BladeComponentsScout;
 use Mozex\Modules\Scouts\CommandsScout;
@@ -90,5 +91,16 @@ enum AssetType: string
         return str($this->value)
             ->replace('-', ' ')
             ->title();
+    }
+
+    /**
+     * @return Collection<int, BaseScout>
+     */
+    public static function activeScouts(): Collection
+    {
+        return collect(self::cases())
+            ->filter(fn (self $type) => $type->isActive())
+            ->map(fn (self $type) => $type->scout())
+            ->filter();
     }
 }

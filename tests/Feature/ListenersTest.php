@@ -18,26 +18,59 @@ test('scout will not collect when disabled', function () {
         false
     );
 
-    expect(ListenersScout::create()->get())->toHaveCount(0);
+    $discoverer = ListenersScout::create();
+
+    expect($discoverer->get())->toHaveCount(0);
+
+    $discoverer->cache();
+
+    expect($discoverer->get())->toHaveCount(0);
+
+    $discoverer->clear();
 });
 
-test('scout has correct structure', function () {
-    expect(ListenersScout::create()->get())
+test('discovering will work', function (bool $cache) {
+    $discoverer = ListenersScout::create();
+
+    if ($cache) {
+        $discoverer->cache();
+    }
+
+    $collection = $discoverer->collect();
+
+    expect($collection)
         ->each->toHaveKeys(['module', 'path'])
-        ->not->toHaveKey('namespace');
-});
-
-test('scout will select correct paths', function () {
-    expect(ListenersScout::create()->collect()->pluck('path'))
+        ->not->toHaveKey('namespace')
+        ->and($collection->pluck('path'))
         ->toContain(realpath(Modules::modulesPath('First/Listeners')))
         ->toContain(realpath(Modules::modulesPath('Second/Listeners')));
-});
 
-it('can attach listeners to events', function () {
+    if ($cache) {
+        $discoverer->clear();
+    }
+})->with([
+    'without cache' => false,
+    'with cache' => true,
+]);
+
+it('can attach listeners to events', function (bool $cache) {
+    $discoverer = ListenersScout::create();
+
+    if ($cache) {
+        $discoverer->cache();
+    }
+
     Event::fake();
 
     Event::assertListening(TestEvent::class, TestListener::class);
     Event::assertListening(TestEvent::class, UserCreatedListener::class);
     Event::assertListening(UserDeletedEvent::class, NotifyDeletedUserListener::class);
     Event::assertListening(TeamCreatedEvent::class, NotifyTeamOwnerListener::class);
-});
+
+    if ($cache) {
+        $discoverer->clear();
+    }
+})->with([
+    'without cache' => false,
+    'with cache' => true,
+]);

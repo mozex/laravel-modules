@@ -2,7 +2,9 @@
 
 namespace Mozex\Modules\Contracts;
 
+use Spatie\StructureDiscoverer\Data\DiscoveredClass;
 use Spatie\StructureDiscoverer\Discover;
+use Spatie\StructureDiscoverer\Enums\Sort;
 use Symfony\Component\Finder\Exception\DirectoryNotFoundException;
 
 abstract class ModuleClassScout extends BaseScout
@@ -18,5 +20,13 @@ abstract class ModuleClassScout extends BaseScout
         }
     }
 
-    abstract protected function definition(): Discover;
+    protected function definition(): Discover
+    {
+        return Discover::in(...$this->patterns())
+            ->parallel()
+            ->classes()
+            ->full()
+            ->custom(fn (DiscoveredClass $structure) => ! $structure->isAbstract)
+            ->sortBy(Sort::Name);
+    }
 }

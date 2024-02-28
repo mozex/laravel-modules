@@ -13,25 +13,51 @@ test('scout will not collect when disabled', function () {
         false
     );
 
-    expect(LivewireComponentsScout::create()->get())->toHaveCount(0);
+    $discoverer = LivewireComponentsScout::create();
+
+    expect($discoverer->get())->toHaveCount(0);
+
+    $discoverer->cache();
+
+    expect($discoverer->get())->toHaveCount(0);
+
+    $discoverer->clear();
 });
 
-test('scout has correct structure', function () {
-    expect(LivewireComponentsScout::create()->get())
-        ->each->toHaveKeys(['module', 'path', 'namespace']);
-});
+test('discovering will work', function (bool $cache) {
+    $discoverer = LivewireComponentsScout::create();
 
-test('scout will select correct classes', function () {
-    expect(LivewireComponentsScout::create()->collect()->pluck('namespace'))
+    if ($cache) {
+        $discoverer->cache();
+    }
+
+    $collection = $discoverer->collect();
+
+    expect($collection)
+        ->each->toHaveKeys(['module', 'path', 'namespace'])
+        ->and($collection->pluck('namespace'))
         ->toContain(Teams::class)
         ->toContain(ListUsers::class)
         ->not->toContain(WrongComponents::class);
-});
 
-it('can register livewire components', function () {
+    if ($cache) {
+        $discoverer->clear();
+    }
+})->with([
+    'without cache' => false,
+    'with cache' => true,
+]);
+
+it('can register livewire components', function (bool $cache) {
+    $discoverer = LivewireComponentsScout::create();
+
+    if ($cache) {
+        $discoverer->cache();
+    }
+
     $components = app(ComponentRegistry::class);
 
-    LivewireComponentsScout::create()->collect()
+    $discoverer->collect()
         ->each(function (array $asset) use ($components) {
             expect($components->getName($asset['namespace']))->not->toBeNull();
         });
@@ -51,4 +77,11 @@ it('can register livewire components', function () {
             deleteCachedView: true
         ))
         ->toContain('Nested Users Livewire Component');
-});
+
+    if ($cache) {
+        $discoverer->clear();
+    }
+})->with([
+    'without cache' => false,
+    'with cache' => true,
+]);

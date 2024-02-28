@@ -11,12 +11,12 @@ class Modules
 
     public function __construct()
     {
-        $this->base_path = base_path();
+        $this->setBasePath();
     }
 
-    public function setBasePath(string $path): void
+    public function setBasePath(?string $path = null): void
     {
-        $this->base_path = $path;
+        $this->base_path = $path ?? base_path();
     }
 
     public function basePath(string $path = ''): string
@@ -28,14 +28,6 @@ class Modules
         );
     }
 
-    public function moduleNameFromNamespace(string $namespace): string
-    {
-        return Regex::match(
-            pattern: '/'.config('modules.modules_directory').'\\\\(.*?)\\\\/',
-            subject: $namespace
-        )->groupOr(1, '');
-    }
-
     public function modulesPath(string $path = ''): string
     {
         return $this->basePath(
@@ -45,6 +37,14 @@ class Modules
                 ltrim($path, '/')
             )
         );
+    }
+
+    public function moduleNameFromNamespace(string $namespace): string
+    {
+        return Regex::match(
+            pattern: '/'.config('modules.modules_directory').'\\\\(.*?)\\\\/',
+            subject: $namespace
+        )->groupOr(1, '');
     }
 
     public function moduleNameFromPath(string $path): ?string

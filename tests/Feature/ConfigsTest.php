@@ -10,23 +10,56 @@ test('scout will not collect when disabled', function () {
         false
     );
 
-    expect(ConfigsScout::create()->get())->toHaveCount(0);
+    $discoverer = ConfigsScout::create();
+
+    expect($discoverer->get())->toHaveCount(0);
+
+    $discoverer->cache();
+
+    expect($discoverer->get())->toHaveCount(0);
+
+    $discoverer->clear();
 });
 
-test('scout has correct structure', function () {
-    expect(ConfigsScout::create()->get())
+test('discovering will work', function (bool $cache) {
+    $discoverer = ConfigsScout::create();
+
+    if ($cache) {
+        $discoverer->cache();
+    }
+
+    $collection = $discoverer->collect();
+
+    expect($collection)
         ->each->toHaveKeys(['module', 'path'])
-        ->not->toHaveKey('namespace');
-});
-
-test('scout will select correct files', function () {
-    expect(ConfigsScout::create()->collect()->pluck('path'))
+        ->not->toHaveKey('namespace')
+        ->and($collection->pluck('path'))
         ->toContain(realpath(Modules::modulesPath('First/Config/first.php')))
         ->toContain(realpath(Modules::modulesPath('Second/Config/test.php')));
-});
 
-it('can load configs', function () {
+    if ($cache) {
+        $discoverer->clear();
+    }
+})->with([
+    'without cache' => false,
+    'with cache' => true,
+]);
+
+it('can load configs', function (bool $cache) {
+    $discoverer = ConfigsScout::create();
+
+    if ($cache) {
+        $discoverer->cache();
+    }
+
     expect(config('first.config'))->toBe('first config')
         ->and(config('test.config'))->toBe('overridden test config')
         ->and(config('test.second-config'))->toBe('second config');
-});
+
+    if ($cache) {
+        $discoverer->clear();
+    }
+})->with([
+    'without cache' => false,
+    'with cache' => true,
+]);

@@ -13,22 +13,48 @@ test('scout will not collect when disabled', function () {
         false
     );
 
-    expect(SchedulesScout::create()->get())->toHaveCount(0);
+    $discoverer = SchedulesScout::create();
+
+    expect($discoverer->get())->toHaveCount(0);
+
+    $discoverer->cache();
+
+    expect($discoverer->get())->toHaveCount(0);
+
+    $discoverer->clear();
 });
 
-test('scout has correct structure', function () {
-    expect(SchedulesScout::create()->get())
-        ->each->toHaveKeys(['module', 'path', 'namespace']);
-});
+test('discovering will work', function (bool $cache) {
+    $discoverer = SchedulesScout::create();
 
-test('scout will select correct classes', function () {
-    expect(SchedulesScout::create()->collect()->pluck('namespace'))
+    if ($cache) {
+        $discoverer->cache();
+    }
+
+    $collection = $discoverer->collect();
+
+    expect($collection)
+        ->each->toHaveKeys(['module', 'path', 'namespace'])
+        ->and($collection->pluck('namespace'))
         ->toContain(FirstKernel::class)
         ->toContain(SecondKernel::class)
         ->not->toContain(WrongKernel::class);
-});
 
-it('can register schedules', function () {
+    if ($cache) {
+        $discoverer->clear();
+    }
+})->with([
+    'without cache' => false,
+    'with cache' => true,
+]);
+
+it('can register schedules', function (bool $cache) {
+    $discoverer = SchedulesScout::create();
+
+    if ($cache) {
+        $discoverer->cache();
+    }
+
     $schedules = collect(app(Schedule::class)->events())
         ->pluck('command')
         ->flatten()
@@ -38,4 +64,11 @@ it('can register schedules', function () {
         ->toContain('first-scheduled-command-1')
         ->toContain('second-scheduled-command-1')
         ->toContain('second-scheduled-command-2');
-});
+
+    if ($cache) {
+        $discoverer->clear();
+    }
+})->with([
+    'without cache' => false,
+    'with cache' => true,
+]);

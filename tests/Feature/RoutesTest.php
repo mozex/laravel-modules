@@ -11,25 +11,51 @@ test('scout will not collect when disabled', function () {
         false
     );
 
-    expect(RoutesScout::create()->get())->toHaveCount(0);
+    $discoverer = RoutesScout::create();
+
+    expect($discoverer->get())->toHaveCount(0);
+
+    $discoverer->cache();
+
+    expect($discoverer->get())->toHaveCount(0);
+
+    $discoverer->clear();
 });
 
-test('scout has correct structure', function () {
-    expect(RoutesScout::create()->get())
+test('discovering will work', function (bool $cache) {
+    $discoverer = RoutesScout::create();
+
+    if ($cache) {
+        $discoverer->cache();
+    }
+
+    $collection = $discoverer->collect();
+
+    expect($collection)
         ->each->toHaveKeys(['module', 'path'])
-        ->not->toHaveKey('namespace');
-});
-
-test('scout will select correct files', function () {
-    expect(RoutesScout::create()->collect()->pluck('path'))
+        ->not->toHaveKey('namespace')
+        ->and($collection->pluck('path'))
         ->toContain(realpath(Modules::modulesPath('First/Routes/web.php')))
         ->toContain(realpath(Modules::modulesPath('First/Routes/api.php')))
         ->toContain(realpath(Modules::modulesPath('Second/Routes/web.php')))
         ->toContain(realpath(Modules::modulesPath('Second/Routes/undefined.php')))
         ->toContain(realpath(Modules::modulesPath('Second/Routes/custom.php')));
-});
 
-it('can load routes', function () {
+    if ($cache) {
+        $discoverer->clear();
+    }
+})->with([
+    'without cache' => false,
+    'with cache' => true,
+]);
+
+it('can load routes', function (bool $cache) {
+    $discoverer = RoutesScout::create();
+
+    if ($cache) {
+        $discoverer->cache();
+    }
+
     expect(Route::getRoutes()->getByName('web-first'))->not->toBeNull()
         ->getPrefix()->toBeEmpty()
         ->gatherMiddleware()->toHaveCount(1)->toContain('web')
@@ -50,4 +76,11 @@ it('can load routes', function () {
         ->getPrefix()->toBe('custom')
         ->gatherMiddleware()->toHaveCount(2)->toContain('web', 'api')
         ->and(route('custom-second'))->toBe('http://localhost/custom/custom-second');
-});
+
+    if ($cache) {
+        $discoverer->clear();
+    }
+})->with([
+    'without cache' => false,
+    'with cache' => true,
+]);
