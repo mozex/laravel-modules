@@ -2,6 +2,12 @@
 
 All notable changes to `laravel-modules` will be documented in this file.
 
+## 2.2.1 - 2024-02-29
+
+* fix filament problem with livewire component registration
+
+**Full Changelog**: https://github.com/mozex/laravel-modules/compare/2.2.0...2.2.1
+
 ## 2.2.0 - 2024-02-29
 
 * add support for filament (resources, pages, widgets, clusters)
