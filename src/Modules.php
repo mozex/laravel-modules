@@ -27,10 +27,7 @@ class Modules
         );
     }
 
-    /**
-     * @param  array<string, mixed>  $args
-     */
-    public function routeGroup(string|callable $name, ...$args): void
+    public function routeGroup(string|callable $name, mixed ...$args): void
     {
         $this->routeGroups[$name] = $args;
     }

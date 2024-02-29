@@ -66,7 +66,7 @@ it('can register filament pages', function (bool $cache) {
     if ($cache) {
         $discoverer->cache();
     }
-    ray(Filament::getPanel('dashboard')->getPages());
+
     expect(Filament::getPanel('admin')->getPages())
         ->toHaveCount(5)
         ->toContain(Dashboard::class)

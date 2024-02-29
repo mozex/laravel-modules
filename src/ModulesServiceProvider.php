@@ -4,6 +4,7 @@ namespace Mozex\Modules;
 
 use Filament\Facades\Filament;
 use Filament\Panel;
+use Filament\PanelRegistry;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Contracts\Auth\Access\Gate as GateInstance;
 use Illuminate\Contracts\Foundation\CachesConfiguration;
@@ -51,7 +52,6 @@ class ModulesServiceProvider extends PackageServiceProvider
         $this->bootSchedules();
         $this->bootListeners();
         $this->bootLivewire();
-        $this->bootFilament();
         $this->bootNova();
     }
 
@@ -59,6 +59,7 @@ class ModulesServiceProvider extends PackageServiceProvider
     {
         $this->registerHelpers();
         $this->registerServicePorviders();
+        $this->registerFilament();
     }
 
     protected function bootCommands(): void
@@ -354,50 +355,65 @@ class ModulesServiceProvider extends PackageServiceProvider
             });
     }
 
-    protected function bootFilament(): void
+    protected function registerFilament(): void
     {
         if (! class_exists(Filament::class)) {
             return;
         }
 
-        collect(Filament::getPanels())
-            ->each(function (Panel $panel): void {
-                if (AssetType::FilamentResources->isActive()) {
-                    AssetType::FilamentResources->scout()->collect()
-                        ->where('panel', strtolower($panel->getId()))
-                        ->each(fn (array $asset) => $panel->discoverResources(
-                            in: $asset['path'],
-                            for: $asset['namespace']
-                        ));
-                }
+        $this->callAfterResolving(PanelRegistry::class, function (PanelRegistry $panelRegistry) {
+            collect($panelRegistry->all())
+                ->each(function (Panel $panel): void {
+                    if (AssetType::FilamentResources->isActive()) {
+                        AssetType::FilamentResources->scout()->collect()
+                            ->where('panel', strtolower($panel->getId()))
+                            ->each(fn (array $asset) => $panel->discoverResources(
+                                in: $asset['path'],
+                                for: $asset['namespace']
+                            ));
+                    }
 
-                if (AssetType::FilamentPages->isActive()) {
-                    AssetType::FilamentPages->scout()->collect()
-                        ->where('panel', strtolower($panel->getId()))
-                        ->each(fn (array $asset) => $panel->discoverPages(
-                            in: $asset['path'],
-                            for: $asset['namespace']
-                        ));
-                }
+                    if (AssetType::FilamentPages->isActive()) {
+                        AssetType::FilamentPages->scout()->collect()
+                            ->where('panel', strtolower($panel->getId()))
+                            ->each(fn (array $asset) => $panel->discoverPages(
+                                in: $asset['path'],
+                                for: $asset['namespace']
+                            ));
+                    }
 
-                if (AssetType::FilamentWidgets->isActive()) {
-                    AssetType::FilamentWidgets->scout()->collect()
-                        ->where('panel', strtolower($panel->getId()))
-                        ->each(fn (array $asset) => $panel->discoverWidgets(
-                            in: $asset['path'],
-                            for: $asset['namespace']
-                        ));
-                }
+                    if (AssetType::FilamentWidgets->isActive()) {
+                        AssetType::FilamentWidgets->scout()->collect()
+                            ->where('panel', strtolower($panel->getId()))
+                            ->each(fn (array $asset) => $panel->discoverWidgets(
+                                in: $asset['path'],
+                                for: $asset['namespace']
+                            ));
+                    }
 
-                if (AssetType::FilamentClusters->isActive()) {
-                    AssetType::FilamentClusters->scout()->collect()
-                        ->where('panel', strtolower($panel->getId()))
-                        ->each(fn (array $asset) => $panel->discoverClusters(
-                            in: $asset['path'],
-                            for: $asset['namespace']
-                        ));
-                }
-            });
+                    if (AssetType::FilamentClusters->isActive()) {
+                        AssetType::FilamentClusters->scout()->collect()
+                            ->where('panel', strtolower($panel->getId()))
+                            ->each(fn (array $asset) => $panel->discoverClusters(
+                                in: $asset['path'],
+                                for: $asset['namespace']
+                            ));
+                    }
+
+                    collect(
+                        (new ReflectionProperty($panel, 'livewireComponents'))
+                            ->getValue($panel)
+                    )
+                        ->filter(
+                            fn (string $class) => str_starts_with(
+                                haystack: $class,
+                                needle: config('modules.modules_namespace')
+                            )
+                        )
+                        ->flip()
+                        ->each(Livewire::component(...));
+                });
+        });
     }
 
     protected function bootNova(): void
