@@ -91,13 +91,37 @@ return [
         'namespace' => 'Policies\\',
     ],
     AssetType::LivewireComponents->value => [
-        'active' => false,
+        'active' => true,
         'patterns' => [
             '*/Livewire',
         ],
     ],
+    AssetType::FilamentResources->value => [
+        'active' => true,
+        'patterns' => [
+            '*/Filament/*/Resources',
+        ],
+    ],
+    AssetType::FilamentPages->value => [
+        'active' => true,
+        'patterns' => [
+            '*/Filament/*/Pages',
+        ],
+    ],
+    AssetType::FilamentWidgets->value => [
+        'active' => true,
+        'patterns' => [
+            '*/Filament/*/Widgets',
+        ],
+    ],
+    AssetType::FilamentClusters->value => [
+        'active' => true,
+        'patterns' => [
+            '*/Filament/*/Clusters',
+        ],
+    ],
     AssetType::NovaResources->value => [
-        'active' => false,
+        'active' => true,
         'patterns' => [
             '*/Nova',
         ],

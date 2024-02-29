@@ -2,6 +2,8 @@
 
 namespace Mozex\Modules;
 
+use Filament\Facades\Filament;
+use Filament\Panel;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Contracts\Auth\Access\Gate as GateInstance;
 use Illuminate\Contracts\Foundation\CachesConfiguration;
@@ -49,6 +51,7 @@ class ModulesServiceProvider extends PackageServiceProvider
         $this->bootSchedules();
         $this->bootListeners();
         $this->bootLivewire();
+        $this->bootFilament();
         $this->bootNova();
     }
 
@@ -351,6 +354,52 @@ class ModulesServiceProvider extends PackageServiceProvider
             });
     }
 
+    protected function bootFilament(): void
+    {
+        if (! class_exists(Filament::class)) {
+            return;
+        }
+
+        collect(Filament::getPanels())
+            ->each(function (Panel $panel): void {
+                if (AssetType::FilamentResources->isActive()) {
+                    AssetType::FilamentResources->scout()->collect()
+                        ->where('panel', strtolower($panel->getId()))
+                        ->each(fn (array $asset) => $panel->discoverResources(
+                            in: $asset['path'],
+                            for: $asset['namespace']
+                        ));
+                }
+
+                if (AssetType::FilamentPages->isActive()) {
+                    AssetType::FilamentPages->scout()->collect()
+                        ->where('panel', strtolower($panel->getId()))
+                        ->each(fn (array $asset) => $panel->discoverPages(
+                            in: $asset['path'],
+                            for: $asset['namespace']
+                        ));
+                }
+
+                if (AssetType::FilamentWidgets->isActive()) {
+                    AssetType::FilamentWidgets->scout()->collect()
+                        ->where('panel', strtolower($panel->getId()))
+                        ->each(fn (array $asset) => $panel->discoverWidgets(
+                            in: $asset['path'],
+                            for: $asset['namespace']
+                        ));
+                }
+
+                if (AssetType::FilamentClusters->isActive()) {
+                    AssetType::FilamentClusters->scout()->collect()
+                        ->where('panel', strtolower($panel->getId()))
+                        ->each(fn (array $asset) => $panel->discoverClusters(
+                            in: $asset['path'],
+                            for: $asset['namespace']
+                        ));
+                }
+            });
+    }
+
     protected function bootNova(): void
     {
         if (! class_exists(Nova::class)) {
@@ -402,9 +451,12 @@ class ModulesServiceProvider extends PackageServiceProvider
                 ->replace('\\', '/')
                 ->replaceFirst('/', '')
                 ->replaceMatches(
-                    '/'.str($pattern)
+                    str($pattern)
                         ->replaceFirst('*', '.*?')
-                        ->replace('/', '\/').'\//',
+                        ->replace('/', '\/')
+                        ->prepend('/')
+                        ->append('\//')
+                        ->toString(),
                     ''
                 )
                 ->before('.php')

@@ -118,6 +118,10 @@ abstract class BaseScout
                     : [
                         'module' => Modules::moduleNameFromPath($item),
                         'path' => realpath($item),
+                        'namespace' => str(is_dir($item) ? $item : dirname($item))
+                            ->after(Modules::basePath())
+                            ->replace(['\\', '/'], ['/', '\\'])
+                            ->toString(),
                     ]
             )
             ->sortBy(

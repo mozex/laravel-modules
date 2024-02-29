@@ -31,8 +31,7 @@ test('discovering will work', function (bool $cache) {
     $collection = $discoverer->collect();
 
     expect($collection)
-        ->each->toHaveKeys(['module', 'path'])
-        ->not->toHaveKey('namespace')
+        ->each->toHaveKeys(['module', 'path', 'namespace'])
         ->and($collection->pluck('path'))
         ->toContain(realpath(Modules::modulesPath('First/Config/first.php')))
         ->toContain(realpath(Modules::modulesPath('Second/Config/test.php')));

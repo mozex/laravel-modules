@@ -7,6 +7,10 @@ use Mozex\Modules\Contracts\BaseScout;
 use Mozex\Modules\Scouts\BladeComponentsScout;
 use Mozex\Modules\Scouts\CommandsScout;
 use Mozex\Modules\Scouts\ConfigsScout;
+use Mozex\Modules\Scouts\FilamentClustersScout;
+use Mozex\Modules\Scouts\FilamentPagesScout;
+use Mozex\Modules\Scouts\FilamentResourcesScout;
+use Mozex\Modules\Scouts\FilamentWidgetsScout;
 use Mozex\Modules\Scouts\HelpersScout;
 use Mozex\Modules\Scouts\ListenersScout;
 use Mozex\Modules\Scouts\LivewireComponentsScout;
@@ -38,6 +42,10 @@ enum AssetType: string
     case Policies = 'policies';
     case Models = 'models';
     case Listeners = 'listeners';
+    case FilamentResources = 'filament-resources';
+    case FilamentPages = 'filament-pages';
+    case FilamentWidgets = 'filament-widgets';
+    case FilamentClusters = 'filament-clusters';
 
     public function scout(): ?BaseScout
     {
@@ -56,6 +64,10 @@ enum AssetType: string
             self::LivewireComponents => LivewireComponentsScout::create(),
             self::NovaResources => NovaResourcesScout::create(),
             self::Listeners => ListenersScout::create(),
+            self::FilamentResources => FilamentResourcesScout::create(),
+            self::FilamentPages => FilamentPagesScout::create(),
+            self::FilamentWidgets => FilamentWidgetsScout::create(),
+            self::FilamentClusters => FilamentClustersScout::create(),
             default => null,
         };
     }

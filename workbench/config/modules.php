@@ -20,16 +20,4 @@ return [
             '*/Components',
         ],
     ],
-    AssetType::LivewireComponents->value => [
-        'active' => true,
-        'patterns' => [
-            '*/Livewire',
-        ],
-    ],
-    AssetType::NovaResources->value => [
-        'active' => true,
-        'patterns' => [
-            '*/Nova',
-        ],
-    ],
 ];
