@@ -2,6 +2,12 @@
 
 All notable changes to `laravel-modules` will be documented in this file.
 
+## 2.2.0 - 2024-02-29
+
+* add support for filament (resources, pages, widgets, clusters)
+
+**Full Changelog**: https://github.com/mozex/laravel-modules/compare/2.1.0...2.2.0
+
 ## 2.1.0 - 2024-02-28
 
 * add support for defining route groups
