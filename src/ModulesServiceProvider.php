@@ -144,11 +144,7 @@ class ModulesServiceProvider extends PackageServiceProvider
             ->each(function (array $asset): void {
                 $this->loadViewsFrom(
                     path: $asset['path'],
-                    namespace: str($asset['module'])
-                        ->replaceMatches('/(?<! )[A-Z]/', '-$0')
-                        ->replaceFirst('-', '')
-                        ->lower()
-                        ->toString()
+                    namespace: $this->lowerDashedName($asset['module'])
                 );
             });
     }
@@ -492,23 +488,25 @@ class ModulesServiceProvider extends PackageServiceProvider
 
             return sprintf(
                 '%s::%s',
-                strtolower($asset['module']),
-                $sub
-                    ->map(
-                        fn (string $view) => str($view)
-                            ->replaceMatches('/(?<! )[A-Z]/', '-$0')
-                            ->replaceFirst('-', '')
-                            ->lower()
-                            ->toString()
-                    )
+                $this->lowerDashedName($asset['module']),
+                $sub->map($this->lowerDashedName(...))
                     ->implode('.')
             );
         }
 
         return sprintf(
             '%s::%s',
-            strtolower($asset['module']),
+            $this->lowerDashedName($asset['module']),
             strtolower(class_basename($asset['namespace']))
         );
+    }
+
+    protected function lowerDashedName(string $name): string
+    {
+        return str($name)
+            ->replaceMatches('/(?<! )[A-Z]/', '-$0')
+            ->replaceFirst('-', '')
+            ->lower()
+            ->toString();
     }
 }
