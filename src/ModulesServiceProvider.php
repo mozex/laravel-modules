@@ -142,7 +142,14 @@ class ModulesServiceProvider extends PackageServiceProvider
 
         AssetType::Views->scout()->collect()
             ->each(function (array $asset): void {
-                $this->loadViewsFrom($asset['path'], strtolower($asset['module']));
+                $this->loadViewsFrom(
+                    path: $asset['path'],
+                    namespace: str($asset['module'])
+                        ->replaceMatches('/(?<! )[A-Z]/', '-$0')
+                        ->replaceFirst('-', '')
+                        ->lower()
+                        ->toString()
+                );
             });
     }
 
