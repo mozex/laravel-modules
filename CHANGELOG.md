@@ -2,6 +2,12 @@
 
 All notable changes to `laravel-modules` will be documented in this file.
 
+## 2.2.3 - 2024-03-01
+
+* fix livewire naming
+
+**Full Changelog**: https://github.com/mozex/laravel-modules/compare/2.2.2...2.2.3
+
 ## 2.2.2 - 2024-03-01
 
 * fix views naming
