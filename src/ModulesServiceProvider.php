@@ -100,7 +100,10 @@ class ModulesServiceProvider extends PackageServiceProvider
 
         AssetType::Translations->scout()->collect()
             ->each(function (array $asset): void {
-                $this->loadTranslationsFrom($asset['path'], $asset['module']);
+                $this->loadTranslationsFrom(
+                    path: $asset['path'],
+                    namespace: $this->lowerDashedName($asset['module'])
+                );
                 $this->loadJsonTranslationsFrom($asset['path']);
             });
     }

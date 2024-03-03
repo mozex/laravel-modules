@@ -44,7 +44,7 @@ return [
     AssetType::Translations->value => [
         'active' => true,
         'patterns' => [
-            '*/Resources/lang',
+            '*/Lang',
         ],
     ],
     AssetType::Schedules->value => [

@@ -33,8 +33,8 @@ test('discovering will work', function (bool $cache) {
     expect($collection)
         ->each->toHaveKeys(['module', 'path', 'namespace'])
         ->and($collection->pluck('path'))
-        ->toContain(realpath(Modules::modulesPath('First/Resources/lang')))
-        ->toContain(realpath(Modules::modulesPath('Second/Resources/lang')));
+        ->toContain(realpath(Modules::modulesPath('First/Lang')))
+        ->toContain(realpath(Modules::modulesPath('Second/Lang')));
 
     if ($cache) {
         $discoverer->clear();
@@ -55,7 +55,7 @@ it('can load translations', function (bool $cache) {
 
     $discoverer->collect()
         ->each(function (array $asset) use ($loader) {
-            expect($loader->namespaces())->toHaveKey($asset['module'])->toContain($asset['path'])
+            expect($loader->namespaces())->toHaveKey(strtolower($asset['module']))->toContain($asset['path'])
                 ->and($loader->jsonPaths())->toContain($asset['path']);
         });
 
