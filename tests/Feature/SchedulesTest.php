@@ -6,6 +6,7 @@ use Modules\Second\Console\Kernel as SecondKernel;
 use Modules\Second\Console\WrongKernel;
 use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\Scouts\SchedulesScout;
+use Mozex\Modules\Tests\Kernel;
 
 test('scout will not collect when disabled', function () {
     config()->set(
@@ -66,14 +67,18 @@ it('can register schedules', function (bool $cache) {
         ->toArray();
 
     expect($schedules)
-        ->toContain('first:console-command-1')
         ->toContain('first-scheduled-command-1')
-        ->toContain('first-scheduled-command-2')
-        ->toContain('first-scheduled-command-3')
-        ->toContain('second:console-command-1')
         ->toContain('second-scheduled-command-1')
-        ->toContain('second-scheduled-command-2')
-        ->toContain('second-scheduled-command-3');
+        ->toContain('second-scheduled-command-2');
+
+    if (method_exists(Kernel::class, 'addCommandRoutePaths')) {
+        expect($schedules)
+            ->toContain('first:console-command-1')
+            ->toContain('first-scheduled-command-2')
+            ->toContain('first-scheduled-command-3')
+            ->toContain('second:console-command-1')
+            ->toContain('second-scheduled-command-3');
+    }
 
     if ($cache) {
         $discoverer->clear();

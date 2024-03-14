@@ -7,6 +7,7 @@ use Modules\Second\Console\Commands\ChainedCommand;
 use Modules\Second\Console\Commands\SecondValidCommand;
 use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\Scouts\CommandsScout;
+use Mozex\Modules\Tests\Kernel;
 
 test('scout will not collect when disabled', function () {
     config()->set(
@@ -65,9 +66,11 @@ it('can register commands', function (bool $cache) {
             expect($commands)->toContain((new $asset['namespace'])->getName());
         });
 
-    expect($commands)
-        ->toContain('first:console-command-1')
-        ->toContain('second:console-command-1');
+    if (method_exists(Kernel::class, 'addCommandRoutePaths')) {
+        expect($commands)
+            ->toContain('first:console-command-1')
+            ->toContain('second:console-command-1');
+    }
 
     if ($cache) {
         $discoverer->clear();

@@ -294,9 +294,12 @@ class ModulesServiceProvider extends PackageServiceProvider
             );
 
         $this->callAfterResolving(Kernel::class, function (Kernel $kernel) use ($commands) {
-            $kernel->addCommandRoutePaths(
-                $commands->pluck('path')->all()
-            );
+            // Compatibility with Laravel 10
+            if (method_exists($kernel, 'addCommandRoutePaths')) {
+                $kernel->addCommandRoutePaths(
+                    $commands->pluck('path')->all()
+                );
+            }
         });
 
         $routes->each(function (array $asset): void {
