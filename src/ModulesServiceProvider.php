@@ -7,6 +7,7 @@ use Filament\Panel;
 use Filament\PanelRegistry;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Contracts\Auth\Access\Gate as GateInstance;
+use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Contracts\Foundation\CachesConfiguration;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Foundation\Events\DiscoverEvents;
@@ -286,15 +287,26 @@ class ModulesServiceProvider extends PackageServiceProvider
             return;
         }
 
-        AssetType::Routes->scout()->collect()
-            ->each(function (array $asset): void {
-                Route::group(
-                    attributes: Modules::getRouteGroup(
-                        name: File::name($asset['path'])
-                    ),
-                    routes: $asset['path']
-                );
-            });
+        [$commands, $routes] = AssetType::Routes->scout()->collect()
+            ->partition(
+                fn (array $asset) => collect(AssetType::Routes->config()['commands_filenames'])
+                    ->contains(File::name($asset['path']))
+            );
+
+        $this->callAfterResolving(Kernel::class, function (Kernel $kernel) use ($commands) {
+            $kernel->addCommandRoutePaths(
+                $commands->pluck('path')->all()
+            );
+        });
+
+        $routes->each(function (array $asset): void {
+            Route::group(
+                attributes: Modules::getRouteGroup(
+                    name: File::name($asset['path'])
+                ),
+                routes: $asset['path']
+            );
+        });
     }
 
     protected function bootSchedules(): void

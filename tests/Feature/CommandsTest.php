@@ -58,12 +58,16 @@ it('can register commands', function (bool $cache) {
         $discoverer->cache();
     }
 
-    $commands = Artisan::all();
+    $commands = collect(Artisan::all())->keys();
 
     $discoverer->collect()
         ->each(function (array $asset) use ($commands) {
-            expect($commands)->toHaveKey((new $asset['namespace'])->getName());
+            expect($commands)->toContain((new $asset['namespace'])->getName());
         });
+
+    expect($commands)
+        ->toContain('first:console-command-1')
+        ->toContain('second:console-command-1');
 
     if ($cache) {
         $discoverer->clear();

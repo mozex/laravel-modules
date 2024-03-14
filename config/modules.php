@@ -77,6 +77,9 @@ return [
         'patterns' => [
             '*/Routes/*.php',
         ],
+        'commands_filenames' => [
+            'console',
+        ],
     ],
     AssetType::Models->value => [
         'active' => true,

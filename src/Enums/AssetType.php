@@ -73,7 +73,7 @@ enum AssetType: string
     }
 
     /**
-     * @return array{active?: bool, patterns?: array<array-key, string>, namespace?: string, priority?: bool}
+     * @return array{active?: bool, patterns?: array<array-key, string>, namespace?: string, priority?: bool, commands_filenames?: array<array-key, string>}
      */
     public function config(): array
     {

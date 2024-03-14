@@ -58,12 +58,22 @@ it('can register schedules', function (bool $cache) {
     $schedules = collect(app(Schedule::class)->events())
         ->pluck('command')
         ->flatten()
+        ->map(
+            fn ($command) => str_contains($command, '"artisan" ')
+                ? str($command)->after('"artisan" ')->toString()
+                : $command
+        )
         ->toArray();
 
     expect($schedules)
+        ->toContain('first:console-command-1')
         ->toContain('first-scheduled-command-1')
+        ->toContain('first-scheduled-command-2')
+        ->toContain('first-scheduled-command-3')
+        ->toContain('second:console-command-1')
         ->toContain('second-scheduled-command-1')
-        ->toContain('second-scheduled-command-2');
+        ->toContain('second-scheduled-command-2')
+        ->toContain('second-scheduled-command-3');
 
     if ($cache) {
         $discoverer->clear();
