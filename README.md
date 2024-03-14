@@ -7,10 +7,12 @@
 
 [//]: # ([![Total Downloads]&#40;https://img.shields.io/packagist/dt/mozex/laravel-modules.svg?style=flat-square&#41;]&#40;https://packagist.org/packages/mozex/laravel-modules&#41;)
 
-This package allows you to manage your Laravel application modules.
+This package is a powerful and flexible solution for creating modular Laravel applications. It is designed to help you build applications that are scalable, maintainable, and easy to test and bundle modules for publishing with one command.
+
+You just need to install this package, and you are ready to go, every thing works out of the box, we have taken care of everything for you so you can focus on your business logic.
 
 - [Support Us](#support-us)
-- [Installation](#installation)
+- [Documentation](docs)
 - [Testing](#testing)
 - [Changelog](#changelog)
 - [Contributing](#contributing)
@@ -26,13 +28,9 @@ Sponsorship can be made through the [GitHub Sponsors](https://github.com/sponsor
 
 Thank you for considering sponsoring. Your support truly makes a difference!
 
-## Installation
+## Documentation
 
-You can install the package via composer:
-
-```bash
-composer require mozex/laravel-modules
-```
+Detailed documentation, including examples and best practices, can be found in [Here](docs).
 
 ## Testing
 
