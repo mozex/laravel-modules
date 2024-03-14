@@ -2,6 +2,12 @@
 
 All notable changes to `laravel-modules` will be documented in this file.
 
+## 2.3.0 - 2024-03-14
+
+* Add Laravel 11 commands file support
+
+**Full Changelog**: https://github.com/mozex/laravel-modules/compare/2.2.4...2.3.0
+
 ## 2.2.4 - 2024-03-03
 
 * fix translations prefix and directory
