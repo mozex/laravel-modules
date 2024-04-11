@@ -279,10 +279,6 @@ class ModulesServiceProvider extends PackageServiceProvider
 
     protected function bootRoutes(): void
     {
-        if ($this->app->routesAreCached()) {
-            return;
-        }
-
         if (AssetType::Routes->isDeactive()) {
             return;
         }
@@ -301,6 +297,10 @@ class ModulesServiceProvider extends PackageServiceProvider
                 );
             }
         });
+
+        if ($this->app->routesAreCached()) {
+            return;
+        }
 
         $routes->each(function (array $asset): void {
             Route::group(
