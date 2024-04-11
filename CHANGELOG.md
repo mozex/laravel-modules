@@ -2,6 +2,15 @@
 
 All notable changes to `laravel-modules` will be documented in this file.
 
+## 2.3.1 - 2024-04-11
+
+### What's Changed
+
+* Fix loading commands from the console.php file when routes are cached
+* Bump dependabot/fetch-metadata from 1.6.0 to 2.0.0 by @dependabot in https://github.com/mozex/laravel-modules/pull/5
+
+**Full Changelog**: https://github.com/mozex/laravel-modules/compare/2.3.0...2.3.1
+
 ## 2.3.0 - 2024-03-14
 
 * Add Laravel 11 commands file support
