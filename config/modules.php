@@ -80,6 +80,9 @@ return [
         'commands_filenames' => [
             'console',
         ],
+        'channels_filenames' => [
+            'channels',
+        ],
     ],
     AssetType::Models->value => [
         'active' => true,
