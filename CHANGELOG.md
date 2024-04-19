@@ -2,6 +2,15 @@
 
 All notable changes to `laravel-modules` will be documented in this file.
 
+## 2.4.0 - 2024-04-19
+
+### What's Changed
+
+* Bump aglipanci/laravel-pint-action from 2.3.1 to 2.4 by @dependabot in https://github.com/mozex/laravel-modules/pull/6
+* add support for channels.php files in the routes directory
+
+**Full Changelog**: https://github.com/mozex/laravel-modules/compare/2.3.1...2.4.0
+
 ## 2.3.1 - 2024-04-11
 
 ### What's Changed
