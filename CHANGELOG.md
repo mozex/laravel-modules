@@ -2,6 +2,12 @@
 
 All notable changes to `laravel-modules` will be documented in this file.
 
+## 2.4.1 - 2024-04-19
+
+* fix registering broadcast auth route
+
+**Full Changelog**: https://github.com/mozex/laravel-modules/compare/2.4.0...2.4.1
+
 ## 2.4.0 - 2024-04-19
 
 ### What's Changed
