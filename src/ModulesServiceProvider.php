@@ -12,6 +12,7 @@ use Illuminate\Contracts\Foundation\CachesConfiguration;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Foundation\Events\DiscoverEvents;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
@@ -305,6 +306,10 @@ class ModulesServiceProvider extends PackageServiceProvider
         });
 
         $this->app->booted(function () use ($channels) {
+            if ($channels->isNotEmpty()) {
+                Broadcast::routes();
+            }
+
             $channels->each(function (array $asset): void {
                 require $asset['path'];
             });
