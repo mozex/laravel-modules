@@ -36,9 +36,13 @@ test('discovering will work', function (bool $cache) {
         ->and($collection->pluck('path'))
         ->toContain(realpath(Modules::modulesPath('First/Routes/web.php')))
         ->toContain(realpath(Modules::modulesPath('First/Routes/api.php')))
+        ->toContain(realpath(Modules::modulesPath('First/Routes/console.php')))
+        ->toContain(realpath(Modules::modulesPath('First/Routes/channels.php')))
         ->toContain(realpath(Modules::modulesPath('Second/Routes/web.php')))
         ->toContain(realpath(Modules::modulesPath('Second/Routes/undefined.php')))
-        ->toContain(realpath(Modules::modulesPath('Second/Routes/custom.php')));
+        ->toContain(realpath(Modules::modulesPath('Second/Routes/custom.php')))
+        ->toContain(realpath(Modules::modulesPath('Second/Routes/console.php')))
+        ->toContain(realpath(Modules::modulesPath('Second/Routes/channels.php')));
 
     if ($cache) {
         $discoverer->clear();

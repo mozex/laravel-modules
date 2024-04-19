@@ -283,9 +283,15 @@ class ModulesServiceProvider extends PackageServiceProvider
             return;
         }
 
-        [$commands, $routes] = AssetType::Routes->scout()->collect()
+        [$commands, $rest] = AssetType::Routes->scout()->collect()
             ->partition(
                 fn (array $asset) => collect(AssetType::Routes->config()['commands_filenames'])
+                    ->contains(File::name($asset['path']))
+            );
+
+        [$channels, $routes] = $rest
+            ->partition(
+                fn (array $asset) => collect(AssetType::Routes->config()['channels_filenames'])
                     ->contains(File::name($asset['path']))
             );
 
@@ -296,6 +302,12 @@ class ModulesServiceProvider extends PackageServiceProvider
                     $commands->pluck('path')->all()
                 );
             }
+        });
+
+        $this->app->booted(function () use ($channels) {
+            $channels->each(function (array $asset): void {
+                require $asset['path'];
+            });
         });
 
         if ($this->app->routesAreCached()) {
