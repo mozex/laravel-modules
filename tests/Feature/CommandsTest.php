@@ -1,5 +1,6 @@
 <?php
 
+use Modules\First\Console\Commands\ExtendedCommand;
 use Modules\First\Console\Commands\FirstValidCommand;
 use Modules\First\Console\Commands\WrongCommand;
 use Modules\Second\Console\Commands\BaseCommand;
@@ -41,6 +42,7 @@ test('discovering will work', function (bool $cache) {
         ->toContain(FirstValidCommand::class)
         ->toContain(SecondValidCommand::class)
         ->toContain(ChainedCommand::class)
+        ->toContain(ExtendedCommand::class)
         ->not->toContain(WrongCommand::class)
         ->not->toContain(BaseCommand::class);
 

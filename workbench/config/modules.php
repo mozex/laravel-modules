@@ -20,4 +20,11 @@ return [
             '*/Components',
         ],
     ],
+    AssetType::Commands->value => [
+        'active' => true,
+        'patterns' => [
+            '*/Console/Commands',
+            '../app/Console/Commands',
+        ],
+    ],
 ];
