@@ -66,10 +66,6 @@ class ModulesServiceProvider extends PackageServiceProvider
 
     protected function bootCommands(): void
     {
-        if (! $this->app->runningInConsole()) {
-            return;
-        }
-
         if (AssetType::Commands->isDeactive()) {
             return;
         }
