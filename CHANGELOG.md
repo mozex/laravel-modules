@@ -2,6 +2,12 @@
 
 All notable changes to `laravel-modules` will be documented in this file.
 
+## 2.4.3 - 2024-05-17
+
+* fix naming components
+
+**Full Changelog**: https://github.com/mozex/laravel-modules/compare/2.4.2...2.4.3
+
 ## 2.4.2 - 2024-05-05
 
 ### What's Changed
