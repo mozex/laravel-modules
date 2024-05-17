@@ -534,7 +534,13 @@ class ModulesServiceProvider extends PackageServiceProvider
 
     protected function lowerDashedName(string $name): string
     {
-        return str($name)
+        $str = str($name);
+
+        if ($name === $str->upper()->toString()) {
+            return $str->lower()->toString();
+        }
+
+        return $str
             ->replaceMatches('/(?<! )[A-Z]/', '-$0')
             ->replaceFirst('-', '')
             ->lower()

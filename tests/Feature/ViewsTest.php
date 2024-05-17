@@ -66,6 +66,13 @@ it('can load views', function (bool $cache) {
         ->toContain('Second Page')
         ->and(view('second::pages.page')->render())
         ->toContain('Nested Page')
+        ->and(view('pwa::head')->render())
+        ->toContain('PWA Head')
+        ->and(Blade::render(
+            string: '<x-pwa::manifest/>',
+            deleteCachedView: true
+        ))
+        ->toContain('Manifest Component')
         ->and(Blade::render(
             string: '<x-first::input/>',
             deleteCachedView: true

@@ -73,6 +73,11 @@ it('can register livewire components', function (bool $cache) {
         ))
         ->toContain('List Users Livewire Component')
         ->and(Blade::render(
+            string: '<livewire:pwa::icons/>',
+            deleteCachedView: true
+        ))
+        ->toContain('PWA Icons Livewire Component')
+        ->and(Blade::render(
             string: '<livewire:first::nested.nested-users/>',
             deleteCachedView: true
         ))
