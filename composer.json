@@ -32,6 +32,7 @@
         "pestphp/pest-plugin-laravel": "^2.0",
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan": "^1.11.2",
+        "rector/rector": "^1.1.0",
         "spatie/ray": "^1.41"
     },
     "autoload": {
