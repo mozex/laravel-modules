@@ -10,8 +10,11 @@
          beStrictAboutOutputDuringTests="true"
 >
     <testsuites>
-        <testsuite name="Mozex Test Suite">
+        <testsuite name="Default">
             <directory>tests</directory>
+        </testsuite>
+        <testsuite name="Features">
+            <directory suffix="UnitTest.php">./src/Features</directory>
         </testsuite>
     </testsuites>
     <coverage>
