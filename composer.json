@@ -76,8 +76,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Mozex\\Modules\\ModulesServiceProvider",
-                "Mozex\\Modules\\ModulesEventServiceProvider"
+                "Mozex\\Modules\\ModulesServiceProvider"
             ],
             "aliases": {
                 "Modules": "Mozex\\Modules\\Facades\\Modules"
