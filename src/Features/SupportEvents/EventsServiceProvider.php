@@ -1,11 +1,11 @@
 <?php
 
-namespace Mozex\Modules;
+namespace Mozex\Modules\Features\SupportEvents;
 
 use Illuminate\Foundation\Support\Providers\EventServiceProvider;
 use Mozex\Modules\Enums\AssetType;
 
-class ModulesEventServiceProvider extends EventServiceProvider
+class EventsServiceProvider extends EventServiceProvider
 {
     public function shouldDiscoverEvents(): bool
     {

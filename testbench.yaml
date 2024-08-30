@@ -6,7 +6,6 @@ providers:
   - App\Providers\Filament\DashboardPanelProvider
   - Mozex\Modules\ModulesServiceProvider
   - App\Providers\EventServiceProvider
-  - Mozex\Modules\ModulesEventServiceProvider
 
 workbench:
   discovers:

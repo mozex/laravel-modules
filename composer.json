@@ -24,17 +24,15 @@
     },
     "require-dev": {
         "filament/filament": "^3.2.39",
-        "larastan/larastan": "^2.0.1",
-        "laravel/pint": "^1.0",
+        "laravel/pint": "^1.16.1",
         "livewire/livewire": "^3.4",
         "nunomaduro/collision": "^7.8|^8.1",
         "orchestra/testbench": "^8.21|^9.0",
-        "pestphp/pest": "^2.31",
+        "pestphp/pest": "^2.34.7",
         "pestphp/pest-plugin-laravel": "^2.0",
         "phpstan/extension-installer": "^1.1",
-        "phpstan/phpstan-deprecation-rules": "^1.0",
-        "phpstan/phpstan-phpunit": "^1.0",
-        "spatie/laravel-ray": "^1.26"
+        "phpstan/phpstan": "^1.11.2",
+        "spatie/ray": "^1.41"
     },
     "autoload": {
         "psr-4": {

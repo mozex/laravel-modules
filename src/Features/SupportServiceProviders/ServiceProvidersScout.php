@@ -1,6 +1,6 @@
 <?php
 
-namespace Mozex\Modules\Scouts;
+namespace Mozex\Modules\Features\SupportServiceProviders;
 
 use Illuminate\Support\ServiceProvider;
 use Mozex\Modules\Contracts\ModuleClassScout;
