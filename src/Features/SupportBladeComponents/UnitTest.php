@@ -8,7 +8,7 @@ use Modules\Second\View\Components\Search;
 use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\Features\SupportBladeComponents\BladeComponentsScout;
 
-test('scout will not collect when disabled', function () {
+test('scout will not collect when disabled', function (): void {
     config()->set(
         'modules.'.AssetType::BladeComponents->value.'.active',
         false
@@ -25,7 +25,7 @@ test('scout will not collect when disabled', function () {
     $discoverer->clear();
 });
 
-test('discovering will work', function (bool $cache) {
+test('discovering will work', function (bool $cache): void {
     $discoverer = BladeComponentsScout::create();
 
     if ($cache) {
@@ -50,7 +50,7 @@ test('discovering will work', function (bool $cache) {
     'with cache' => true,
 ]);
 
-it('can load blade components', function (bool $cache) {
+it('can load blade components', function (bool $cache): void {
     $discoverer = BladeComponentsScout::create();
 
     if ($cache) {
@@ -60,7 +60,7 @@ it('can load blade components', function (bool $cache) {
     $components = Blade::getClassComponentAliases();
 
     $discoverer->collect()
-        ->each(function (array $asset) use ($components) {
+        ->each(function (array $asset) use ($components): void {
             expect($components)->toContain($asset['namespace']);
         });
 

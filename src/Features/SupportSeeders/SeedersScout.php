@@ -21,7 +21,7 @@ class SeedersScout extends ModuleClassScout
         return parent::definition()
             ->extending(Seeder::class)
             ->custom(
-                fn (DiscoveredClass $structure) => $structure->name == Modules::moduleNameFromNamespace($structure->namespace).'DatabaseSeeder'
+                fn (DiscoveredClass $structure): bool => $structure->name === Modules::moduleNameFromNamespace($structure->namespace).'DatabaseSeeder'
             );
     }
 }

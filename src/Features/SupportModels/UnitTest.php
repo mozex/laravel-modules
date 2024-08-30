@@ -13,7 +13,7 @@ use Modules\Second\Database\Factories\TeamFactory;
 use Modules\Second\Models\Nested\NestedTeam;
 use Modules\Second\Models\Team;
 
-it('can guess model name', function () {
+it('can guess model name', function (): void {
     expect((new TestFactory)->modelName())->toBe(Test::class)
         ->and((new UserFactory)->modelName())->toBe(User::class)
         ->and((new TeamFactory)->modelName())->toBe(Team::class)

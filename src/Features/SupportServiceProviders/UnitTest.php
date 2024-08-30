@@ -6,7 +6,7 @@ use Modules\Second\Providers\TeamServiceProvider;
 use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\Features\SupportServiceProviders\ServiceProvidersScout;
 
-test('scout will not collect when disabled', function () {
+test('scout will not collect when disabled', function (): void {
     config()->set(
         'modules.'.AssetType::ServiceProviders->value.'.active',
         false
@@ -23,7 +23,7 @@ test('scout will not collect when disabled', function () {
     $discoverer->clear();
 });
 
-test('discovering will work', function (bool $cache) {
+test('discovering will work', function (bool $cache): void {
     $discoverer = ServiceProvidersScout::create();
 
     if ($cache) {
@@ -47,7 +47,7 @@ test('discovering will work', function (bool $cache) {
     'with cache' => true,
 ]);
 
-it('can register service providers', function (bool $cache) {
+it('can register service providers', function (bool $cache): void {
     $discoverer = ServiceProvidersScout::create();
 
     if ($cache) {
@@ -57,7 +57,7 @@ it('can register service providers', function (bool $cache) {
     $serviceProviders = app()->getLoadedProviders();
 
     $discoverer->collect()
-        ->each(function (array $asset) use ($serviceProviders) {
+        ->each(function (array $asset) use ($serviceProviders): void {
             expect($serviceProviders)->toHaveKey($asset['namespace']);
         });
 

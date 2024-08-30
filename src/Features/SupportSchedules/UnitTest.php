@@ -8,7 +8,7 @@ use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\Features\SupportSchedules\SchedulesScout;
 use Mozex\Modules\Tests\Kernel;
 
-test('scout will not collect when disabled', function () {
+test('scout will not collect when disabled', function (): void {
     config()->set(
         'modules.'.AssetType::Schedules->value.'.active',
         false
@@ -25,7 +25,7 @@ test('scout will not collect when disabled', function () {
     $discoverer->clear();
 });
 
-test('discovering will work', function (bool $cache) {
+test('discovering will work', function (bool $cache): void {
     $discoverer = SchedulesScout::create();
 
     if ($cache) {
@@ -49,7 +49,7 @@ test('discovering will work', function (bool $cache) {
     'with cache' => true,
 ]);
 
-it('can register schedules', function (bool $cache) {
+it('can register schedules', function (bool $cache): void {
     $discoverer = SchedulesScout::create();
 
     if ($cache) {

@@ -19,7 +19,7 @@ class ClearCommand extends Command
         progress(
             label: 'Clearing Modules Cache',
             steps: AssetType::activeScouts(),
-            callback: function (BaseScout $scout, $progress) {
+            callback: function (BaseScout $scout, $progress): void {
                 $progress->label("Clearing {$scout->asset()->title()}");
 
                 $scout->clear();

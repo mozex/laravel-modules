@@ -18,13 +18,13 @@ class FilamentServiceProvider extends Feature
             return;
         }
 
-        $this->callAfterResolving(PanelRegistry::class, function (PanelRegistry $panelRegistry) {
+        $this->callAfterResolving(PanelRegistry::class, function (PanelRegistry $panelRegistry): void {
             collect($panelRegistry->all())
                 ->each(function (Panel $panel): void {
                     if (AssetType::FilamentResources->isActive()) {
                         AssetType::FilamentResources->scout()->collect()
                             ->where('panel', strtolower($panel->getId()))
-                            ->each(fn (array $asset) => $panel->discoverResources(
+                            ->each(fn (array $asset): Panel => $panel->discoverResources(
                                 in: $asset['path'],
                                 for: $asset['namespace']
                             ));
@@ -33,7 +33,7 @@ class FilamentServiceProvider extends Feature
                     if (AssetType::FilamentPages->isActive()) {
                         AssetType::FilamentPages->scout()->collect()
                             ->where('panel', strtolower($panel->getId()))
-                            ->each(fn (array $asset) => $panel->discoverPages(
+                            ->each(fn (array $asset): Panel => $panel->discoverPages(
                                 in: $asset['path'],
                                 for: $asset['namespace']
                             ));
@@ -42,7 +42,7 @@ class FilamentServiceProvider extends Feature
                     if (AssetType::FilamentWidgets->isActive()) {
                         AssetType::FilamentWidgets->scout()->collect()
                             ->where('panel', strtolower($panel->getId()))
-                            ->each(fn (array $asset) => $panel->discoverWidgets(
+                            ->each(fn (array $asset): Panel => $panel->discoverWidgets(
                                 in: $asset['path'],
                                 for: $asset['namespace']
                             ));
@@ -51,7 +51,7 @@ class FilamentServiceProvider extends Feature
                     if (AssetType::FilamentClusters->isActive()) {
                         AssetType::FilamentClusters->scout()->collect()
                             ->where('panel', strtolower($panel->getId()))
-                            ->each(fn (array $asset) => $panel->discoverClusters(
+                            ->each(fn (array $asset): Panel => $panel->discoverClusters(
                                 in: $asset['path'],
                                 for: $asset['namespace']
                             ));
@@ -62,7 +62,7 @@ class FilamentServiceProvider extends Feature
                             ->getValue($panel)
                     )
                         ->filter(
-                            fn (string $class) => str_starts_with(
+                            fn (string $class): bool => str_starts_with(
                                 haystack: $class,
                                 needle: config('modules.modules_namespace')
                             )

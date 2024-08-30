@@ -15,7 +15,7 @@ use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\Facades\Modules;
 use Mozex\Modules\Features\SupportFilament\FilamentPagesScout;
 
-test('scout will not collect when disabled', function () {
+test('scout will not collect when disabled', function (): void {
     config()->set(
         'modules.'.AssetType::FilamentPages->value.'.active',
         false
@@ -32,7 +32,7 @@ test('scout will not collect when disabled', function () {
     $discoverer->clear();
 });
 
-test('discovering will work', function (bool $cache) {
+test('discovering will work', function (bool $cache): void {
     $discoverer = FilamentPagesScout::create();
 
     if ($cache) {
@@ -60,7 +60,7 @@ test('discovering will work', function (bool $cache) {
     'with cache' => true,
 ]);
 
-it('can register filament pages', function (bool $cache) {
+it('can register filament pages', function (bool $cache): void {
     $discoverer = FilamentPagesScout::create();
 
     if ($cache) {

@@ -8,7 +8,7 @@ use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\Facades\Modules;
 use Mozex\Modules\Features\SupportSeeders\SeedersScout;
 
-test('scout will not collect when disabled', function () {
+test('scout will not collect when disabled', function (): void {
     config()->set(
         'modules.'.AssetType::Seeders->value.'.active',
         false
@@ -25,7 +25,7 @@ test('scout will not collect when disabled', function () {
     $discoverer->clear();
 });
 
-test('discovering will work', function (bool $cache) {
+test('discovering will work', function (bool $cache): void {
     $discoverer = SeedersScout::create();
 
     if ($cache) {
@@ -50,7 +50,7 @@ test('discovering will work', function (bool $cache) {
     'with cache' => true,
 ]);
 
-it('can return seeders', function (bool $cache) {
+it('can return seeders', function (bool $cache): void {
     $discoverer = SeedersScout::create();
 
     if ($cache) {
@@ -70,7 +70,7 @@ it('can return seeders', function (bool $cache) {
     'with cache' => true,
 ]);
 
-it('will not return seeders when disabled', function (bool $cache) {
+it('will not return seeders when disabled', function (bool $cache): void {
     config()->set(
         'modules.'.AssetType::Seeders->value.'.active',
         false

@@ -7,7 +7,7 @@ use Modules\Second\Livewire\WrongComponents;
 use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\Features\SupportLivewire\LivewireComponentsScout;
 
-test('scout will not collect when disabled', function () {
+test('scout will not collect when disabled', function (): void {
     config()->set(
         'modules.'.AssetType::LivewireComponents->value.'.active',
         false
@@ -24,7 +24,7 @@ test('scout will not collect when disabled', function () {
     $discoverer->clear();
 });
 
-test('discovering will work', function (bool $cache) {
+test('discovering will work', function (bool $cache): void {
     $discoverer = LivewireComponentsScout::create();
 
     if ($cache) {
@@ -48,7 +48,7 @@ test('discovering will work', function (bool $cache) {
     'with cache' => true,
 ]);
 
-it('can register livewire components', function (bool $cache) {
+it('can register livewire components', function (bool $cache): void {
     $discoverer = LivewireComponentsScout::create();
 
     if ($cache) {
@@ -58,7 +58,7 @@ it('can register livewire components', function (bool $cache) {
     $components = app(ComponentRegistry::class);
 
     $discoverer->collect()
-        ->each(function (array $asset) use ($components) {
+        ->each(function (array $asset) use ($components): void {
             expect($components->getName($asset['namespace']))->not->toBeNull();
         });
 

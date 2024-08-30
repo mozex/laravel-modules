@@ -14,7 +14,7 @@ class RegisterServiceProviders extends Feature
         }
 
         AssetType::ServiceProviders->scout()->collect()
-            ->each(function (array $asset) {
+            ->each(function (array $asset): void {
                 $this->app->register($asset['namespace']);
             });
     }

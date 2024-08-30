@@ -26,7 +26,7 @@ abstract class ModuleClassScout extends BaseScout
             ->parallel()
             ->classes()
             ->full()
-            ->custom(fn (DiscoveredClass $structure) => ! $structure->isAbstract)
+            ->custom(fn (DiscoveredClass $structure): bool => ! $structure->isAbstract)
             ->sortBy(Sort::Name);
     }
 }

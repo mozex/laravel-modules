@@ -10,7 +10,7 @@ use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\Features\SupportCommands\CommandsScout;
 use Mozex\Modules\Tests\Kernel;
 
-test('scout will not collect when disabled', function () {
+test('scout will not collect when disabled', function (): void {
     config()->set(
         'modules.'.AssetType::Commands->value.'.active',
         false
@@ -27,7 +27,7 @@ test('scout will not collect when disabled', function () {
     $discoverer->clear();
 });
 
-test('discovering will work', function (bool $cache) {
+test('discovering will work', function (bool $cache): void {
     $discoverer = CommandsScout::create();
 
     if ($cache) {
@@ -54,7 +54,7 @@ test('discovering will work', function (bool $cache) {
     'with cache' => true,
 ]);
 
-it('can register commands', function (bool $cache) {
+it('can register commands', function (bool $cache): void {
     $discoverer = CommandsScout::create();
 
     if ($cache) {
@@ -64,7 +64,7 @@ it('can register commands', function (bool $cache) {
     $commands = collect(Artisan::all())->keys();
 
     $discoverer->collect()
-        ->each(function (array $asset) use ($commands) {
+        ->each(function (array $asset) use ($commands): void {
             expect($commands)->toContain((new $asset['namespace'])->getName());
         });
 

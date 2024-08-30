@@ -111,8 +111,8 @@ enum AssetType: string
     public static function activeScouts(): Collection
     {
         return collect(self::cases())
-            ->filter(fn (self $type) => $type->isActive())
-            ->map(fn (self $type) => $type->scout())
+            ->filter(fn (self $type): bool => $type->isActive())
+            ->map(fn (self $type): ?BaseScout => $type->scout())
             ->filter();
     }
 }

@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Broadcast;
 use Mozex\Modules\Features\SupportRoutes\RoutesScout;
 
-it('can register channels', function (bool $cache) {
+it('can register channels', function (bool $cache): void {
     $discoverer = RoutesScout::create();
 
     if ($cache) {

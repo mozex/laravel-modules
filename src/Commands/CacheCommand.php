@@ -19,7 +19,7 @@ class CacheCommand extends Command
         progress(
             label: 'Caching Modules',
             steps: AssetType::activeScouts(),
-            callback: function (BaseScout $scout, $progress) {
+            callback: function (BaseScout $scout, $progress): void {
                 $progress->label("Caching {$scout->asset()->title()}");
 
                 $scout->clear();

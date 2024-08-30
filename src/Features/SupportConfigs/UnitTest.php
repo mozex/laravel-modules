@@ -4,7 +4,7 @@ use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\Facades\Modules;
 use Mozex\Modules\Features\SupportConfigs\ConfigsScout;
 
-test('scout will not collect when disabled', function () {
+test('scout will not collect when disabled', function (): void {
     config()->set(
         'modules.'.AssetType::Configs->value.'.active',
         false
@@ -21,7 +21,7 @@ test('scout will not collect when disabled', function () {
     $discoverer->clear();
 });
 
-test('discovering will work', function (bool $cache) {
+test('discovering will work', function (bool $cache): void {
     $discoverer = ConfigsScout::create();
 
     if ($cache) {
@@ -44,7 +44,7 @@ test('discovering will work', function (bool $cache) {
     'with cache' => true,
 ]);
 
-it('can load configs', function (bool $cache) {
+it('can load configs', function (bool $cache): void {
     $discoverer = ConfigsScout::create();
 
     if ($cache) {

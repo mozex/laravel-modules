@@ -14,9 +14,9 @@ class SchedulesServiceProvider extends Feature
             return;
         }
 
-        $this->callAfterResolving(Schedule::class, function (Schedule $schedule) {
+        $this->callAfterResolving(Schedule::class, function (Schedule $schedule): void {
             AssetType::Schedules->scout()->collect()
-                ->each(function (array $asset) use ($schedule) {
+                ->each(function (array $asset) use ($schedule): void {
                     (new $asset['namespace'])->schedule($schedule);
                 });
         });

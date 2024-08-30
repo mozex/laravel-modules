@@ -30,7 +30,7 @@ class RoutesServiceProvider extends Feature
                     ->contains(File::name($asset['path']))
             );
 
-        $this->callAfterResolving(Kernel::class, function (Kernel $kernel) use ($commands) {
+        $this->callAfterResolving(Kernel::class, function (Kernel $kernel) use ($commands): void {
             // Compatibility with Laravel 10
             if (method_exists($kernel, 'addCommandRoutePaths')) {
                 $kernel->addCommandRoutePaths(
@@ -39,7 +39,7 @@ class RoutesServiceProvider extends Feature
             }
         });
 
-        $this->app->booted(function () use ($channels) {
+        $this->app->booted(function () use ($channels): void {
             if ($channels->isNotEmpty()) {
                 Broadcast::routes();
             }

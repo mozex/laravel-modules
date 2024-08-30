@@ -109,7 +109,7 @@ abstract class BaseScout
     {
         return collect($result)
             ->map(
-                fn (string|DiscoveredClass $item) => $item instanceof DiscoveredClass
+                fn (string|DiscoveredClass $item): array => $item instanceof DiscoveredClass
                     ? [
                         'module' => Modules::moduleNameFromNamespace($item->namespace),
                         'path' => realpath($item->file),
@@ -125,7 +125,7 @@ abstract class BaseScout
                     ]
             )
             ->sortBy(
-                fn (array $asset) => (int) (config('modules.modules', [])[$asset['module']]['order'] ?? 9999)
+                fn (array $asset): int => (int) (config('modules.modules', [])[$asset['module']]['order'] ?? 9999)
             )
             ->filter(
                 fn (array $asset) => config('modules.modules', [])[$asset['module']]['active'] ?? true

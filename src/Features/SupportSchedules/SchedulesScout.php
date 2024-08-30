@@ -21,7 +21,7 @@ class SchedulesScout extends ModuleClassScout
         return parent::definition()
             ->extending(ConsoleKernel::class)
             ->custom(
-                fn (DiscoveredClass $structure) => $structure->name === 'Kernel'
+                fn (DiscoveredClass $structure): bool => $structure->name === 'Kernel'
                     && str_ends_with(
                         $structure->namespace,
                         Modules::moduleNameFromNamespace($structure->namespace).'\\Console'

@@ -7,7 +7,7 @@ use Modules\Second\Nova\WrongResource;
 use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\Features\SupportNova\NovaResourcesScout;
 
-test('scout will not collect when disabled', function () {
+test('scout will not collect when disabled', function (): void {
     config()->set(
         'modules.'.AssetType::NovaResources->value.'.active',
         false
@@ -24,7 +24,7 @@ test('scout will not collect when disabled', function () {
     $discoverer->clear();
 });
 
-test('discovering will work', function (bool $cache) {
+test('discovering will work', function (bool $cache): void {
     $discoverer = NovaResourcesScout::create();
 
     if ($cache) {

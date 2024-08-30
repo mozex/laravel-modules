@@ -21,7 +21,7 @@ class NovaResourcesScout extends ModuleClassScout
         return parent::definition()
             ->extending(Resource::class)
             ->custom(
-                fn (DiscoveredClass $structure) => ! in_array(ActionResource::class, $structure->extendsChain)
+                fn (DiscoveredClass $structure): bool => ! in_array(ActionResource::class, $structure->extendsChain)
             );
     }
 }

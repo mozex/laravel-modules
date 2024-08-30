@@ -13,7 +13,7 @@ use Modules\Second\Database\Factories\TeamFactory;
 use Modules\Second\Models\Nested\NestedTeam;
 use Modules\Second\Models\Team;
 
-it('can guess factory name', function () {
+it('can guess factory name', function (): void {
     expect(Test::factory())->toBeInstanceOf(TestFactory::class)
         ->and(User::factory())->toBeInstanceOf(UserFactory::class)
         ->and(Team::factory())->toBeInstanceOf(TeamFactory::class)

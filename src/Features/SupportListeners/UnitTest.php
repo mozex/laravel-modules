@@ -12,7 +12,7 @@ use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\Facades\Modules;
 use Mozex\Modules\Features\SupportListeners\ListenersScout;
 
-test('scout will not collect when disabled', function () {
+test('scout will not collect when disabled', function (): void {
     config()->set(
         'modules.'.AssetType::Listeners->value.'.active',
         false
@@ -29,7 +29,7 @@ test('scout will not collect when disabled', function () {
     $discoverer->clear();
 });
 
-test('discovering will work', function (bool $cache) {
+test('discovering will work', function (bool $cache): void {
     $discoverer = ListenersScout::create();
 
     if ($cache) {
@@ -52,7 +52,7 @@ test('discovering will work', function (bool $cache) {
     'with cache' => true,
 ]);
 
-it('can attach listeners to events', function (bool $cache) {
+it('can attach listeners to events', function (bool $cache): void {
     $discoverer = ListenersScout::create();
 
     if ($cache) {

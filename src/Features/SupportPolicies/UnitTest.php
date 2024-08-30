@@ -12,7 +12,7 @@ use Modules\Second\Models\Team;
 use Modules\Second\Policies\Nested\NestedTeamPolicy;
 use Modules\Second\Policies\TeamPolicy;
 
-it('can guess policy name', function () {
+it('can guess policy name', function (): void {
     expect(Gate::getPolicyFor(Test::class))->toBeInstanceOf(TestPolicy::class)
         ->and(Gate::getPolicyFor(User::class))->toBeInstanceOf(UserPolicy::class)
         ->and(Gate::getPolicyFor(Team::class))->toBeInstanceOf(TeamPolicy::class)

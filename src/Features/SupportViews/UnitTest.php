@@ -5,7 +5,7 @@ use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\Facades\Modules;
 use Mozex\Modules\Features\SupportViews\ViewsScout;
 
-test('scout will not collect when disabled', function () {
+test('scout will not collect when disabled', function (): void {
     config()->set(
         'modules.'.AssetType::Views->value.'.active',
         false
@@ -22,7 +22,7 @@ test('scout will not collect when disabled', function () {
     $discoverer->clear();
 });
 
-test('discovering will work', function (bool $cache) {
+test('discovering will work', function (bool $cache): void {
     $discoverer = ViewsScout::create();
 
     if ($cache) {
@@ -45,7 +45,7 @@ test('discovering will work', function (bool $cache) {
     'with cache' => true,
 ]);
 
-it('can load views', function (bool $cache) {
+it('can load views', function (bool $cache): void {
     $discoverer = ViewsScout::create();
 
     if ($cache) {
@@ -55,9 +55,9 @@ it('can load views', function (bool $cache) {
     $views = app('view')->getFinder()->getHints();
 
     $discoverer->collect()
-        ->each(function (array $asset) use ($views) {
             expect($views)->toHaveKey(strtolower($asset['module']))
                 ->and($views[strtolower($asset['module'])])->toHaveCount(1)->toContain($asset['path']);
+        ->each(function (array $asset) use ($views): void {
         });
 
     expect(view('first::first')->render())
