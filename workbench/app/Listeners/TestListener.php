@@ -6,7 +6,5 @@ use App\Events\TestEvent;
 
 class TestListener
 {
-    public function handle(TestEvent $event): void
-    {
-    }
+    public function handle(TestEvent $event): void {}
 }

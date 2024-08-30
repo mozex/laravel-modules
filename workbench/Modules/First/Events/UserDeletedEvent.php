@@ -10,7 +10,5 @@ class UserDeletedEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 }

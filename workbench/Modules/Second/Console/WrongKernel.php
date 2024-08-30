@@ -9,7 +9,5 @@ use Mozex\Modules\Contracts\ConsoleKernel;
 
 class WrongKernel extends ConsoleKernel
 {
-    public function schedule(Schedule $schedule): void
-    {
-    }
+    public function schedule(Schedule $schedule): void {}
 }

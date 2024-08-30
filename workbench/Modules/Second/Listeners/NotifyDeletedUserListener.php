@@ -6,7 +6,5 @@ use Modules\First\Events\UserDeletedEvent;
 
 class NotifyDeletedUserListener
 {
-    public function handle(UserDeletedEvent $event): void
-    {
-    }
+    public function handle(UserDeletedEvent $event): void {}
 }

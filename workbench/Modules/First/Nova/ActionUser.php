@@ -4,6 +4,4 @@ namespace Modules\First\Nova;
 
 use Laravel\Nova\Actions\ActionResource;
 
-class ActionUser extends ActionResource
-{
-}
+class ActionUser extends ActionResource {}

@@ -2,6 +2,4 @@
 
 namespace Modules\First\View\Components;
 
-class WrongComponent
-{
-}
+class WrongComponent {}

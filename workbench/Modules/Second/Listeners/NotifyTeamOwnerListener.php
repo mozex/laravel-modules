@@ -6,7 +6,5 @@ use Modules\Second\Events\TeamCreatedEvent;
 
 class NotifyTeamOwnerListener
 {
-    public function handle(TeamCreatedEvent $event): void
-    {
-    }
+    public function handle(TeamCreatedEvent $event): void {}
 }

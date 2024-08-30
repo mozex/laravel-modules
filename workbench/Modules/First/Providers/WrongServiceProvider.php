@@ -2,6 +2,4 @@
 
 namespace Modules\First\Providers;
 
-class WrongServiceProvider
-{
-}
+class WrongServiceProvider {}
