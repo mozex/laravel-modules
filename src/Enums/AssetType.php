@@ -4,24 +4,24 @@ namespace Mozex\Modules\Enums;
 
 use Illuminate\Support\Collection;
 use Mozex\Modules\Contracts\BaseScout;
-use Mozex\Modules\Scouts\BladeComponentsScout;
-use Mozex\Modules\Scouts\CommandsScout;
-use Mozex\Modules\Scouts\ConfigsScout;
-use Mozex\Modules\Scouts\FilamentClustersScout;
-use Mozex\Modules\Scouts\FilamentPagesScout;
-use Mozex\Modules\Scouts\FilamentResourcesScout;
-use Mozex\Modules\Scouts\FilamentWidgetsScout;
-use Mozex\Modules\Scouts\HelpersScout;
-use Mozex\Modules\Scouts\ListenersScout;
-use Mozex\Modules\Scouts\LivewireComponentsScout;
-use Mozex\Modules\Scouts\MigrationsScout;
-use Mozex\Modules\Scouts\NovaResourcesScout;
-use Mozex\Modules\Scouts\RoutesScout;
-use Mozex\Modules\Scouts\SchedulesScout;
-use Mozex\Modules\Scouts\SeedersScout;
-use Mozex\Modules\Scouts\ServiceProvidersScout;
-use Mozex\Modules\Scouts\TranslationsScout;
-use Mozex\Modules\Scouts\ViewsScout;
+use Mozex\Modules\Features\SupportBladeComponents\BladeComponentsScout;
+use Mozex\Modules\Features\SupportCommands\CommandsScout;
+use Mozex\Modules\Features\SupportConfigs\ConfigsScout;
+use Mozex\Modules\Features\SupportFilament\FilamentClustersScout;
+use Mozex\Modules\Features\SupportFilament\FilamentPagesScout;
+use Mozex\Modules\Features\SupportFilament\FilamentResourcesScout;
+use Mozex\Modules\Features\SupportFilament\FilamentWidgetsScout;
+use Mozex\Modules\Features\SupportHelpers\HelpersScout;
+use Mozex\Modules\Features\SupportListeners\ListenersScout;
+use Mozex\Modules\Features\SupportLivewire\LivewireComponentsScout;
+use Mozex\Modules\Features\SupportMigrations\MigrationsScout;
+use Mozex\Modules\Features\SupportNova\NovaResourcesScout;
+use Mozex\Modules\Features\SupportRoutes\RoutesScout;
+use Mozex\Modules\Features\SupportSchedules\SchedulesScout;
+use Mozex\Modules\Features\SupportSeeders\SeedersScout;
+use Mozex\Modules\Features\SupportServiceProviders\ServiceProvidersScout;
+use Mozex\Modules\Features\SupportTranslations\TranslationsScout;
+use Mozex\Modules\Features\SupportViews\ViewsScout;
 
 enum AssetType: string
 {
