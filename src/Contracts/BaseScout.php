@@ -13,7 +13,7 @@ abstract class BaseScout
 {
     public static function create(): static
     {
-        return new static();
+        return new static;
     }
 
     public function identifier(): string
