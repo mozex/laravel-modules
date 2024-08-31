@@ -45,7 +45,7 @@ test('discovering will work', function (bool $cache): void {
     'with cache' => true,
 ]);
 
-it('can load views', function (bool $cache) {
+it('can load views', function (bool $cache): void {
     $discoverer = ViewsScout::create();
 
     if ($cache) {
@@ -55,7 +55,7 @@ it('can load views', function (bool $cache) {
     $views = app('view')->getFinder()->getHints();
 
     $discoverer->collect()
-        ->each(function (array $asset) use ($views) {
+        ->each(function (array $asset) use ($views): void {
             expect($views)->toHaveKey(strtolower($asset['module']))
                 ->and($views[strtolower($asset['module'])])->toHaveCount(1)->toContain($asset['path']);
         });
