@@ -9,6 +9,4 @@ use Illuminate\Queue\SerializesModels;
 class UserDeletedEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-
-    public function __construct() {}
 }

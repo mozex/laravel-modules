@@ -13,7 +13,7 @@ use Rector\TypeDeclaration\Rector\ArrowFunction\AddArrowFunctionReturnTypeRector
 use Rector\TypeDeclaration\Rector\Closure\AddClosureVoidReturnTypeWhereNoReturnRector;
 
 return RectorConfig::configure()
-    ->withPaths(['config', 'src', 'tests'])
+    ->withPaths(['config', 'src', 'tests', 'workbench'])
     ->withPhpSets(php82: true)
     ->withPreparedSets(
         deadCode: true,

@@ -9,6 +9,4 @@ use Illuminate\Queue\SerializesModels;
 class TeamCreatedEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-
-    public function __construct() {}
 }
