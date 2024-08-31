@@ -19,6 +19,7 @@ class NovaServiceProvider extends Feature
         }
 
         Nova::serving(function (): void {
+            // @phpstan-ignore-next-line
             Nova::resources(
                 AssetType::NovaResources->scout()->collect()
                     ->pluck('namespace')

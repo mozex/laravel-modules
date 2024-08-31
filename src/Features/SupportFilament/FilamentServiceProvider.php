@@ -68,7 +68,7 @@ class FilamentServiceProvider extends Feature
                             )
                         )
                         ->flip()
-                        ->each(Livewire::component(...));
+                        ->each(fn (string $name, string $class) => Livewire::component($name, $class));
                 });
         });
     }

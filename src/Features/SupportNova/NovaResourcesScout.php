@@ -19,9 +19,9 @@ class NovaResourcesScout extends ModuleClassScout
     protected function definition(): Discover
     {
         return parent::definition()
-            ->extending(Resource::class)
+            ->extending(Resource::class) // @phpstan-ignore-line
             ->custom(
-                fn (DiscoveredClass $structure): bool => ! in_array(ActionResource::class, $structure->extendsChain)
+                fn (DiscoveredClass $structure): bool => ! in_array(ActionResource::class, $structure->extendsChain) // @phpstan-ignore-line
             );
     }
 }
