@@ -64,7 +64,7 @@ class FilamentServiceProvider extends Feature
                         ->filter(
                             fn (string $class): bool => str_starts_with(
                                 haystack: $class,
-                                needle: config('modules.modules_namespace')
+                                needle: (string) config('modules.modules_namespace')
                             )
                         )
                         ->flip()

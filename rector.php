@@ -2,26 +2,33 @@
 
 declare(strict_types=1);
 
-use Rector\CodeQuality\Rector\Class_\InlineConstructorDefaultToPropertyRector;
+use Rector\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector;
+use Rector\CodeQuality\Rector\If_\CombineIfRector;
+use Rector\CodeQuality\Rector\If_\ExplicitBoolCompareRector;
 use Rector\Config\RectorConfig;
-use Rector\Set\ValueObject\LevelSetList;
-use Rector\Set\ValueObject\SetList;
+use Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector;
+use Rector\Php81\Rector\Property\ReadOnlyPropertyRector;
+use Rector\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector;
+use Rector\TypeDeclaration\Rector\ArrowFunction\AddArrowFunctionReturnTypeRector;
+use Rector\TypeDeclaration\Rector\Closure\AddClosureVoidReturnTypeWhereNoReturnRector;
 
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->paths([
-        __DIR__.'/src',
+return RectorConfig::configure()
+    ->withPaths(['config', 'src', 'tests'])
+    ->withPhpSets(php82: true)
+    ->withPreparedSets(
+        deadCode: true,
+        codeQuality: true,
+        typeDeclarations: true,
+        privatization: true,
+        earlyReturn: true
+    )
+    ->withSkip([
+        ReadOnlyPropertyRector::class,
+        ClosureToArrowFunctionRector::class,
+        AddArrowFunctionReturnTypeRector::class,
+        AddClosureVoidReturnTypeWhereNoReturnRector::class,
+        CombineIfRector::class,
+        FlipTypeControlToUseExclusiveTypeRector::class,
+        ExplicitBoolCompareRector::class,
+        DisallowedEmptyRuleFixerRector::class,
     ]);
-
-    $rectorConfig->rules([
-        InlineConstructorDefaultToPropertyRector::class,
-    ]);
-
-    $rectorConfig->sets([
-        LevelSetList::UP_TO_PHP_81,
-        SetList::CODE_QUALITY,
-        SetList::DEAD_CODE,
-        SetList::EARLY_RETURN,
-        SetList::TYPE_DECLARATION,
-        SetList::PRIVATIZATION,
-    ]);
-};
