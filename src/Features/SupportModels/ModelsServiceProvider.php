@@ -17,13 +17,13 @@ class ModelsServiceProvider extends Feature
         }
 
         Factory::guessModelNamesUsing(function (Factory $factory) {
-            if ($module = Modules::moduleNameFromNamespace(get_class($factory))) {
+            if ($module = Modules::moduleNameFromNamespace($factory::class)) {
                 return sprintf(
                     '%s%s\\%s%s',
                     config('modules.modules_namespace'),
                     $module,
                     AssetType::Models->config()['namespace'],
-                    str(get_class($factory))->after(
+                    str($factory::class)->after(
                         sprintf(
                             '%s%s\\%s',
                             config('modules.modules_namespace'),

@@ -20,6 +20,6 @@ class Kernel extends ConsoleKernel
 
     protected function shouldDiscoverCommands(): bool
     {
-        return get_class($this) === __CLASS__;
+        return static::class === self::class;
     }
 }
