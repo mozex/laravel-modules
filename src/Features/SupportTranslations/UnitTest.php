@@ -44,7 +44,7 @@ test('discovering will work', function (bool $cache): void {
     'with cache' => true,
 ]);
 
-it('can load translations', function (bool $cache) {
+it('can load translations', function (bool $cache): void {
     $discoverer = TranslationsScout::create();
 
     if ($cache) {
@@ -54,7 +54,7 @@ it('can load translations', function (bool $cache) {
     $loader = app('translator')->getLoader();
 
     $discoverer->collect()
-        ->each(function (array $asset) use ($loader) {
+        ->each(function (array $asset) use ($loader): void {
             expect($loader->namespaces())->toHaveKey(strtolower($asset['module']))->toContain($asset['path'])
                 ->and($loader->jsonPaths())->toContain($asset['path']);
         });
