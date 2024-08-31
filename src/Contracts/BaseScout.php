@@ -9,9 +9,14 @@ use Spatie\StructureDiscoverer\Cache\DiscoverCacheDriver;
 use Spatie\StructureDiscoverer\Cache\FileDiscoverCacheDriver;
 use Spatie\StructureDiscoverer\Data\DiscoveredClass;
 
-/** @phpstan-consistent-constructor */
+/**
+ * @template T of static
+ */
 abstract class BaseScout
 {
+    /**
+     * @return T
+     */
     public static function create(): static
     {
         return new static; // @phpstan-ignore-line
@@ -44,6 +49,9 @@ abstract class BaseScout
         );
     }
 
+    /**
+     * @return array<array-key, array{module: string, path: string, namespace: class-string}>
+     */
     public function get(): array
     {
         if ($this->asset()->isDeactive()) {
@@ -60,13 +68,16 @@ abstract class BaseScout
     }
 
     /**
-     * @return Collection<int, array{module: string, path: string, namespace?: string}>
+     * @return Collection<array-key, array{module: string, path: string, namespace: class-string}>
      */
     public function collect(): Collection
     {
         return collect($this->get());
     }
 
+    /**
+     * @return array<array-key, array{module: string, path: string, namespace: class-string}>
+     */
     public function cache(): array
     {
         if ($this->asset()->isDeactive()) {
@@ -83,6 +94,9 @@ abstract class BaseScout
         return $structures;
     }
 
+    /**
+     * @return T
+     */
     public function clear(): static
     {
         $this->cacheDriver()->forget(
@@ -99,6 +113,9 @@ abstract class BaseScout
         );
     }
 
+    /**
+     * @return array<array-key, string>
+     */
     protected function patterns(): array
     {
         return collect($this->asset()->patterns())
@@ -106,6 +123,10 @@ abstract class BaseScout
             ->toArray();
     }
 
+    /**
+     * @param  array<array-key, string|DiscoveredClass>  $result
+     * @return array<array-key, array{module: string, path: string, namespace: class-string}>
+     */
     public function transform(array $result): array
     {
         return collect($result)

@@ -12,6 +12,9 @@ class EventsServiceProvider extends EventServiceProvider
         return AssetType::Listeners->isActive();
     }
 
+    /**
+     * @return array<string>
+     */
     protected function discoverEventsWithin(): array
     {
         return AssetType::Listeners->scout()

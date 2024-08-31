@@ -57,10 +57,11 @@ class FilamentServiceProvider extends Feature
                             ));
                     }
 
-                    collect(
-                        (new ReflectionProperty($panel, 'livewireComponents'))
-                            ->getValue($panel)
-                    )
+                    /** @var array<string, class-string> $livewireComponents */
+                    $livewireComponents = (new ReflectionProperty($panel, 'livewireComponents'))
+                        ->getValue($panel);
+
+                    collect($livewireComponents)
                         ->filter(
                             fn (string $class): bool => str_starts_with(
                                 haystack: $class,

@@ -9,6 +9,9 @@ use Symfony\Component\Finder\Exception\DirectoryNotFoundException;
 
 abstract class ModuleClassScout extends BaseScout
 {
+    /**
+     * @return array<array-key, array{module: string, path: string, namespace: class-string}>
+     */
     public function getWithoutCache(): array
     {
         try {

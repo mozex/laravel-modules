@@ -9,6 +9,7 @@ class Modules
 {
     public string $base_path;
 
+    /** @var array<string, array<string, mixed>> */
     public array $routeGroups = [];
 
     public function __construct()
@@ -40,6 +41,9 @@ class Modules
         return $this->routeGroups;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getRouteGroup(string $name): array
     {
         if (! isset($this->getRouteGroups()[$name])) {
@@ -93,6 +97,9 @@ class Modules
         )->groupOr(1, '');
     }
 
+    /**
+     * @return array<array-key, class-string>
+     */
     public function seeders(): array
     {
         if (AssetType::Seeders->isDeactive()) {

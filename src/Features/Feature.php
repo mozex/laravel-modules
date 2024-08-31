@@ -33,6 +33,9 @@ abstract class Feature extends ServiceProvider
             ->toString();
     }
 
+    /**
+     * @param  array{module: string, path: string, namespace: class-string}  $asset
+     */
     protected function getViewName(array $asset, AssetType $type): string
     {
         foreach ($type->patterns() as $pattern) {
