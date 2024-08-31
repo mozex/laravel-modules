@@ -48,7 +48,7 @@ class Modules
 
         return collect($this->getRouteGroups()[$name])
             ->filter()
-            ->map(fn ($value) => is_callable($value) ? $value() : $value)
+            ->map(fn (mixed $value) => is_callable($value) ? $value() : $value)
             ->toArray();
     }
 

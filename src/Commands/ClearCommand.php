@@ -3,6 +3,7 @@
 namespace Mozex\Modules\Commands;
 
 use Illuminate\Console\Command;
+use Laravel\Prompts\Progress;
 use Mozex\Modules\Contracts\BaseScout;
 use Mozex\Modules\Enums\AssetType;
 
@@ -19,7 +20,7 @@ class ClearCommand extends Command
         progress(
             label: 'Clearing Modules Cache',
             steps: AssetType::activeScouts(),
-            callback: function (BaseScout $scout, $progress): void {
+            callback: function (BaseScout $scout, Progress $progress): void {
                 $progress->label("Clearing {$scout->asset()->title()}");
 
                 $scout->clear();

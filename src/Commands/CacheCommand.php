@@ -3,6 +3,7 @@
 namespace Mozex\Modules\Commands;
 
 use Illuminate\Console\Command;
+use Laravel\Prompts\Progress;
 use Mozex\Modules\Contracts\BaseScout;
 use Mozex\Modules\Enums\AssetType;
 
@@ -19,7 +20,7 @@ class CacheCommand extends Command
         progress(
             label: 'Caching Modules',
             steps: AssetType::activeScouts(),
-            callback: function (BaseScout $scout, $progress): void {
+            callback: function (BaseScout $scout, Progress $progress): void {
                 $progress->label("Caching {$scout->asset()->title()}");
 
                 $scout->clear();

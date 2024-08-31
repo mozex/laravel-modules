@@ -33,6 +33,7 @@
     <source>
         <include>
             <directory>./src</directory>
+            <directory>./config</directory>
         </include>
     </source>
 </phpunit>

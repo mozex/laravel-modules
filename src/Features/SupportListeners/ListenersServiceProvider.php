@@ -18,7 +18,7 @@ class ListenersServiceProvider extends Feature
             return;
         }
 
-        DiscoverEvents::guessClassNamesUsing(function (SplFileInfo $file, $basePath) {
+        DiscoverEvents::guessClassNamesUsing(function (SplFileInfo $file, string $basePath) {
             if (Modules::moduleNameFromPath($file->getRealPath())) {
                 return str($file->getRealPath())
                     ->after(realpath(Modules::basePath()).DIRECTORY_SEPARATOR)
