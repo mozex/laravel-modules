@@ -34,6 +34,7 @@
         <include>
             <directory>./src</directory>
             <directory>./config</directory>
+            <directory>./workbench</directory>
         </include>
     </source>
 </phpunit>
