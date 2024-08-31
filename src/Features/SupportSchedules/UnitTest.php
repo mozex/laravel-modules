@@ -60,7 +60,7 @@ it('can register schedules', function (bool $cache): void {
         ->pluck('command')
         ->flatten()
         ->map(
-            fn ($command) => str_contains($command, 'artisan')
+            fn (string $command) => str_contains($command, 'artisan')
                 ? str($command)->explode(' ')->last()
                 : $command
         )
