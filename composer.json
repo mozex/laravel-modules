@@ -24,15 +24,15 @@
     },
     "require-dev": {
         "filament/filament": "^3.2.39",
+        "larastan/larastan": "^2.9",
         "laravel/pint": "^1.16.1",
         "livewire/livewire": "^3.4",
         "nunomaduro/collision": "^7.8|^8.1",
         "orchestra/testbench": "^8.21|^9.0",
         "pestphp/pest": "^2.34.7",
-        "pestphp/pest-plugin-type-coverage": "^2.8.2",
         "pestphp/pest-plugin-laravel": "^2.0",
+        "pestphp/pest-plugin-type-coverage": "^2.8.2",
         "phpstan/extension-installer": "^1.1",
-        "phpstan/phpstan": "^1.11.2",
         "rector/rector": "^1.1.0",
         "spatie/ray": "^1.41"
     },
