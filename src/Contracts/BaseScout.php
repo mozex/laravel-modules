@@ -88,9 +88,6 @@ abstract class BaseScout
         return $structures;
     }
 
-    /**
-     * @return T
-     */
     public function clear(): static
     {
         $this->cacheDriver()->forget(
