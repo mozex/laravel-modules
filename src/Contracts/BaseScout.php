@@ -9,14 +9,8 @@ use Spatie\StructureDiscoverer\Cache\DiscoverCacheDriver;
 use Spatie\StructureDiscoverer\Cache\FileDiscoverCacheDriver;
 use Spatie\StructureDiscoverer\Data\DiscoveredClass;
 
-/**
- * @template T of static
- */
 abstract class BaseScout
 {
-    /**
-     * @return T
-     */
     public static function create(): static
     {
         return new static; // @phpstan-ignore-line
