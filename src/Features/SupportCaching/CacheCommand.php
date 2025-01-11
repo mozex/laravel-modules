@@ -1,6 +1,6 @@
 <?php
 
-namespace Mozex\Modules\Commands;
+namespace Mozex\Modules\Features\SupportCaching;
 
 use Illuminate\Console\Command;
 use Laravel\Prompts\Progress;
@@ -9,21 +9,23 @@ use Mozex\Modules\Enums\AssetType;
 
 use function Laravel\Prompts\progress;
 
-class ClearCommand extends Command
+class CacheCommand extends Command
 {
-    protected $signature = 'modules:clear';
+    protected $signature = 'modules:cache';
 
-    protected $description = 'Clear all module assets cache.';
+    protected $description = 'Cache all module assets.';
 
     public function handle(): void
     {
         progress(
-            label: 'Clearing Modules Cache',
+            label: 'Caching Modules',
             steps: AssetType::activeScouts(),
             callback: function (BaseScout $scout, Progress $progress): void {
-                $progress->label("Clearing {$scout->asset()->title()}");
+                $progress->label("Caching {$scout->asset()->title()}");
 
                 $scout->clear();
+
+                $scout->cache();
             },
         );
     }
