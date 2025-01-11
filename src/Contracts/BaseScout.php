@@ -149,5 +149,8 @@ abstract class BaseScout
 
     abstract public function asset(): AssetType;
 
+    /**
+     * @return array<array-key, mixed>
+     */
     abstract public function getWithoutCache(): array;
 }
