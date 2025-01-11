@@ -5,6 +5,7 @@ namespace Mozex\Modules\Features\SupportServiceProviders;
 use Illuminate\Support\ServiceProvider;
 use Mozex\Modules\Contracts\ModuleClassScout;
 use Mozex\Modules\Enums\AssetType;
+use Mozex\Modules\ExtendsDiscoverCondition;
 use Spatie\StructureDiscoverer\Discover;
 
 class ServiceProvidersScout extends ModuleClassScout
@@ -17,6 +18,6 @@ class ServiceProvidersScout extends ModuleClassScout
     protected function definition(): Discover
     {
         return parent::definition()
-            ->extending(ServiceProvider::class);
+            ->custom(new ExtendsDiscoverCondition(ServiceProvider::class));
     }
 }

@@ -5,6 +5,7 @@ namespace Mozex\Modules\Features\SupportCommands;
 use Illuminate\Console\Command;
 use Mozex\Modules\Contracts\ModuleClassScout;
 use Mozex\Modules\Enums\AssetType;
+use Mozex\Modules\ExtendsDiscoverCondition;
 use Spatie\StructureDiscoverer\Discover;
 
 class CommandsScout extends ModuleClassScout
@@ -17,6 +18,6 @@ class CommandsScout extends ModuleClassScout
     protected function definition(): Discover
     {
         return parent::definition()
-            ->extending(Command::class);
+            ->custom(new ExtendsDiscoverCondition(Command::class));
     }
 }

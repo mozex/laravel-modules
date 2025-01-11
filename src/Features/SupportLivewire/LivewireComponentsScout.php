@@ -5,6 +5,7 @@ namespace Mozex\Modules\Features\SupportLivewire;
 use Livewire\Component;
 use Mozex\Modules\Contracts\ModuleClassScout;
 use Mozex\Modules\Enums\AssetType;
+use Mozex\Modules\ExtendsDiscoverCondition;
 use Spatie\StructureDiscoverer\Discover;
 
 class LivewireComponentsScout extends ModuleClassScout
@@ -17,6 +18,6 @@ class LivewireComponentsScout extends ModuleClassScout
     protected function definition(): Discover
     {
         return parent::definition()
-            ->extending(Component::class);
+            ->custom(new ExtendsDiscoverCondition(Component::class));
     }
 }
