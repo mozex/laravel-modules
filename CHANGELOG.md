@@ -2,6 +2,15 @@
 
 All notable changes to `laravel-modules` will be documented in this file.
 
+## 2.5.0 - 2025-01-11
+
+### What's Changed
+
+* Improve the structure of the package
+* improve class discovering
+
+**Full Changelog**: https://github.com/mozex/laravel-modules/compare/2.4.3...2.5.0
+
 ## 2.4.3 - 2024-05-17
 
 * fix naming components
