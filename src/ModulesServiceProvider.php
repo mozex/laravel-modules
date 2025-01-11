@@ -2,9 +2,9 @@
 
 namespace Mozex\Modules;
 
-use Mozex\Modules\Commands\CacheCommand;
-use Mozex\Modules\Commands\ClearCommand;
 use Mozex\Modules\Features\Feature;
+use Mozex\Modules\Features\SupportCaching\CacheCommand;
+use Mozex\Modules\Features\SupportCaching\ClearCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
