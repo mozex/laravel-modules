@@ -1,6 +1,8 @@
 <?php
 
 use Livewire\Mechanisms\ComponentRegistry;
+use Modules\First\Livewire\BaseChained;
+use Modules\First\Livewire\Chained;
 use Modules\First\Livewire\Teams;
 use Modules\Second\Livewire\ListUsers;
 use Modules\Second\Livewire\WrongComponents;
@@ -38,6 +40,8 @@ test('discovering will work', function (bool $cache): void {
         ->and($collection->pluck('namespace'))
         ->toContain(Teams::class)
         ->toContain(ListUsers::class)
+        ->toContain(Chained::class)
+        ->not->toContain(BaseChained::class)
         ->not->toContain(WrongComponents::class);
 
     if ($cache) {
@@ -67,6 +71,11 @@ it('can register livewire components', function (bool $cache): void {
         deleteCachedView: true
     ))
         ->toContain('Teams Livewire Component')
+        ->and(Blade::render(
+            string: '<livewire:first::chained/>',
+            deleteCachedView: true
+        ))
+        ->toContain('Chained Livewire Component')
         ->and(Blade::render(
             string: '<livewire:second::list-users/>',
             deleteCachedView: true
