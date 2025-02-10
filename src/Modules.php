@@ -2,6 +2,7 @@
 
 namespace Mozex\Modules;
 
+use Closure;
 use Mozex\Modules\Enums\AssetType;
 use Spatie\Regex\Regex;
 
@@ -11,6 +12,9 @@ class Modules
 
     /** @var array<string, array<string, mixed>> */
     public array $routeGroups = [];
+
+    /** @var array<string, Closure> */
+    public array $registerRoutesUsing = [];
 
     public function __construct()
     {
@@ -33,6 +37,11 @@ class Modules
         $this->routeGroups[$name] = $args;
     }
 
+    public function registerRoutesUsing(string|callable $name, Closure $closure): void
+    {
+        $this->registerRoutesUsing[$name] = $closure;
+    }
+
     /**
      * @return array<string, array<string, mixed>>
      */
@@ -42,18 +51,11 @@ class Modules
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<string, Closure>
      */
-    public function getRouteGroup(string $name): array
+    public function getRegisterRoutesUsing(): array
     {
-        if (! isset($this->getRouteGroups()[$name])) {
-            return [];
-        }
-
-        return collect($this->getRouteGroups()[$name])
-            ->filter()
-            ->map(fn (mixed $value) => is_callable($value) ? $value() : $value)
-            ->toArray();
+        return $this->registerRoutesUsing;
     }
 
     public function setBasePath(?string $path = null): void

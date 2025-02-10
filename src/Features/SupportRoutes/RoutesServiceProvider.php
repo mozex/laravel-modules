@@ -2,6 +2,7 @@
 
 namespace Mozex\Modules\Features\SupportRoutes;
 
+use Closure;
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\File;
@@ -54,12 +55,41 @@ class RoutesServiceProvider extends Feature
         }
 
         $routes->each(function (array $asset): void {
-            Route::group(
-                attributes: Modules::getRouteGroup(
-                    name: File::name($asset['path'])
-                ),
-                routes: $asset['path']
+            $name = File::name($asset['path']);
+
+            $this->getRegisterRoutesUsing($name)(
+                $this->getRouteAttributes($name),
+                $asset['path']
             );
         });
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function getRouteAttributes(string $name): array
+    {
+        if (! isset(Modules::getRouteGroups()[$name])) {
+            return [];
+        }
+
+        return collect(Modules::getRouteGroups()[$name])
+            ->filter()
+            ->map(fn (mixed $value) => is_callable($value) ? $value() : $value)
+            ->toArray();
+    }
+
+    public function getRegisterRoutesUsing(string $name): Closure
+    {
+        if (isset(Modules::getRegisterRoutesUsing()[$name])) {
+            return Modules::getRegisterRoutesUsing()[$name];
+        }
+
+        return function (array $attributes, array|Closure|string $routes) {
+            Route::group(
+                attributes: $attributes,
+                routes: $routes
+            );
+        };
     }
 }
