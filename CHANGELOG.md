@@ -2,6 +2,16 @@
 
 All notable changes to `laravel-modules` will be documented in this file.
 
+## 2.5.1 - 2025-02-10
+
+### What's Changed
+
+* Add registerRoutesUsing to route groups
+* Bump dependabot/fetch-metadata from 2.2.0 to 2.3.0 by @dependabot in https://github.com/mozex/laravel-modules/pull/9
+* Bump aglipanci/laravel-pint-action from 2.4 to 2.5 by @dependabot in https://github.com/mozex/laravel-modules/pull/10
+
+**Full Changelog**: https://github.com/mozex/laravel-modules/compare/2.5.0...2.5.1
+
 ## 2.5.0 - 2025-01-11
 
 ### What's Changed
