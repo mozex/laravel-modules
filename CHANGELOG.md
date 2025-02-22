@@ -2,6 +2,12 @@
 
 All notable changes to `laravel-modules` will be documented in this file.
 
+## 2.5.2 - 2025-02-22
+
+* fix guess model name for factories caused by laravel/framework#54644
+
+**Full Changelog**: https://github.com/mozex/laravel-modules/compare/2.5.1...2.5.2
+
 ## 2.5.1 - 2025-02-10
 
 ### What's Changed
