@@ -35,6 +35,7 @@ class ModelsServiceProvider extends Feature
             }
 
             try {
+                // Backward compatibility
                 if (property_exists(Factory::class, 'modelNameResolver')) {
                     $property = (new ReflectionProperty(Factory::class, 'modelNameResolver'));
 
