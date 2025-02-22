@@ -35,8 +35,14 @@ class ModelsServiceProvider extends Feature
             }
 
             try {
-                (new ReflectionProperty(Factory::class, 'modelNameResolver'))
-                    ->setValue(null);
+                $property = new ReflectionProperty(Factory::class, 'modelNameResolvers');
+
+                $value = $property->getValue();
+
+                unset($value[Factory::class]);
+
+                $property
+                    ->setValue($value);
 
                 return $factory->modelName();
             } finally {
