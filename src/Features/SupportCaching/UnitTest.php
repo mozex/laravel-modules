@@ -1,37 +1,37 @@
 <?php
 
+use Illuminate\Support\Facades\Artisan;
 use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\Features\SupportCaching\CacheCommand;
 use Mozex\Modules\Features\SupportCaching\ClearCommand;
-
-use function Pest\Laravel\artisan;
+use Pest\Expectation;
 
 it('can cache', function () {
     $scouts = AssetType::activeScouts();
 
-    artisan(ClearCommand::class)->run();
+    Artisan::call(ClearCommand::class);
 
     expect($scouts)
-        ->each(fn ($scout) => $scout->isCached()->toBeFalse());
+        ->each(fn (Expectation $scout) => $scout->isCached()->toBeFalse());
 
-    artisan(CacheCommand::class)->run();
+    Artisan::call(CacheCommand::class);
 
     expect($scouts)
-        ->each(fn ($scout) => $scout->isCached()->toBeTrue());
+        ->each(fn (Expectation $scout) => $scout->isCached()->toBeTrue());
 
-    artisan(ClearCommand::class)->run();
+    Artisan::call(ClearCommand::class);
 });
 
 it('can clear', function () {
     $scouts = AssetType::activeScouts();
 
-    artisan(CacheCommand::class)->run();
+    Artisan::call(CacheCommand::class);
 
     expect($scouts)
-        ->each(fn ($scout) => $scout->isCached()->toBeTrue());
+        ->each(fn (Expectation $scout) => $scout->isCached()->toBeTrue());
 
-    artisan(ClearCommand::class)->run();
+    Artisan::call(ClearCommand::class);
 
     expect($scouts)
-        ->each(fn ($scout) => $scout->isCached()->toBeFalse());
+        ->each(fn (Expectation $scout) => $scout->isCached()->toBeFalse());
 });

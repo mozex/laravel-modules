@@ -15,7 +15,7 @@ abstract class FilamentScout extends ModuleDirectoryScout
     public function transform(array $result): array
     {
         return collect(parent::transform($result))
-            ->map(function (array $item) {
+            ->map(function (array $item): array {
                 $panel = null;
 
                 foreach ($this->asset()->patterns() as $pattern) {

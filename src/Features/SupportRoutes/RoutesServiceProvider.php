@@ -33,6 +33,7 @@ class RoutesServiceProvider extends Feature
 
         $this->callAfterResolving(Kernel::class, function (Kernel $kernel) use ($commands): void {
             // Compatibility with Laravel 10
+            /** @phpstan-ignore-next-line */
             if (method_exists($kernel, 'addCommandRoutePaths')) {
                 $kernel->addCommandRoutePaths(
                     $commands->pluck('path')->all()
@@ -81,11 +82,7 @@ class RoutesServiceProvider extends Feature
 
     public function getRegisterRoutesUsing(string $name): Closure
     {
-        if (isset(Modules::getRegisterRoutesUsing()[$name])) {
-            return Modules::getRegisterRoutesUsing()[$name];
-        }
-
-        return function (array $attributes, array|Closure|string $routes) {
+        return Modules::getRegisterRoutesUsing()[$name] ?? function (array $attributes, array|Closure|string $routes) {
             Route::group(
                 attributes: $attributes,
                 routes: $routes

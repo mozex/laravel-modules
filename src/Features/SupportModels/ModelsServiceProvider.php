@@ -35,17 +35,18 @@ class ModelsServiceProvider extends Feature
             }
 
             try {
-                // Backward compatibility
-                if (property_exists(Factory::class, 'modelNameResolver')) {
-                    $property = (new ReflectionProperty(Factory::class, 'modelNameResolver'));
-
-                    $value = null;
-                } else {
+                if (property_exists(Factory::class, 'modelNameResolvers')) {
                     $property = new ReflectionProperty(Factory::class, 'modelNameResolvers');
 
                     $value = $property->getValue();
 
                     unset($value[Factory::class]);
+                } else {
+                    // Backward compatibility
+                    $property = (new ReflectionProperty(Factory::class, 'modelNameResolver'));
+
+                    $value = null;
+
                 }
 
                 $property

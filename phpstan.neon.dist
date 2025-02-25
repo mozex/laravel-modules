@@ -6,5 +6,4 @@ parameters:
     excludePaths:
         analyseAndScan:
             - src/Features/*/*UnitTest.php
-    checkOctaneCompatibility: true
-    checkModelProperties: true
+    reportUnmatchedIgnoredErrors: true
