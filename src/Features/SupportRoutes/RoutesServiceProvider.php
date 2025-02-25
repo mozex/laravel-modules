@@ -81,11 +81,7 @@ class RoutesServiceProvider extends Feature
 
     public function getRegisterRoutesUsing(string $name): Closure
     {
-        if (isset(Modules::getRegisterRoutesUsing()[$name])) {
-            return Modules::getRegisterRoutesUsing()[$name];
-        }
-
-        return function (array $attributes, array|Closure|string $routes) {
+        return Modules::getRegisterRoutesUsing()[$name] ?? function (array $attributes, array|Closure|string $routes) {
             Route::group(
                 attributes: $attributes,
                 routes: $routes
