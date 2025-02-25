@@ -2,7 +2,6 @@
 
 namespace Mozex\Modules;
 
-use Mozex\Modules\Features\Feature;
 use Mozex\Modules\Features\SupportCaching\CacheCommand;
 use Mozex\Modules\Features\SupportCaching\ClearCommand;
 use Spatie\LaravelPackageTools\Package;
@@ -20,7 +19,7 @@ class ModulesServiceProvider extends PackageServiceProvider
     }
 
     /**
-     * @return array<class-string<Feature>>
+     * @return array<int, class-string>
      */
     protected function getFeatures(): array
     {
