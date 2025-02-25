@@ -2,6 +2,14 @@
 
 All notable changes to `laravel-modules` will be documented in this file.
 
+## 2.6.0 - 2025-02-25
+
+### What's Changed
+
+* Add Laravel 12 compatibility by @mozex in https://github.com/mozex/laravel-modules/pull/11
+
+**Full Changelog**: https://github.com/mozex/laravel-modules/compare/2.5.2...2.6.0
+
 ## 2.5.2 - 2025-02-22
 
 * fix guess model name for factories caused by laravel/framework#54644
