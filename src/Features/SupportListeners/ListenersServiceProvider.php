@@ -32,7 +32,7 @@ class ListenersServiceProvider extends Feature
                 $discoverEvent = $this->app->make(DiscoverEvents::class);
 
                 (new ReflectionProperty($discoverEvent, 'guessClassNamesUsingCallback'))
-                    ->setValue(null);
+                    ->setValue(null, null);
 
                 $reflection = (new ReflectionMethod($discoverEvent, 'classFromFile'));
 

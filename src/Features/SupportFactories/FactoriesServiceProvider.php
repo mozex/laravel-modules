@@ -36,7 +36,7 @@ class FactoriesServiceProvider extends Feature
 
             try {
                 (new ReflectionProperty(Factory::class, 'factoryNameResolver'))
-                    ->setValue(null);
+                    ->setValue(null, null);
 
                 return Factory::resolveFactoryName($modelName);
             } finally {
