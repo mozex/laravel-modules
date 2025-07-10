@@ -24,12 +24,12 @@ class ModulesServiceProvider extends PackageServiceProvider
     protected function getFeatures(): array
     {
         return [
+            Features\SupportConfigs\ConfigsServiceProvider::class,
             Features\SupportServiceProviders\RegisterServiceProviders::class,
             Features\SupportHelpers\HelpersServiceProvider::class,
             Features\SupportCommands\CommandsServiceProvider::class,
             Features\SupportMigrations\MigrationsServiceProvider::class,
             Features\SupportTranslations\TranslationsServiceProvider::class,
-            Features\SupportConfigs\ConfigsServiceProvider::class,
             Features\SupportViews\ViewsServiceProvider::class,
             Features\SupportBladeComponents\BladeComponentsServiceProvider::class,
             Features\SupportModels\ModelsServiceProvider::class,
