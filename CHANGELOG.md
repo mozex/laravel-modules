@@ -2,6 +2,17 @@
 
 All notable changes to `laravel-modules` will be documented in this file.
 
+## 2.6.1 - 2025-07-10
+
+### What's Changed
+
+* Bump stefanzweifel/git-auto-commit-action from 5 to 6 by @dependabot in https://github.com/mozex/laravel-modules/pull/12
+* Make type coverage compact
+* Make config loading priority
+* Fix deprecated reflection values
+
+**Full Changelog**: https://github.com/mozex/laravel-modules/compare/2.6.0...2.6.1
+
 ## 2.6.0 - 2025-02-25
 
 ### What's Changed
