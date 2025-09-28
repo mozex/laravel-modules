@@ -2,6 +2,12 @@
 
 All notable changes to `laravel-modules` will be documented in this file.
 
+## 2.6.2 - 2025-09-23
+
+* require amphp/parallel
+
+**Full Changelog**: https://github.com/mozex/laravel-modules/compare/2.6.1...2.6.2
+
 ## 2.6.1 - 2025-07-10
 
 ### What's Changed
