@@ -5,6 +5,7 @@ use App\Filament\Dashboard\Resources\NestedTestResource;
 use Filament\Facades\Filament;
 use Modules\First\Filament\Admin\Resources\UserResource;
 use Modules\First\Filament\Dashboard\Resources\NestedUserResource;
+use Modules\Second\Filament\Admin\Resources\Invoices\InvoiceResource;
 use Modules\Second\Filament\Admin\Resources\TeamResource;
 use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\Facades\Modules;
@@ -63,10 +64,11 @@ it('can register filament resources', function (bool $cache): void {
     }
 
     expect(Filament::getPanel('admin')->getResources())
-        ->toHaveCount(3)
+        ->toHaveCount(4)
         ->toContain(TestResource::class)
         ->toContain(TeamResource::class)
         ->toContain(UserResource::class)
+        ->toContain(InvoiceResource::class)
         ->and(Filament::getPanel('dashboard')->getResources())
         ->toHaveCount(2)
         ->toContain(NestedTestResource::class)
