@@ -23,5 +23,5 @@ class EventsServiceProvider extends EventServiceProvider
             ->toArray();
     }
 
-    protected function configureEmailVerification() {}
+    protected function configureEmailVerification(): void {}
 }
