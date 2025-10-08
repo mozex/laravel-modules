@@ -22,4 +22,6 @@ class EventsServiceProvider extends EventServiceProvider
             ->pluck('path')
             ->toArray();
     }
+
+    protected function configureEmailVerification() {}
 }
