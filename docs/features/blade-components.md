@@ -49,8 +49,8 @@ Modules/Blog/
 ## Naming rules
 
 - The module name becomes the first segment in lower-kebab-case: `Blog` => `blog`, `UserAdmin` => `user-admin`.
-- Sub-namespaces and class names are converted to lower-kebab-case and dot-joined: `Post/Card` => `post.card`, `UserMenu` => `user-menu`.
-- As a final fallback, if no pattern match can determine the alias, the class base name is used: `.../Components/WithoutView.php` => `<x-blog::withoutview />`.
+- Alias segments are derived from the file path under the first matching pattern, with each segment kebab-cased: `Post/Card.php` => `post.card`, `WithoutView.php` => `without-view`.
+- If no path segments can be determined from any configured pattern (edge case), the alias falls back to the lowercase class basename.
 
 ## Usage examples
 
@@ -90,8 +90,8 @@ return [
     'blade-components' => [
         'active' => true,
         'patterns' => [
-            '*/UI/Components',             // discover in Modules/*/UI/Components
-            '*/Presentation/Blade',        // and in Modules/*/Presentation/Blade
+            '*/View/Components',
+            '*/Components',               // alternate layout (e.g., Modules/*/Components)
         ],
     ],
 ];
@@ -100,7 +100,6 @@ return [
 ## Performance and caching
 - Build cache: `php artisan modules:cache`
 - Clear cache: `php artisan modules:clear`
-- Aliases are registered at boot, and respect Laravel's view cache lifecycle.
 
 ## Testing hints
 
