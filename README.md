@@ -7,9 +7,12 @@
 
 Laravel Modules brings a clean, zero‑config modular structure to your Laravel app. Place your modules under the project root `Modules/` directory and this package will auto‑discover and wire their assets: configs, service providers, helpers, artisan commands, migrations, translations, views, Blade components, routes (web/api/console/broadcasting), schedules, listeners/events, Livewire, Filament, Nova, and more.
 
-- Sensible conventions: namespaces, view/component aliases, and route groups are derived automatically.
-- Fine‑grained control: enable/disable modules, control load order, and override discovery patterns from `config/modules.php`.
-- Fast by default: built‑in caching makes discovery quick in all environments.
+> Sensible conventions: namespaces, view/component aliases, and route groups are derived automatically.
+> 
+> Fine‑grained control: enable/disable modules, control load order, and override discovery patterns from `config/modules.php`.
+> 
+> Fast by default: built‑in caching makes discovery quick in all environments.
+
 
 - [Support Us](#support-us)
 - [Documentation](#documentation)
