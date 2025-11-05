@@ -5,12 +5,20 @@
 [![License](https://img.shields.io/github/license/mozex/laravel-modules.svg?style=flat-square)](https://packagist.org/packages/mozex/laravel-modules)
 [![Total Downloads](https://img.shields.io/packagist/dt/mozex/laravel-modules.svg?style=flat-square)](https://packagist.org/packages/mozex/laravel-modules)
 
-This package is a powerful and flexible solution for creating modular Laravel applications. It is designed to help you build applications that are scalable, maintainable, and easy to test and bundle modules for publishing with one command.
+Laravel Modules brings a clean, zero‑config modular structure to your Laravel app. Place your modules under the project root `Modules/` directory and this package will auto‑discover and wire their assets: configs, service providers, helpers, artisan commands, migrations, translations, views, Blade components, routes (web/api/console/broadcasting), schedules, listeners/events, Livewire, Filament, Nova, and more.
 
-You just need to install this package, and you are ready to go, every thing works out of the box, we have taken care of everything for you so you can focus on your business logic.
+- Sensible conventions: namespaces, view/component aliases, and route groups are derived automatically.
+- Fine‑grained control: enable/disable modules, control load order, and override discovery patterns from `config/modules.php`.
+- Fast by default: built‑in caching makes discovery quick in all environments.
 
 - [Support Us](#support-us)
-- [Documentation](docs)
+- [Documentation](#documentation)
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Quick start](#quick-start)
+- [Configuration overview](#configuration-overview)
+- [Features](#features)
+- [Caching](#caching)
 - [Testing](#testing)
 - [Changelog](#changelog)
 - [Contributing](#contributing)
@@ -28,7 +36,152 @@ Thank you for considering sponsoring. Your support truly makes a difference!
 
 ## Documentation
 
-Detailed documentation, including examples and best practices, can be found in [Here](docs).
+Detailed documentation, including examples and best practices, lives in the `docs` folder.
+
+### Index
+
+- Start here: [docs/README.md](./docs/README.md)
+
+### Feature guides
+
+- [Blade Components: class-based components](./docs/features/blade-components.md)
+- [Views: namespacing and anonymous components](./docs/features/views.md)
+- [Routes: groups, broadcasting, console routes](./docs/features/routes.md)
+- [Configs: merge strategy and priority](./docs/features/configs.md)
+- [Migrations & Seeders](./docs/features/migrations-seeders.md)
+- [Commands & Helpers](./docs/features/commands-helpers.md)
+- [Models, Factories & Policies](./docs/features/models-factories-policies.md)
+- [Listeners & Events](./docs/features/listeners-events.md)
+- [Schedules](./docs/features/schedules.md)
+- [Livewire Components](./docs/features/livewire-components.md)
+- [Filament Resources/Pages/Widgets/Clusters](./docs/features/filament.md)
+- [Nova Resources](./docs/features/nova-resources.md)
+
+## Requirements
+
+- PHP: ^8.1
+- Laravel: ^10.34.2 | ^11.29.0 | ^12.0
+
+## Installation
+
+Install via Composer:
+
+```bash
+composer require mozex/laravel-modules
+```
+
+Publish the config file (optional, only if you want to tweak defaults):
+
+```bash
+php artisan vendor:publish --tag=laravel-modules-config
+```
+
+This will publish `config/modules.php`.
+
+## Quick start
+
+By default, modules live under the project root `Modules/` directory. Each module contains a conventional structure, for example:
+
+```
+project-root/
+├── app/
+├── bootstrap/
+├── config/
+├── database/
+├── Modules/
+│   ├── Blog/
+│   │   ├── Config/
+│   │   ├── Console/
+│   │   ├── Database/
+│   │   │   ├── Factories/
+│   │   │   ├── Migrations/
+│   │   │   └── Seeders/
+│   │   ├── Filament/
+│   │   ├── Lang/
+│   │   ├── Listeners/
+│   │   ├── Models/
+│   │   ├── Policies/
+│   │   ├── Providers/
+│   │   ├── Resources/
+│   │   │   └── views/
+│   │   ├── Routes/
+│   │   └── View/
+│   │       └── Components/
+│   └── Shop/
+│       └── ...
+└── vendor/
+```
+
+Out of the box, the package will automatically discover and register the following assets inside your modules: configs, service providers, helpers, artisan commands, migrations, translations, views, Blade components, models, factories, policies, routes, schedules, listeners/events, Livewire, Filament, and Nova resources.
+
+Use your assets via namespaced conventions:
+
+- Views: `view('blog::post.show')` maps to `Modules/Blog/Resources/views/post/show.blade.php`
+- Class-based Blade components: `<x-blog::post.card/>` for `Modules/Blog/View/Components/Post/Card.php`
+- Anonymous Blade components (from views): `<x-blog::button.primary/>` for `Modules/Blog/Resources/views/components/button/primary.blade.php`
+- Routes: drop files under `Modules/*/Routes/*.php` and they will be loaded under sensible groups (web, api). See the Routes feature docs for customization.
+
+Note for contributors: the test workbench lives in `workbench/` and follows the same conventions (`workbench/Modules/*`).
+
+## Configuration overview
+
+All options live in `config/modules.php`.
+
+- modules_directory: default `Modules` (relative to the project base path). Change where your modules are stored.
+- modules_namespace: default `Modules\\`. Change the PSR-4 base namespace for your modules.
+- modules: per-module activation and ordering. Example:
+  ```php
+  'modules' => [
+      'Shared' => [
+          'active' => true,
+          'order' => 1, // lower loads earlier
+      ],
+  ],
+  ```
+- Per-asset sections: each feature can be enabled/disabled and configured with glob patterns and other options. For example, Blade Components:
+  ```php
+  'blade-components' => [
+      'active' => true,
+      'patterns' => [
+          '*/View/Components',
+      ],
+  ],
+  ```
+- Configs merging priority: when `'configs.priority' => true`, values from your modules override the app config; when false, app config wins and modules provide defaults.
+
+You can disable any feature by setting `'active' => false` in its section.
+
+## Features
+
+This package discovers and wires many module assets. We’ll document them in depth, one by one. Suggested reading order:
+
+1) Blade Components (class-based)
+2) Views (namespaces, anonymous components)
+3) Routes (groups, api/web, broadcasting, commands)
+4) Configs (merging strategy, priority)
+5) Migrations & Seeders
+6) Commands & Helpers
+7) Models, Factories & Policies
+8) Listeners & Events
+9) Schedules
+10) Livewire Components
+11) Filament (Resources, Pages, Widgets, Clusters)
+12) Nova Resources
+
+## Caching
+
+For speed, the package can cache discovered assets under `bootstrap/cache`.
+
+- Build the cache:
+  ```bash
+  php artisan modules:cache
+  ```
+- Clear the cache:
+  ```bash
+  php artisan modules:clear
+  ```
+
+Tip: rerun `modules:cache` after adding, renaming, or moving assets (components, routes, etc.). Config and routes respect Laravel’s own caching as well.
 
 ## Testing
 
