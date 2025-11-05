@@ -22,15 +22,6 @@ In `config/modules.php`:
 ],
 ```
 
-## Namespace and naming
-
-- Module name → namespace (kebab-case):
-  - `Blog` → `blog`
-  - `Shop` → `shop`
-  - `PWA` (all caps) → `pwa`
-- A view file at `Modules/Blog/Resources/views/home.blade.php` is used via `view('blog::home')`.
-- Nested paths map to dot notation: `Modules/Shop/Resources/views/pages/product/show.blade.php` → `view('shop::pages.product.show')`.
-
 ## Directory layout examples
 
 ```
@@ -63,6 +54,15 @@ Modules/PWA/
         └── components/
             └── manifest.blade.php      // <x-pwa::manifest />
 ```
+
+## Namespace and naming
+
+- Module name → namespace (kebab-case):
+  - `Blog` → `blog`
+  - `Shop` → `shop`
+  - `PWA` (all caps) → `pwa`
+- A view file at `Modules/Blog/Resources/views/home.blade.php` is used via `view('blog::home')`.
+- Nested paths map to dot notation: `Modules/Shop/Resources/views/pages/product/show.blade.php` → `view('shop::pages.product.show')`.
 
 ## Anonymous components
 
@@ -103,6 +103,20 @@ Anonymous Blade components placed under `Resources/views/components` are availab
 - Discovered view directories participate in the modules cache commands:
   - Build cache: `php artisan modules:cache`
   - Clear cache: `php artisan modules:clear`
+
+## Testing hints
+
+- Assert namespace hints exist:
+  ```php
+  $hints = app('view')->getFinder()->getHints();
+  assert(isset($hints['blog']) && in_array(base_path('Modules/Blog/Resources/views'), $hints['blog']));
+  ```
+- Render a simple view or anonymous component as a smoke test.
+
+## Troubleshooting
+
+- View not found: confirm file path, module namespace (kebab-case), and discovery patterns; rebuild cache with `php artisan modules:cache`.
+- Anonymous component not found: ensure file lives under `Resources/views/components` and use the correct `<x-module::...>` path.
 
 ## See also
 
