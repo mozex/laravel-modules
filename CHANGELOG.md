@@ -2,6 +2,20 @@
 
 All notable changes to `laravel-modules` will be documented in this file.
 
+## 2.7.0 - 2025-11-06
+
+**Full Changelog**: https://github.com/mozex/laravel-modules/compare/2.6.3...2.7.0
+
+### What's Changed
+
+* Bump stefanzweifel/git-auto-commit-action from 6 to 7 by @dependabot[bot] in https://github.com/mozex/laravel-modules/pull/15
+* Bump actions/checkout from 4 to 5 by @dependabot[bot] in https://github.com/mozex/laravel-modules/pull/14
+* Bump aglipanci/laravel-pint-action from 2.5 to 2.6 by @dependabot[bot] in https://github.com/mozex/laravel-modules/pull/13
+* Complete documentation
+* Add Laravel Boost support
+
+**Full Changelog**: https://github.com/mozex/laravel-modules/compare/2.6.3...2.7.0
+
 ## 2.6.3 - 2025-10-08
 
 * fix event service provider
