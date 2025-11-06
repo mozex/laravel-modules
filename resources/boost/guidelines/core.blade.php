@@ -170,14 +170,18 @@ uses(Tests\TestCase::class, Illuminate\Foundation\Testing\RefreshDatabase::class
 
 ## Feature cheat sheet (essentials)
 
+@verbatim
 - Blade Components: class-based components discovered in `*/View/Components`, aliased as `<x-module::path.name/>`.
+@endverbatim
 @verbatim
 <code-snippet name="Blade Components usage" lang="blade">
 <x-blog::post.card :post="$post" />
 </code-snippet>
 @endverbatim
 
+@verbatim
 - Views & Anonymous Components: `*/Resources/views` namespaced as `module::...`; anonymous in `views/components` → `<x-module::.../>`.
+@endverbatim
 @verbatim
 <code-snippet name="Views & anonymous" lang="blade">
 {{ view('blog::home') }}
@@ -186,7 +190,9 @@ uses(Tests\TestCase::class, Illuminate\Foundation\Testing\RefreshDatabase::class
 </code-snippet>
 @endverbatim
 
+@verbatim
 - Livewire: components in `*/Livewire` → `<livewire:module::alias/>`.
+@endverbatim
 @verbatim
 <code-snippet name="Livewire usage" lang="blade">
 <livewire:shop::list-products />
