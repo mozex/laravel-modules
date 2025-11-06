@@ -83,6 +83,12 @@ Anonymous Blade components placed under `Resources/views/components` are availab
   echo view('pwa::head');
   ```
 
+- Blade includes:
+  ```blade
+  @include('invoice::inc.view')
+  {{-- loads Modules/Invoice/Resources/views/inc/view.blade.php --}}
+  ```
+
 - Anonymous components:
   ```blade
   <x-blog::form.input />
