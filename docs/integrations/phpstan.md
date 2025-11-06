@@ -67,7 +67,7 @@ phpstan analyse -c phpstan.php
 If you prefer the Composer-installed binary:
 
 ```bat
-vendor\bin\phpstan analyse -c phpstan.php
+./vendor/bin/phpstan analyse -c phpstan.php
 ```
 
 ## Baseline (optional)

@@ -52,19 +52,19 @@ Notes
 From your project root:
 
 ```bat
-vendor\bin\phpunit -c phpunit.xml
+./vendor/bin/phpunit
 ```
 
 If you have a global phpunit binary on PATH:
 
 ```bat
-phpunit -c phpunit.xml
+phpunit
 ```
 
 Filter to only module tests:
 
 ```bat
-vendor\bin\phpunit -c phpunit.xml --testsuite Modules
+phpunit -c phpunit.xml --testsuite Modules
 ```
 
 ## Troubleshooting

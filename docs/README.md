@@ -25,6 +25,7 @@ This directory contains feature-by-feature documentation for the mozex/laravel-m
 - Integrations
   - [PHPStan](./integrations/phpstan.md)
   - [PHPUnit](./integrations/phpunit.md)
+  - [Pest](./integrations/pest.md)
 
 ## Conventions
 
