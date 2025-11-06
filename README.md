@@ -51,7 +51,8 @@ Detailed documentation, including examples and best practices, lives in the `doc
 - [Views: namespacing and anonymous components](./docs/features/views.md)
 - [Routes: groups, broadcasting, console routes](./docs/features/routes.md)
 - [Configs: merge strategy and priority](./docs/features/configs.md)
-- [Migrations & Seeders](./docs/features/migrations-seeders.md)
+- [Migrations](./docs/features/migrations.md)
+- [Seeders](./docs/features/seeders.md)
 - [Commands & Helpers](./docs/features/commands-helpers.md)
 - [Models, Factories & Policies](./docs/features/models-factories-policies.md)
 - [Listeners & Events](./docs/features/listeners-events.md)
@@ -162,14 +163,15 @@ This package discovers and wires many module assets. We’ll document them in de
 2) Views (namespaces, anonymous components)
 3) Routes (groups, api/web, broadcasting, commands)
 4) Configs (merging strategy, priority)
-5) Migrations & Seeders
-6) Commands & Helpers
-7) Models, Factories & Policies
-8) Listeners & Events
-9) Schedules
-10) Livewire Components
-11) Filament (Resources, Pages, Widgets, Clusters)
-12) Nova Resources
+5) Migrations
+6) Seeders
+7) Commands & Helpers
+8) Models, Factories & Policies
+9) Listeners & Events
+10) Schedules
+11) Livewire Components
+12) Filament (Resources, Pages, Widgets, Clusters)
+13) Nova Resources
 
 ## Caching
 
