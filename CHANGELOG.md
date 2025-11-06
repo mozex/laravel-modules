@@ -2,6 +2,12 @@
 
 All notable changes to `laravel-modules` will be documented in this file.
 
+## 2.7.1 - 2025-11-06
+
+* Fix AI guidelines rendering
+
+**Full Changelog**: https://github.com/mozex/laravel-modules/compare/2.7.0...2.7.1
+
 ## 2.7.0 - 2025-11-06
 
 **Full Changelog**: https://github.com/mozex/laravel-modules/compare/2.6.3...2.7.0
