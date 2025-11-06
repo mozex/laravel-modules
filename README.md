@@ -57,8 +57,7 @@ Detailed documentation, including examples and best practices, lives in the `doc
 - [Helpers](./docs/features/helpers.md)
 - [Models & Factories](./docs/features/models-factories.md)
 - [Policies](./docs/features/policies.md)
-- [Listeners](./docs/features/listeners.md)
-- [Events](./docs/features/events.md)
+- [Events & Listeners](./docs/features/events-listeners.md)
 - [Schedules](./docs/features/schedules.md)
 - [Livewire Components](./docs/features/livewire-components.md)
 - [Filament Resources/Pages/Widgets/Clusters](./docs/features/filament.md)
@@ -172,12 +171,11 @@ This package discovers and wires many module assets. We’ll document them in de
 8) Helpers
 9) Models & Factories
 10) Policies
-11) Listeners
-12) Events
-13) Schedules
-14) Livewire Components
-15) Filament (Resources, Pages, Widgets, Clusters)
-16) Nova Resources
+11) Events & Listeners
+12) Schedules
+13) Livewire Components
+14) Filament (Resources, Pages, Widgets, Clusters)
+15) Nova Resources
 
 ## Caching
 
