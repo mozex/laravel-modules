@@ -124,12 +124,8 @@ The package discovers these Kernels and calls `schedule()` for each active modul
 
 ## Troubleshooting
 
-- Not seeing schedules from `Routes/console.php`:
-  - Ensure your Laravel version supports command route paths (10+), and `routes.commands_filenames` includes `console`.
-  - Confirm the file path is `Modules/*/Routes/console.php` and the [Routes](./routes.md) feature is active.
-- Module Console Kernel not running:
-  - Check the class is `Modules/{Module}/Console/Kernel` and extends `Mozex\Modules\Contracts\ConsoleKernel`.
-  - Ensure `'schedules.active' => true` and the module is active.
+- Console route schedules not running: ensure your Laravel version supports command route paths and that files are named `Routes/console.php`.
+- Module Console Kernel not invoked: class must be `Modules/{Module}/Console/Kernel` extending `Mozex\Modules\Contracts\ConsoleKernel`.
 
 ## See also
 

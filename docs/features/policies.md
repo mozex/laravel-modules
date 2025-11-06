@@ -29,12 +29,12 @@ In `config/modules.php`:
 
 ## How name guessing works
 
-- Detect module from namespace: the module name is parsed from the model class namespace (e.g., `Modules\\Blog\\Models\\Post` → `Blog`).
+- Detect module from namespace: the module name is parsed from the model class namespace (e.g., `Modules\Blog\Models\Post` → `Blog`).
 - Model → Policy mapping:
-  - Input: `Modules\\Blog\\Models\\Post`
-  - Output: `Modules\\Blog\\Policies\\PostPolicy`
+  - Input: `Modules\Blog\Models\Post`
+  - Output: `Modules\Blog\Policies\PostPolicy`
 - Nested namespaces are preserved beyond the configured sub-namespace:
-  - `Modules\\Shop\\Models\\Nested\\Item` → `Modules\\Shop\\Policies\\Nested\\ItemPolicy`
+  - `Modules\Shop\Models\Nested\Item` → `Modules\Shop\Policies\Nested\ItemPolicy`
 
 ## Directory layout examples
 
@@ -64,31 +64,14 @@ Modules/Blog/
 - Toggle feature
   - Set `'policies.active' => false` to disable module policy guessing.
 - Customize sub-namespaces
-  - Change `'models.namespace'` and `'policies.namespace'` to match your folder structure.
-
-## Backward compatibility
-
-- If a model does not belong to a module namespace, the feature temporarily resets Gate’s default resolver and defers to the framework’s built-in logic (then restores the module-aware resolver).
-
-## Testing hints
-
-- Assert both flat and nested module models resolve to their policies:
-  ```php
-  expect(Gate::getPolicyFor(Modules\Shop\Models\Order::class))
-      ->toBeInstanceOf(Modules\Shop\Policies\OrderPolicy::class);
-
-  expect(Gate::getPolicyFor(Modules\Shop\Models\Nested\Item::class))
-      ->toBeInstanceOf(Modules\Shop\Policies\Nested\ItemPolicy::class);
-  ```
+  - Change `'models.namespace'` and `'policies.namespace'` to match your directory structure.
 
 ## Troubleshooting
 
-- Policy not found:
-  - Verify `'models.namespace'` and `'policies.namespace'` in `config/modules.php`.
-  - Ensure your policy lives under the configured policies namespace and ends with `Policy`.
+- Policy not found: ensure the policy class exists under your module’s `Policies` namespace and ends with `Policy`.
+- Namespace mismatch: confirm the model and policy namespaces match their PSR‑4 paths.
 
 ## See also
 
 - [Models & Factories](./models-factories.md)
 - [Configs](./configs.md)
-- [Routes](./routes.md)

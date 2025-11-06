@@ -39,7 +39,7 @@ Thank you for considering sponsoring. Your support truly makes a difference!
 
 ## Documentation
 
-Detailed documentation, including examples and best practices, lives in the `docs` folder.
+Detailed documentation, including examples and best practices, lives in the `docs` directory.
 
 ### Index
 

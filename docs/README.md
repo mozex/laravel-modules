@@ -1,6 +1,6 @@
 # Laravel Modules - Documentation
 
-This folder contains feature-by-feature documentation for the mozex/laravel-modules package.
+This directory contains feature-by-feature documentation for the mozex/laravel-modules package.
 
 ## Index
 

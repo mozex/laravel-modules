@@ -104,19 +104,11 @@ Anonymous Blade components placed under `Resources/views/components` are availab
 - Change discovery patterns
   - Edit `'views.patterns'` to add/remove directories, relative to each module root. Wildcards are supported and resolved under `<base>/Modules` by default.
 
-## Testing hints
-
-- Assert namespace hints exist:
-  ```php
-  $hints = app('view')->getFinder()->getHints();
-  assert(isset($hints['blog']) && in_array(base_path('Modules/Blog/Resources/views'), $hints['blog']));
-  ```
-- Render a simple view or anonymous component as a smoke test.
-
 ## Troubleshooting
 
-- View not found: confirm file path, module namespace (kebab-case), and discovery patterns; rebuild cache with `php artisan modules:cache`.
-- Anonymous component not found: ensure file lives under `Resources/views/components` and use the correct `<x-module::...>` path.
+- View not found: verify the namespaced key matches the file path (kebab-case module name + dot path). Example: `Modules/Shop/Resources/views/catalog/index.blade.php` → `shop::catalog.index`.
+- Anonymous component not found: ensure it lives under `Resources/views/components` and you’re using the `<x-module::...>` path (kebab-cased and dot-joined).
+- Wrong module namespace: the module alias is the kebab-case of the module directory name (e.g., `Blog` → `blog`).
 
 ## See also
 

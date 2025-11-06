@@ -173,20 +173,14 @@ Route::middleware('can:manage-shop')->group(function () {
 - Define/override groups and registrars
   - Use `Modules::routeGroup($name, ...)` and `Modules::registerRoutesUsing($name, $closure)` (values can be closures that return computed attributes).
 
-## Testing hints
-
-- Quick smoke tests:
-  - Hit a known path registered in a module route file and assert the response.
-  - For channels, assert private channel authorization logic runs as expected.
-- Validate effective attributes: create a distinct middleware or prefix in a custom group and verify requests are affected.
-
 ## Troubleshooting
 
-- File not using expected group: ensure the filename matches your group name (e.g., `admin.php` for group `admin`) or define the group with `Modules::routeGroup('admin', ...)`.
-- Middleware/prefix not applied: check your group attributes and confirm closures return expected values at registration time.
-- Routes not changing: clear Laravel route cache (`php artisan route:clear`), then warm it again if needed (`php artisan route:cache`).
+- Wrong group applied: the filename is the group key (e.g., `admin.php` → `admin`). Define attributes via `Modules::routeGroup('admin', ...)`.
+- Changes not visible: clear Laravel’s route cache (`php artisan route:clear && php artisan route:cache`).
+- Channels not loading: place channel definitions in `Modules/*/Routes/channels.php`.
 
 ## See also
 
 - [Views](./views.md)
 - [Blade Components](./blade-components.md)
+- [Schedules](./schedules.md)

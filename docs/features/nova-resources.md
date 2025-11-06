@@ -48,18 +48,11 @@ Modules/Shop/
 - Change discovery patterns
   - Edit `'nova-resources.patterns'` to add/remove directories, relative to each module root.
 
-## Testing hints
-
-- You can assert resources are present in Nova by inspecting Nova’s registered resources list in integration tests, or rely on the unit tests included in this package for discovery behavior.
-
 ## Troubleshooting
 
-- Resource not registered:
-  - Ensure it extends `Laravel\\Nova\\Resource` (and not `ActionResource`).
-  - Confirm the file is under a configured `Nova` directory and the feature is active.
+- Resource not registered: ensure it extends `Laravel\Nova\Resource` (not an ActionResource), the class namespace matches the file path, and the feature is active.
 
 ## See also
 
-- [Views](./views.md)
-- [Routes](./routes.md)
 - [Models & Factories](./models-factories.md)
+- [Policies](./policies.md)

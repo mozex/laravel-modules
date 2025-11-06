@@ -73,23 +73,12 @@ Modules/Shop/
 - Change discovery patterns
   - Edit `'seeders.patterns'` to add/remove directories, relative to each module root.
 
-## Performance and caching
-
-- Discovered seeders are collected at boot; modules caching (`php artisan modules:cache`) speeds up discovery only.
-
-## Testing hints
-
-- In integration tests, call `Modules::seeders()` and run `$this->seed($class)` per item to seed module data.
-- Unit-test each `{Module}DatabaseSeeder` by verifying it calls expected internal seeders using Laravel’s Container spies or fakes.
-
 ## Troubleshooting
 
-- Seeder not discovered: ensure the class name matches `{Module}DatabaseSeeder`, extends `Seeder`, and is under `Database/Seeders`.
-- No seeders returned: confirm `'seeders.active' => true` and patterns include your modules.
+- Not discovered: the top-level seeder must be named `{Module}DatabaseSeeder` and extend `Illuminate\Database\Seeder`.
+- Nothing runs: ensure your app’s `DatabaseSeeder` calls `$this->call(Modules::seeders())`.
 
 ## See also
 
 - [Migrations](./migrations.md)
-- [Configs](./configs.md)
-- [Routes](./routes.md)
-
+- [Models & Factories](./models-factories.md)
