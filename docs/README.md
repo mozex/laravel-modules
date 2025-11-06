@@ -22,6 +22,8 @@ This directory contains feature-by-feature documentation for the mozex/laravel-m
   - [Livewire Components](./features/livewire-components.md)
   - [Filament Resources/Pages/Widgets/Clusters](./features/filament.md)
   - [Nova Resources](./features/nova-resources.md)
+- Integrations
+  - [PHPStan](./integrations/phpstan.md)
 
 ## Conventions
 
