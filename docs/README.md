@@ -24,6 +24,7 @@ This directory contains feature-by-feature documentation for the mozex/laravel-m
   - [Nova Resources](./features/nova-resources.md)
 - Integrations
   - [PHPStan](./integrations/phpstan.md)
+  - [PHPUnit](./integrations/phpunit.md)
 
 ## Conventions
 
