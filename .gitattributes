@@ -14,7 +14,12 @@
 /.php_cs.dist.php   export-ignore
 /psalm.xml          export-ignore
 /psalm.xml.dist     export-ignore
+/testbench     export-ignore
 /testbench.yaml     export-ignore
 /UPGRADING.md       export-ignore
 /phpstan.neon.dist  export-ignore
 /phpstan-baseline.neon  export-ignore
+/CHANGELOG.md  export-ignore
+/CODE_OF_CONDUCT.md  export-ignore
+/CONTRIBUTING.md  export-ignore
+/rector.php  export-ignore
