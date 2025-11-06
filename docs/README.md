@@ -19,6 +19,7 @@ This directory contains feature-by-feature documentation for the mozex/laravel-m
   - [Policies](./features/policies.md)
   - [Events & Listeners](./features/events-listeners.md)
   - [Service Providers](./features/service-providers.md)
+  - [Translations](./features/translations.md)
   - [Schedules](./features/schedules.md)
   - [Livewire Components](./features/livewire-components.md)
   - [Filament Resources/Pages/Widgets/Clusters](./features/filament.md)
