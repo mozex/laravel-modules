@@ -104,9 +104,29 @@ Modules/Blog/
 - Factory not found for a model:
   - Create a matching Factory under the configured factories namespace with a `Factory` suffix.
 
+## Editor hints
+
+- Some IDEs (e.g., PhpStorm) don’t pick up the custom model/factory resolvers for autocompletion and navigation. Functionally, everything works; this only affects IDE hints.
+- To help your editor, set the `$model` property explicitly on your factories:
+  ```php
+  namespace Modules\Blog\Database\Factories;
+
+  use Illuminate\Database\Eloquent\Factories\Factory;
+  use Modules\Blog\Models\Post;
+
+  class PostFactory extends Factory
+  {
+      protected $model = Post::class;
+
+      public function definition(): array
+      {
+          return [/* ... */];
+      }
+  }
+  ```
+
 ## See also
 
 - [Policies](./policies.md)
 - [Configs](./configs.md)
 - [Seeders](./seeders.md)
-

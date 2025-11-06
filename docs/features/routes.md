@@ -173,12 +173,6 @@ Route::middleware('can:manage-shop')->group(function () {
 - Define/override groups and registrars
   - Use `Modules::routeGroup($name, ...)` and `Modules::registerRoutesUsing($name, $closure)` (values can be closures that return computed attributes).
 
-## Performance and caching
-
-- When Laravel route caching is enabled (`php artisan route:cache`), module HTTP route files are not reloaded at boot; clear route cache to pick up changes.
-- Broadcasting channels are loaded after boot and are not part of the route cache, so `channels.php` files will still be required.
-- Modules asset caching (`php artisan modules:cache`) is orthogonal and only optimizes discovery; it does not replace `route:cache`.
-
 ## Testing hints
 
 - Quick smoke tests:

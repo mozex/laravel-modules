@@ -104,12 +104,6 @@ Anonymous Blade components placed under `Resources/views/components` are availab
 - Change discovery patterns
   - Edit `'views.patterns'` to add/remove directories, relative to each module root. Wildcards are supported and resolved under `<base>/Modules` by default.
 
-## Performance and caching
-
-- Discovered view directories participate in the modules cache commands:
-  - Build cache: `php artisan modules:cache`
-  - Clear cache: `php artisan modules:clear`
-
 ## Testing hints
 
 - Assert namespace hints exist:

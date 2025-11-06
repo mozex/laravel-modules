@@ -107,11 +107,6 @@ The package discovers these Kernels and calls `schedule()` for each active modul
 - Patterns
   - Adjust `'schedules.patterns'` for Console Kernels and `'routes.patterns'` for console route files if your layout differs.
 
-## Performance and caching
-
-- Schedule registration happens during boot. Laravel’s `route:cache` does not affect console route files; `config:cache` does not affect scheduling registration.
-- `php artisan modules:cache` only speeds up discovery; it does not persist schedule definitions.
-
 ## Testing hints
 
 - Inspect scheduled events:
@@ -141,4 +136,3 @@ The package discovers these Kernels and calls `schedule()` for each active modul
 - [Routes](./routes.md)
 - [Commands](./commands.md)
 - [Configs](./configs.md)
-

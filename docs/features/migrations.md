@@ -53,11 +53,6 @@ Modules/Shop/
 - Change discovery patterns
   - Edit `'migrations.patterns'` to add/remove directories, relative to each module root.
 
-## Performance and caching
-
-- Migration path registration happens at boot; it’s not affected by Laravel’s route/config caches.
-- Modules asset caching (`php artisan modules:cache`) only optimizes discovery; it doesn’t change migration execution.
-
 ## Testing hints
 
 - Assert migrator paths include module directories:
@@ -78,4 +73,3 @@ Modules/Shop/
 - [Routes](./routes.md)
 - [Views](./views.md)
 - [Blade Components](./blade-components.md)
-

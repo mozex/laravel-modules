@@ -66,19 +66,15 @@ Modules/PWA/
 - Change discovery patterns
   - Edit `'livewire-components.patterns'` to add/remove directories, relative to each module root.
 
-## Performance and caching
-
-- Livewire components are registered at boot. Modules cache (`php artisan modules:cache`) speeds discovery only.
-
 ## Testing hints
 
-- Use `app(\Livewire\Mechanisms\ComponentRegistry::class)->getName(ClassName::class)` to assert registration.
+- Use `app(\\Livewire\\Mechanisms\\ComponentRegistry::class)->getName(ClassName::class)` to assert registration.
 - Render components in tests with `Blade::render('<livewire:module::alias/>')` and assert output.
 
 ## Troubleshooting
 
 - Component not found:
-  - Ensure it extends `Livewire\Component` and is under a configured `Livewire` directory.
+  - Ensure it extends `Livewire\\Component` and is under a configured `Livewire` directory.
   - Confirm module activation and rebuild modules cache if needed.
 
 ## See also
@@ -86,4 +82,3 @@ Modules/PWA/
 - [Views](./views.md)
 - [Blade Components](./blade-components.md)
 - [Routes](./routes.md)
-

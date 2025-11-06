@@ -55,10 +55,6 @@ Modules/Shop/
 - Change discovery patterns
   - Edit `'helpers.patterns'` to add/remove directories, relative to each module root.
 
-## Performance and caching
-
-- Helpers are required once at registration time; modules cache (`php artisan modules:cache`) speeds discovery only.
-
 ## Testing hints
 
 - Assert helper functions are available in tests by calling them directly.
@@ -75,4 +71,3 @@ Modules/Shop/
 - [Commands](./commands.md)
 - [Configs](./configs.md)
 - [Routes](./routes.md)
-

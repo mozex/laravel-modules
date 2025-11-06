@@ -97,10 +97,6 @@ return [
 ];
 ```
 
-## Performance and caching
-- Build cache: `php artisan modules:cache`
-- Clear cache: `php artisan modules:clear`
-
 ## Testing hints
 
 - You can assert registration via `Blade::getClassComponentAliases()` or render the components in a small view.
@@ -109,7 +105,7 @@ return [
 ## Troubleshooting
 
 - Component not found:
-  - Ensure it extends `Illuminate\View\Component` and is not abstract.
+  - Ensure it extends `Illuminate\\View\\Component` and is not abstract.
   - Ensure the file is under one of the configured `patterns`.
   - Check per-module activation in `config/modules.php` under `'modules' => ['YourModule' => ['active' => true]]`.
   - Rebuild cache with `php artisan modules:cache`.

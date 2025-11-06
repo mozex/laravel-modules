@@ -58,19 +58,14 @@ Modules/Shop/
 
 - If you define module `console.php` route files (see the [Routes](./routes.md) docs), and your Laravel version supports command route paths (Laravel 10+), those command routes are also registered and visible in `php artisan list`.
 
-## Performance and caching
-
-- Command discovery happens at boot; modules cache (`php artisan modules:cache`) optimizes discovery only.
-- Laravel’s `config:cache`/`route:cache` do not affect command registration.
-
 ## Testing hints
 
 - Assert command registration via `Artisan::all()` keys or by running commands in tests.
-- Ensure abstract base commands aren’t picked up; keep real commands extending `Illuminate\Console\Command`.
+- Ensure abstract base commands aren’t picked up; keep real commands extending `Illuminate\\Console\\Command`.
 
 ## Troubleshooting
 
-- Command not found: verify it extends `Illuminate\Console\Command`, matches a configured pattern, and the feature is active.
+- Command not found: verify it extends `Illuminate\\Console\\Command`, matches a configured pattern, and the feature is active.
 - Name collision: ensure your command signatures are unique across modules.
 
 ## See also

@@ -93,15 +93,11 @@ Modules/Blog/
 - Change discovery patterns
   - Adjust the glob patterns to match your desired folder structure under each module.
 
-## Performance and caching
-
-- Discovery runs when Filament panels are resolved. Modules cache (`php artisan modules:cache`) speeds discovery only.
-
 ## Testing hints
 
 - Assert that module assets are present per panel:
   ```php
-  expect(Filament::getPanel('admin')->getResources())->toContain(Modules\Blog\Filament\Admin\Resources\PostResource::class);
+  expect(Filament::getPanel('admin')->getResources())->toContain(Modules\\Blog\\Filament\\Admin\\Resources\\PostResource::class);
   ```
 - For pages and widgets, assert via `getPages()` / `getWidgets()`; for clusters, use `getPages()` or panel APIs appropriate to your Filament version.
 
@@ -117,4 +113,3 @@ Modules/Blog/
 - [Livewire Components](./livewire-components.md)
 - [Views](./views.md)
 - [Routes](./routes.md)
-

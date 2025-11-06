@@ -28,4 +28,3 @@ This folder contains feature-by-feature documentation for the mozex/laravel-modu
 - Modules root: by default `Modules`. Configure via `config/modules.php` key `modules_directory`.
 - Module namespace: by default `Modules\\`. Configure via `config/modules.php` key `modules_namespace`.
 - Per-asset feature toggles and patterns live in `config/modules.php` under the corresponding section (e.g. `blade-components`, `views`, `routes`, ...).
-- Caching: discovered assets can be cached into `bootstrap/cache` via `php artisan modules:cache` and cleared via `php artisan modules:clear`.

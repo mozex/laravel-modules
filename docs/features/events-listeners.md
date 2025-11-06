@@ -66,10 +66,6 @@ Event::assertListening(Modules\\Blog\\Events\\PostPublished::class, Modules\\Blo
 - Change discovery patterns
   - Edit `'listeners.patterns'` to add/remove directories per module.
 
-## Performance and caching
-
-- Discovery runs during boot. Modules cache (`php artisan modules:cache`) accelerates discovery only.
-
 ## Testing hints
 
 - Use `Event::fake()` and `Event::assertListening(...)` to verify attachments.

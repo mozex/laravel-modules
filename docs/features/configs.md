@@ -83,11 +83,6 @@ Modules/Shop/
   - Edit `'configs.patterns'` to add/remove directories.
   - Set `'configs.priority'` to tune who wins on conflicts.
 
-## Performance and caching
-
-- Merging is skipped when the app configuration is cached (`php artisan config:cache`).
-- Modules asset caching (`php artisan modules:cache`) only optimizes discovery; it does not affect merge results.
-
 ## Testing hints
 
 - Assert expected values:
@@ -109,4 +104,3 @@ Modules/Shop/
 - [Routes](./routes.md)
 - [Views](./views.md)
 - [Blade Components](./blade-components.md)
-

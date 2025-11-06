@@ -48,10 +48,6 @@ Modules/Shop/
 - Change discovery patterns
   - Edit `'nova-resources.patterns'` to add/remove directories, relative to each module root.
 
-## Performance and caching
-
-- Registration happens when Nova serves a request. Modules cache (`php artisan modules:cache`) speeds discovery only.
-
 ## Testing hints
 
 - You can assert resources are present in Nova by inspecting Nova’s registered resources list in integration tests, or rely on the unit tests included in this package for discovery behavior.
@@ -59,7 +55,7 @@ Modules/Shop/
 ## Troubleshooting
 
 - Resource not registered:
-  - Ensure it extends `Laravel\Nova\Resource` (and not `ActionResource`).
+  - Ensure it extends `Laravel\\Nova\\Resource` (and not `ActionResource`).
   - Confirm the file is under a configured `Nova` directory and the feature is active.
 
 ## See also
@@ -67,4 +63,3 @@ Modules/Shop/
 - [Views](./views.md)
 - [Routes](./routes.md)
 - [Models & Factories](./models-factories.md)
-

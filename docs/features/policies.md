@@ -92,4 +92,3 @@ Modules/Blog/
 - [Models & Factories](./models-factories.md)
 - [Configs](./configs.md)
 - [Routes](./routes.md)
-

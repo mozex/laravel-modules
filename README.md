@@ -179,18 +179,18 @@ This package discovers and wires many module assets. We’ll document them in de
 
 ## Caching
 
-For speed, the package can cache discovered assets under `bootstrap/cache`.
+This package supports a single discovery cache that speeds up scanning your Modules directory. Use these commands:
 
-- Build the cache:
+- Build the discovery cache:
   ```bash
   php artisan modules:cache
   ```
-- Clear the cache:
+- Clear the discovery cache:
   ```bash
   php artisan modules:clear
   ```
 
-Tip: rerun `modules:cache` after adding, renaming, or moving assets (components, routes, etc.). Config and routes respect Laravel’s own caching as well.
+Tip: after adding, renaming, or moving module assets, clear any relevant Laravel caches and rebuild the modules discovery cache as needed.
 
 ## Testing
 
