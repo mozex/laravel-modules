@@ -53,9 +53,13 @@ Detailed documentation, including examples and best practices, lives in the `doc
 - [Configs: merge strategy and priority](./docs/features/configs.md)
 - [Migrations](./docs/features/migrations.md)
 - [Seeders](./docs/features/seeders.md)
-- [Commands & Helpers](./docs/features/commands-helpers.md)
-- [Models, Factories & Policies](./docs/features/models-factories-policies.md)
-- [Listeners & Events](./docs/features/listeners-events.md)
+- [Commands](./docs/features/commands.md)
+- [Helpers](./docs/features/helpers.md)
+- [Models](./docs/features/models.md)
+- [Factories](./docs/features/factories.md)
+- [Policies](./docs/features/policies.md)
+- [Listeners](./docs/features/listeners.md)
+- [Events](./docs/features/events.md)
 - [Schedules](./docs/features/schedules.md)
 - [Livewire Components](./docs/features/livewire-components.md)
 - [Filament Resources/Pages/Widgets/Clusters](./docs/features/filament.md)
@@ -165,13 +169,17 @@ This package discovers and wires many module assets. We’ll document them in de
 4) Configs (merging strategy, priority)
 5) Migrations
 6) Seeders
-7) Commands & Helpers
-8) Models, Factories & Policies
-9) Listeners & Events
-10) Schedules
-11) Livewire Components
-12) Filament (Resources, Pages, Widgets, Clusters)
-13) Nova Resources
+7) Commands
+8) Helpers
+9) Models
+10) Factories
+11) Policies
+12) Listeners
+13) Events
+14) Schedules
+15) Livewire Components
+16) Filament (Resources, Pages, Widgets, Clusters)
+17) Nova Resources
 
 ## Caching
 
