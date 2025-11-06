@@ -97,22 +97,14 @@ return [
 ];
 ```
 
-## Testing hints
-
-- You can assert registration via `Blade::getClassComponentAliases()` or render the components in a small view.
-- If you rename or move components, rebuild the cache.
-
 ## Troubleshooting
 
-- Component not found:
-  - Ensure it extends `Illuminate\\View\\Component` and is not abstract.
-  - Ensure the file is under one of the configured `patterns`.
-  - Check per-module activation in `config/modules.php` under `'modules' => ['YourModule' => ['active' => true]]`.
-  - Rebuild cache with `php artisan modules:cache`.
-- Alias differs from expectation:
-  - Verify the calculated alias from the folder structure and kebab-case rules above.
-  - You can always reference the component class directly if needed: `Blade::component(YourClass::class, 'your-alias')` in a service provider.
+- Component renders as unknown tag: clear compiled views (`php artisan view:clear`) and confirm the alias matches the kebab-cased path (e.g., `Post/Card.php` → `<x-blog::post.card />`).
+- View not found from `render()`: ensure the view exists under the module namespace (e.g., `blog::components.post.card`) and the file is named with `.blade.php`.
+- Alias collision across modules: if two classes would map to the same alias, rename one or adjust structure to keep aliases unique.
+- Class not loaded: make sure the file and namespace match PSR-4 (run `composer dump-autoload` if needed).
 
 ## See also
 
 - [Views & Anonymous Components](./views.md)
+

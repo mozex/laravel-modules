@@ -25,7 +25,7 @@ In `config/modules.php`:
 
 ## Aliases and naming
 
-- Component aliases are derived from the module name and the relative path under the Livewire folder:
+- Component aliases are derived from the module name and the relative path under the Livewire directory:
   - `Modules/Blog/Livewire/Posts.php` → `<livewire:blog::posts/>`
   - `Modules/Blog/Livewire/Nested/Manage/Comments.php` → `<livewire:blog::nested.manage.comments/>`
 - The module name becomes the first segment in kebab‑case; subsequent path segments are kebab‑cased and dot‑joined.
@@ -66,16 +66,10 @@ Modules/PWA/
 - Change discovery patterns
   - Edit `'livewire-components.patterns'` to add/remove directories, relative to each module root.
 
-## Testing hints
-
-- Use `app(\\Livewire\\Mechanisms\\ComponentRegistry::class)->getName(ClassName::class)` to assert registration.
-- Render components in tests with `Blade::render('<livewire:module::alias/>')` and assert output.
-
 ## Troubleshooting
 
-- Component not found:
-  - Ensure it extends `Livewire\\Component` and is under a configured `Livewire` directory.
-  - Confirm module activation and rebuild modules cache if needed.
+- Component not found: ensure it extends `Livewire\Component`, lives under a discovered `Livewire` directory, and the module is active.
+- Alias mismatch: use kebab-case for module name and dots for nested directories, e.g., `<livewire:blog::nested.manage.comments />`.
 
 ## See also
 

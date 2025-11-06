@@ -49,14 +49,14 @@ Modules/Shop/
 
 ## Usage
 
-- Define events per module (e.g., `Modules\\Blog\\Events\\PostPublished`).
+- Define events per module (e.g., `Modules\Blog\Events\PostPublished`).
 - Place listener classes under each module’s `Listeners` directory.
 - Laravel will discover and attach them at boot; you can assert this with:
 
 > Note: Module listeners can listen to events defined anywhere in your application (core app or other modules); the event does not have to live in the same module.
 
 ```php
-Event::assertListening(Modules\\Blog\\Events\\PostPublished::class, Modules\\Blog\\Listeners\\NotifyFollowers::class);
+Event::assertListening(Modules\Blog\Events\PostPublished::class, Modules\Blog\Listeners\NotifyFollowers::class);
 ```
 
 ## Configuration options
@@ -73,12 +73,11 @@ Event::assertListening(Modules\\Blog\\Events\\PostPublished::class, Modules\\Blo
 
 ## Troubleshooting
 
-- Listener not attached:
-  - Ensure the file lives under a configured `Listeners` path and the feature is active.
-  - Confirm the resolved namespace matches the file path and class name.
+- Listener not attached: ensure the file lives under a configured `Listeners` path and the feature is active.
+- Namespace mismatch: confirm the resolved namespace matches the file path and class name.
+- Cross-module events: listeners can point to events defined anywhere in your app.
 
 ## See also
 
 - [Policies](./policies.md)
 - [Models & Factories](./models-factories.md)
-- [Routes](./routes.md)

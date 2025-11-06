@@ -55,19 +55,13 @@ Modules/Shop/
 - Change discovery patterns
   - Edit `'helpers.patterns'` to add/remove directories, relative to each module root.
 
-## Testing hints
-
-- Assert helper functions are available in tests by calling them directly.
-- To avoid state bleed, prefer pure helper functions; guard with `function_exists`.
-
 ## Troubleshooting
 
-- Function not found:
-  - Ensure the file path matches a configured pattern and the feature is active.
-  - Confirm the function is not conditionally defined behind a failing guard.
+- Function not found: verify the file path is under a discovered `Helpers` directory and the feature is active.
+- Redeclaration error: wrap helpers with `function_exists` guards to avoid duplicate definitions across modules.
 
 ## See also
 
 - [Commands](./commands.md)
 - [Configs](./configs.md)
-- [Routes](./routes.md)
+- [Views](./views.md)

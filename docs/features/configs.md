@@ -83,24 +83,12 @@ Modules/Shop/
   - Edit `'configs.patterns'` to add/remove directories.
   - Set `'configs.priority'` to tune who wins on conflicts.
 
-## Testing hints
-
-- Assert expected values:
-  ```php
-  expect(config('blog.x'))->toBe('...');
-  ```
-- Flip `'configs.priority'` and verify override direction in tests.
-
 ## Troubleshooting
 
-- Value not merging:
-  - Ensure the file path matches a configured pattern and the feature is active.
-  - Clear Laravel config cache if enabled.
-- Unexpected precedence:
-  - Check the `'configs.priority'` flag.
+- Values not updating: clear Laravel’s config cache, then reload (`php artisan config:clear && php artisan config:cache`).
+- Wrong key: the file name becomes the key. `Modules/Blog/Config/blog.php` → `config('blog.*')`.
+- Merge direction: set `'configs.priority'` to control whether module or app values win on conflicts.
 
 ## See also
 
 - [Routes](./routes.md)
-- [Views](./views.md)
-- [Blade Components](./blade-components.md)

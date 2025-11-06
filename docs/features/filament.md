@@ -82,7 +82,8 @@ Modules/Blog/
 
 ## Usage
 
-- Define Filament classes under module folders per panel, following Filament’s conventions. The panel id is inferred from the folder name.
+- Define Filament classes under module directories per panel, following Filament’s conventions. The panel id is inferred from the
+  directory name.
 - Ensure your app registers panels (e.g., AdminPanelProvider, DashboardPanelProvider) with ids matching the inferred ids (e.g., `admin`, `dashboard`).
 - The package will discover and register your module’s Filament classes into the corresponding panels at boot.
 
@@ -91,22 +92,12 @@ Modules/Blog/
 - Toggle features
   - Disable any of the four features by setting `'active' => false` in its section.
 - Change discovery patterns
-  - Adjust the glob patterns to match your desired folder structure under each module.
-
-## Testing hints
-
-- Assert that module assets are present per panel:
-  ```php
-  expect(Filament::getPanel('admin')->getResources())->toContain(Modules\\Blog\\Filament\\Admin\\Resources\\PostResource::class);
-  ```
-- For pages and widgets, assert via `getPages()` / `getWidgets()`; for clusters, use `getPages()` or panel APIs appropriate to your Filament version.
+  - Adjust the glob patterns to match your desired directory structure under each module.
 
 ## Troubleshooting
 
-- Asset not registered:
-  - Confirm the folder path matches the configured patterns and the feature is active.
-  - Verify the Filament panel id matches the second wildcard segment (kebab‑case).
-  - Ensure Filament is installed and panels are registered before modules boot.
+- Not appearing in a panel: confirm the directory includes the panel segment (e.g., `Filament/Admin/Resources`) and that your app defines a panel with the matching id (`admin`).
+- Namespace mismatch: ensure class namespaces match their PSR‑4 paths under the module.
 
 ## See also
 

@@ -2,7 +2,7 @@
 
 ## Overview
 
-The package auto-discovers module migration directories and registers them with Laravel’s migrator. All migrations under those directories (including nested subfolders) are picked up by `php artisan migrate`.
+The package auto-discovers module migration directories and registers them with Laravel’s migrator. All migrations under those directories (including nested subdirectories) are picked up by `php artisan migrate`.
 
 ## What gets discovered
 
@@ -53,23 +53,13 @@ Modules/Shop/
 - Change discovery patterns
   - Edit `'migrations.patterns'` to add/remove directories, relative to each module root.
 
-## Testing hints
-
-- Assert migrator paths include module directories:
-  ```php
-  $paths = app('migrator')->paths();
-  expect($paths)->toContain(base_path('Modules/Blog/Database/Migrations'));
-  ```
-- Place a dummy migration in a subfolder and run `migrate --pretend` to confirm it’s picked up.
-
 ## Troubleshooting
 
-- Migration not found: verify the directory matches the configured patterns and the feature is active; check subfolder placement and filename timestamps.
-- Order/duplicate issues: ensure unique timestamp prefixes across modules to avoid collisions.
+- Migration not found: make sure the file lives under a discovered directory and its timestamped filename is correct.
+- Order/collisions: ensure unique timestamps across modules to avoid conflicts.
+- Targeted runs: use `--path=Modules/ModuleName/Database/Migrations` when you want to run a module’s migrations only.
 
 ## See also
 
-- [Configs](./configs.md)
-- [Routes](./routes.md)
-- [Views](./views.md)
-- [Blade Components](./blade-components.md)
+- [Seeders](./seeders.md)
+- [Models & Factories](./models-factories.md)
