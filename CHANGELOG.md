@@ -2,6 +2,16 @@
 
 All notable changes to `laravel-modules` will be documented in this file.
 
+## 2.7.2 - 2026-01-24
+
+### What's Changed
+
+* Bump actions/cache from 4 to 5 by @dependabot[bot] in https://github.com/mozex/laravel-modules/pull/17
+* Bump actions/checkout from 5 to 6 by @dependabot[bot] in https://github.com/mozex/laravel-modules/pull/16
+* improve docs
+
+**Full Changelog**: https://github.com/mozex/laravel-modules/compare/2.7.1...2.7.2
+
 ## 2.7.1 - 2025-11-06
 
 * Fix AI guidelines rendering
