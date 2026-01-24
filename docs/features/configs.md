@@ -25,7 +25,7 @@ In `config/modules.php`:
 
 ## Merging strategy
 
-Merging only runs when Laravel configuration is not cached.
+**Important**: Merging only runs when Laravel configuration is **not** cached. In production with cached config (`php artisan config:cache`), module configs are merged at cache-build time, not at runtime. After changing module configs, always rebuild the cache.
 
 - If `priority` is true (default):
   - final = array_merge(app[$key] ?? [], module[$key])

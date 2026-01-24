@@ -157,6 +157,24 @@ All options live in `config/modules.php`.
 
 You can disable any feature by setting `'active' => false` in its section.
 
+### Modules Facade
+
+The `Mozex\Modules\Facades\Modules` facade provides utility methods:
+
+```php
+use Mozex\Modules\Facades\Modules;
+
+Modules::basePath('path');                    // Get base path with suffix
+Modules::modulesPath('Blog/Config');          // Get modules directory path
+Modules::moduleNameFromNamespace($class);     // Extract module name from namespace
+Modules::moduleNameFromPath($path);           // Extract module name from file path
+Modules::seeders();                           // Get all module seeder classes
+Modules::routeGroup('admin', ...);            // Define custom route group
+Modules::registerRoutesUsing('name', fn);     // Custom route registration
+```
+
+See [docs/README.md](./docs/README.md) for the complete API reference.
+
 ## Features
 
 This package discovers and wires many module assets. We’ll document them in depth, one by one. Suggested reading order:

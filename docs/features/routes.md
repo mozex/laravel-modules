@@ -50,10 +50,16 @@ Modules/Shop/
 
 ## Groups and registration
 
-- By default, two groups are pre-defined:
-  - `web`: `middleware` → `['web']`
-  - `api`: `prefix` → `'api'`, `middleware` → `['api']`
-- The group used for a file is the base filename (e.g., `web.php` → `web`).
+- By default, two groups are pre-defined (registered in the `Modules` class constructor):
+  ```php
+  // api group: adds 'api' prefix and ['api'] middleware
+  Modules::routeGroup('api', prefix: 'api', middleware: ['api']);
+
+  // web group: adds ['web'] middleware only (no prefix)
+  Modules::routeGroup('web', middleware: ['web']);
+  ```
+- The group used for a file is the base filename (e.g., `web.php` → `web`, `api.php` → `api`).
+- Files with names that don't match any defined group are registered with empty attributes (no middleware/prefix).
 - You can define or override groups and their attributes using the `Modules` facade (attributes accept static values or closures evaluated at registration time):
 
 ```php
