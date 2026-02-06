@@ -2,17 +2,7 @@
 
 ## Overview
 
-Run PHPStan across your Laravel app and all Modules using a single, dynamic configuration. By switching to a PHP config file (phpstan.php), you can glob your module directories at runtime so new modules are picked up automatically.
-
-## Requirements
-
-- PHPStan installed in your project (dev dependency)
-- Optional: a baseline file (phpstan-baseline.php) if you want to suppress known issues
-
-## Setup
-
-1) Create `phpstan.php` at the project root (or replace your existing `phpstan.neon`/`phpstan.neon.dist`).
-2) Paste the configuration below (adjust levels and paths as you prefer).
+Run PHPStan across your Laravel app and all Modules using a PHP config file that globs module directories at runtime.
 
 ## Recommended configuration (phpstan.php)
 
@@ -41,50 +31,25 @@ return [
         'tmpDir' => 'storage/phpstan',
         'checkOctaneCompatibility' => true,
         'checkModelProperties' => true,
-        'reportUnmatchedIgnoredErrors' => false,
-        'ignoreErrors' => [
-            ['identifier' => 'trait.unused'],
-            ['identifier' => 'typeCoverage.paramTypeCoverage'],
-        ],
     ],
 ];
 ```
 
-Notes
-- `paths`: analyses your core app/config and every module directory dynamically.
-- `excludePaths.analyseAndScan`: skips module Tests, Database, and Resources directories (tune as needed).
-- `databaseMigrationsPath`: points PHPStan/Laravel helpers at your module migration directories.
-- The array spread (`...glob(...)`) requires PHP 8.1+.
+Key points:
+- `...glob(...)` dynamically includes all module directories (requires PHP 8.1+).
+- `excludePaths` skips Tests, Database, and Resources directories.
+- `databaseMigrationsPath` points PHPStan at module migration directories.
 
-## Run PHPStan
+## Running PHPStan
 
-From your project root:
-
-```bat
-phpstan analyse -c phpstan.php
-```
-
-If you prefer the Composer-installed binary:
-
-```bat
+```bash
 ./vendor/bin/phpstan analyse -c phpstan.php
 ```
 
-## Baseline (optional)
+## Baseline
 
-Generate or update a baseline to suppress existing issues:
+Generate a baseline to suppress existing issues:
 
-```bat
-phpstan analyse -c phpstan.php --allow-empty-baseline --generate-baseline phpstan-baseline.php
+```bash
+./vendor/bin/phpstan analyse -c phpstan.php --allow-empty-baseline --generate-baseline phpstan-baseline.php
 ```
-
-## Troubleshooting
-
-- “Path not analysed”: confirm the `paths` glob finds your module directories (run `php -r "print_r(glob(__DIR__ . '/Modules/*', GLOB_ONLYDIR));"`).
-- “Too many findings from Resources/Database/Tests”: adjust `excludePaths.analyseAndScan` to suit your project.
-- Windows path separators: use `__DIR__` and absolute paths as shown to avoid slash issues.
-
-## See also
-
-- PHPStan docs: https://phpstan.org/
-

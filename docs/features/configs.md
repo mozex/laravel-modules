@@ -2,16 +2,14 @@
 
 ## Overview
 
-The package auto-discovers module config files and merges them into Laravel’s configuration at boot (when the app config is not cached). Merging order is configurable, so you can choose whether module values override the app config or act as defaults.
+Auto-discovers module config files and merges them into Laravel's configuration at boot time (when config is not cached). The merging order is configurable via the `priority` option.
 
 ## What gets discovered
 
-- Files matching the configured patterns (default: `*/Config/*.php` under each module)
-- Each file’s base filename becomes the config key (e.g., `Modules/Blog/Config/blog.php` → `config('blog.*')`)
+- PHP files matching configured patterns (default: `*/Config/*.php`)
+- Each file's base filename becomes the config key: `Modules/Blog/Config/blog.php` → `config('blog.*')`
 
 ## Default configuration
-
-In `config/modules.php`:
 
 ```php
 'configs' => [
@@ -19,41 +17,24 @@ In `config/modules.php`:
     'patterns' => [
         '*/Config/*.php',
     ],
-    'priority' => true, // when true, module values override app values
+    'priority' => true,
 ],
 ```
 
 ## Merging strategy
 
-**Important**: Merging only runs when Laravel configuration is **not** cached. In production with cached config (`php artisan config:cache`), module configs are merged at cache-build time, not at runtime. After changing module configs, always rebuild the cache.
+**Important**: Merging only runs when Laravel configuration is **not** cached. In production with `php artisan config:cache`, module configs are merged at cache-build time. Always rebuild the cache after changing module configs.
 
-- If `priority` is true (default):
-  - final = array_merge(app[$key] ?? [], module[$key])
-  - module values win for duplicate keys.
-- If `priority` is false:
-  - final = array_merge(module[$key], app[$key] ?? [])
-  - app values win; module files provide defaults.
+- `priority: true` (default): `array_merge(app_config, module_config)` — module values win
+- `priority: false`: `array_merge(module_config, app_config)` — app values win, modules provide defaults
 
-Example
+### Example
 
-- `config/app.php` contains:
-  ```php
-  'feature' => [
-      'enabled' => false,
-      'limit' => 10,
-  ]
-  ```
-- `Modules/Shop/Config/app.php` contains:
-  ```php
-  return [
-      'feature' => [
-          'enabled' => true,
-      ],
-  ];
-  ```
-- With `priority: true`, `config('app.feature.enabled')` becomes `true` and `config('app.feature.limit')` remains `10`.
+Given `config/app.php` with `'feature' => ['enabled' => false, 'limit' => 10]` and `Modules/Shop/Config/app.php` returning `['feature' => ['enabled' => true]]`:
 
-## Directory layout examples
+- With `priority: true`: `config('app.feature.enabled')` → `true`, `config('app.feature.limit')` → `10`
+
+## Directory layout
 
 ```
 Modules/Blog/
@@ -62,33 +43,16 @@ Modules/Blog/
 
 Modules/Shop/
 └── Config/
-    └── app.php           // config('app.*') merged with Laravel app config
+    └── app.php           // merged with Laravel's config/app.php
 ```
 
-## Usage examples
+## Configuration
 
-- Read merged values as usual:
-  ```php
-  if (config('blog.comments.enabled')) {
-      // ...
-  }
-  $limit = config('app.feature.limit', 10);
-  ```
-
-## Configuration options
-
-- Toggle discovery
-  - Set `'configs.active' => false` to disable merging.
-- Change discovery patterns or priority
-  - Edit `'configs.patterns'` to add/remove directories.
-  - Set `'configs.priority'` to tune who wins on conflicts.
+- Set `'configs.active' => false` to disable merging.
+- Edit `'configs.patterns'` to change discovery directories.
+- Set `'configs.priority'` to control merge direction.
 
 ## Troubleshooting
 
-- Values not updating: clear Laravel’s config cache, then reload (`php artisan config:clear && php artisan config:cache`).
-- Wrong key: the file name becomes the key. `Modules/Blog/Config/blog.php` → `config('blog.*')`.
-- Merge direction: set `'configs.priority'` to control whether module or app values win on conflicts.
-
-## See also
-
-- [Routes](./routes.md)
+- **Values not updating**: clear config cache (`php artisan config:clear`).
+- **Wrong key**: the filename is the key — `blog.php` → `config('blog.*')`.

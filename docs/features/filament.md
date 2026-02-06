@@ -2,64 +2,46 @@
 
 ## Overview
 
-The package auto-discovers Filament Resources, Pages, Widgets, and Clusters within your modules and registers them per panel. It respects your Filament panel providers and maps each module’s Filament classes to the correct panel based on directory naming.
+Auto-discovers Filament Resources, Pages, Widgets, and Clusters within modules and registers them per panel. The panel id is inferred from the directory name under `Filament/`.
 
 ## What gets discovered
 
-- When Filament is installed and enabled, the following features can be toggled independently:
-  - Resources: `*/Filament/*/Resources`
-  - Pages: `*/Filament/*/Pages`
-  - Widgets: `*/Filament/*/Widgets`
-  - Clusters: `*/Filament/*/Clusters`
-- The `*` segment denotes the panel name (e.g., `Admin`, `Dashboard`). The panel id is the kebab-case of that segment (e.g., `Admin` → `admin`).
-- Each discovered directory is paired with its PSR-4 namespace and panel id, then handed to Filament’s `discover*()` APIs.
+Four independently toggleable features (when Filament is installed):
+- Resources: `*/Filament/*/Resources`
+- Pages: `*/Filament/*/Pages`
+- Widgets: `*/Filament/*/Widgets`
+- Clusters: `*/Filament/*/Clusters`
+
+The second `*` in each pattern is the panel name. It's lowercased to form the panel id (e.g., `Admin` → `admin`).
 
 ## Default configuration
-
-In `config/modules.php`:
 
 ```php
 'filament-resources' => [
     'active' => true,
-    'patterns' => [
-        '*/Filament/*/Resources',
-    ],
+    'patterns' => ['*/Filament/*/Resources'],
 ],
-
 'filament-pages' => [
     'active' => true,
-    'patterns' => [
-        '*/Filament/*/Pages',
-    ],
+    'patterns' => ['*/Filament/*/Pages'],
 ],
-
 'filament-widgets' => [
     'active' => true,
-    'patterns' => [
-        '*/Filament/*/Widgets',
-    ],
+    'patterns' => ['*/Filament/*/Widgets'],
 ],
-
 'filament-clusters' => [
     'active' => true,
-    'patterns' => [
-        '*/Filament/*/Clusters',
-    ],
+    'patterns' => ['*/Filament/*/Clusters'],
 ],
 ```
 
 ## How panel mapping works
 
-- The panel name is extracted from the second wildcard in the pattern: `*/Filament/*/...`.
-- It’s converted to lowercase for the final id (e.g., `Admin` or `admin` → `admin`).
-- During boot, each Filament panel is iterated and only the assets matching that panel id are registered via:
-  - `$panel->discoverResources(in: $path, for: $namespace)`
-  - `$panel->discoverPages(in: $path, for: $namespace)`
-  - `$panel->discoverWidgets(in: $path, for: $namespace)`
-  - `$panel->discoverClusters(in: $path, for: $namespace)`
-- Any panel-contained Livewire components that use module namespaces are re-registered with Livewire to ensure the correct component aliases are available.
+- The panel name is extracted from the directory path: `Filament/{Panel}/Resources`.
+- During registration, each Filament panel is iterated and only assets matching that panel id are registered via `$panel->discoverResources()`, `discoverPages()`, `discoverWidgets()`, `discoverClusters()`.
+- Module Livewire components registered by Filament are re-registered with Livewire to ensure correct aliases.
 
-## Directory layout examples
+## Directory layout
 
 ```
 Modules/Blog/
@@ -74,33 +56,21 @@ Modules/Blog/
     └── Dashboard/
         ├── Resources/
         │   └── NestedPostResource.php
-        ├── Pages/
-        │   └── CreatePostPage.php
         └── Clusters/
             └── NestedPost.php
 ```
 
 ## Usage
 
-- Define Filament classes under module directories per panel, following Filament’s conventions. The panel id is inferred from the
-  directory name.
-- Ensure your app registers panels (e.g., AdminPanelProvider, DashboardPanelProvider) with ids matching the inferred ids (e.g., `admin`, `dashboard`).
-- The package will discover and register your module’s Filament classes into the corresponding panels at boot.
+- Place Filament classes under `Modules/{Module}/Filament/{PanelId}/...` following Filament conventions.
+- Ensure your app has panel providers with matching ids (e.g., `AdminPanelProvider` with id `admin`).
 
-## Configuration options
+## Configuration
 
-- Toggle features
-  - Disable any of the four features by setting `'active' => false` in its section.
-- Change discovery patterns
-  - Adjust the glob patterns to match your desired directory structure under each module.
+- Disable any feature by setting `'active' => false` in its section.
+- Adjust glob patterns to match your directory structure.
 
 ## Troubleshooting
 
-- Not appearing in a panel: confirm the directory includes the panel segment (e.g., `Filament/Admin/Resources`) and that your app defines a panel with the matching id (`admin`).
-- Namespace mismatch: ensure class namespaces match their PSR‑4 paths under the module.
-
-## See also
-
-- [Livewire Components](./livewire-components.md)
-- [Views](./views.md)
-- [Routes](./routes.md)
+- **Not appearing in panel**: confirm directory has the panel segment (e.g., `Filament/Admin/Resources`) and your app defines a panel with matching id.
+- **Namespace mismatch**: class namespaces must match PSR-4 paths.

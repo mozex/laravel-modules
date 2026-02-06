@@ -2,17 +2,14 @@
 
 ## Overview
 
-The package discovers Livewire components inside your modules and registers them with namespaced aliases, so you can render them with `<livewire:module::path.to.component/>` or `@livewire('module::path.to.component')`.
+Discovers Livewire components inside modules and registers them with namespaced aliases: `<livewire:module::path.to.component/>`.
 
 ## What gets discovered
 
-- Classes that extend `Livewire\Component`
-- Located in directories matching the configured patterns (default: `*/Livewire` under each module)
-- Abstract or non‑component classes are ignored
+- Non-abstract classes extending `Livewire\Component`
+- Located in directories matching configured patterns (default: `*/Livewire`)
 
 ## Default configuration
-
-In `config/modules.php`:
 
 ```php
 'livewire-components' => [
@@ -23,26 +20,21 @@ In `config/modules.php`:
 ],
 ```
 
-## Aliases and naming
+## Naming
 
-- Component aliases are derived from the module name and the relative path under the Livewire directory:
+- Module name → kebab-case prefix, path segments → kebab-cased and dot-joined:
   - `Modules/Blog/Livewire/Posts.php` → `<livewire:blog::posts/>`
-  - `Modules/Blog/Livewire/Nested/Manage/Comments.php` → `<livewire:blog::nested.manage.comments/>`
-- The module name becomes the first segment in kebab‑case; subsequent path segments are kebab‑cased and dot‑joined.
+  - `Modules/Blog/Livewire/Nested/ManageComments.php` → `<livewire:blog::nested.manage-comments/>`
+  - `Modules/PWA/Livewire/Icons.php` → `<livewire:pwa::icons/>`
 
-## Directory layout examples
+## Directory layout
 
 ```
 Modules/Blog/
 └── Livewire/
     ├── Posts.php                         // <livewire:blog::posts />
     └── Nested/
-        └── Manage/
-            └── Comments.php              // <livewire:blog::nested.manage.comments />
-
-Modules/Shop/
-└── Livewire/
-    └── ListProducts.php                  // <livewire:shop::list-products />
+        └── NestedUsers.php              // <livewire:blog::nested.nested-users />
 
 Modules/PWA/
 └── Livewire/
@@ -51,28 +43,23 @@ Modules/PWA/
 
 ## Usage
 
-- In Blade:
-  ```blade
-  <livewire:blog::posts />
-  @livewire('shop::list-products')
-  <livewire:blog::nested.manage.comments />
-  <livewire:pwa::icons />
-  ```
+```blade
+<livewire:blog::posts />
+@livewire('shop::list-products')
+<livewire:pwa::icons />
+```
 
-## Configuration options
+## Configuration
 
-- Toggle discovery
-  - Set `'livewire-components.active' => false` to disable auto‑registration.
-- Change discovery patterns
-  - Edit `'livewire-components.patterns'` to add/remove directories, relative to each module root.
+- Set `'livewire-components.active' => false` to disable auto-registration.
+- Edit `'livewire-components.patterns'` to change discovery directories.
 
 ## Troubleshooting
 
-- Component not found: ensure it extends `Livewire\Component`, lives under a discovered `Livewire` directory, and the module is active.
-- Alias mismatch: use kebab-case for module name and dots for nested directories, e.g., `<livewire:blog::nested.manage.comments />`.
+- **Component not found**: ensure it extends `Livewire\Component` and is under a discovered `Livewire` directory.
+- **Alias mismatch**: use kebab-case module name and dots for nested directories.
 
 ## See also
 
 - [Views](./views.md)
 - [Blade Components](./blade-components.md)
-- [Routes](./routes.md)

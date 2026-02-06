@@ -2,16 +2,9 @@
 
 ## Overview
 
-The package auto-discovers PHP helper files within your modules and requires them once at registration time. This makes your helper functions globally available across the application.
-
-## What gets discovered
-
-- Files matching the configured patterns (default: `*/Helpers/*.php` under each module)
-- Each discovered file is `require`d once during the container registration phase
+Auto-discovers PHP helper files within modules and `require_once`s them during the container registration phase, making helper functions globally available.
 
 ## Default configuration
-
-In `config/modules.php`:
 
 ```php
 'helpers' => [
@@ -22,46 +15,36 @@ In `config/modules.php`:
 ],
 ```
 
-## Directory layout examples
+## Directory layout
 
 ```
 Modules/Blog/
 └── Helpers/
-    ├── formatting.php        // defines blog-specific helpers
-    └── strings.php           // defines extra string helpers
+    ├── formatting.php
+    └── strings.php
 
 Modules/Shop/
 └── Helpers/
-    └── pricing.php           // defines shop-specific helpers
+    └── pricing.php
 ```
 
 ## Usage
 
-- Define helpers in plain PHP files and guard them to avoid redeclaration:
-  ```php
-  if (! function_exists('format_price')) {
-      function format_price(int $cents): string { /* ... */ }
-  }
-  ```
-- After discovery, call them anywhere:
-  ```php
-  $label = format_price(1999);
-  ```
+Guard helpers with `function_exists` to avoid redeclaration across modules:
 
-## Configuration options
+```php
+if (! function_exists('format_price')) {
+    function format_price(int $cents): string { /* ... */ }
+}
+```
 
-- Toggle discovery
-  - Set `'helpers.active' => false` to disable requiring helper files.
-- Change discovery patterns
-  - Edit `'helpers.patterns'` to add/remove directories, relative to each module root.
+After discovery, call them anywhere:
 
-## Troubleshooting
+```php
+$label = format_price(1999);
+```
 
-- Function not found: verify the file path is under a discovered `Helpers` directory and the feature is active.
-- Redeclaration error: wrap helpers with `function_exists` guards to avoid duplicate definitions across modules.
+## Configuration
 
-## See also
-
-- [Commands](./commands.md)
-- [Configs](./configs.md)
-- [Views](./views.md)
+- Set `'helpers.active' => false` to disable requiring helper files.
+- Edit `'helpers.patterns'` to change discovery directories.

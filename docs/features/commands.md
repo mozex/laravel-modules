@@ -2,17 +2,9 @@
 
 ## Overview
 
-The package discovers module Artisan command classes and registers them automatically. Any class that extends `Illuminate\Console\Command` and matches the configured patterns is picked up and added to Artisan.
-
-## What gets discovered
-
-- Classes that extend `Illuminate\Console\Command`
-- Located in directories matching the configured patterns (default: `*/Console/Commands` under each module)
-- Abstract base commands (or classes not extending `Command`) are ignored
+Discovers module Artisan command classes and registers them automatically. Any non-abstract class extending `Illuminate\Console\Command` that matches configured patterns is added to Artisan.
 
 ## Default configuration
-
-In `config/modules.php`:
 
 ```php
 'commands' => [
@@ -23,48 +15,34 @@ In `config/modules.php`:
 ],
 ```
 
-## Directory layout examples
+## Directory layout
 
 ```
 Modules/Blog/
 └── Console/
     └── Commands/
-        ├── PublishPosts.php          // extends Illuminate\Console\Command (discovered)
-        └── BaseCommand.php           // abstract base (ignored)
-
-Modules/Shop/
-└── Console/
-    └── Commands/
-        ├── SyncInventory.php         // discovered
-        └── ChainSync.php             // discovered
+        ├── PublishPosts.php          // extends Command (discovered)
+        └── BaseCommand.php           // abstract (ignored)
 ```
 
 ## Usage
 
-- Commands are available via Artisan as soon as they are discovered:
-  ```bash
-  php artisan list | find "blog:publish-posts"
-  php artisan blog:publish-posts
-  ```
+Commands are available via Artisan as soon as they are discovered:
 
-## Configuration options
+```bash
+php artisan blog:publish-posts
+```
 
-- Toggle discovery
-  - Set `'commands.active' => false` to disable auto-registration.
-- Change discovery patterns
-  - Edit `'commands.patterns'` to add/remove directories, relative to each module root.
+## Console routes
 
-## Console routes integration
+If you define module `Routes/console.php` files and your Laravel version supports command route paths (Laravel 10+), those commands are also registered. See [Routes](./routes.md).
 
-- If you define module `console.php` route files (see the [Routes](./routes.md) docs), and your Laravel version supports command route paths (Laravel 10+), those command routes are also registered and visible in `php artisan list`.
+## Configuration
+
+- Set `'commands.active' => false` to disable auto-registration.
+- Edit `'commands.patterns'` to change discovery directories.
 
 ## Troubleshooting
 
-- Command not found: ensure it extends `Illuminate\Console\Command`, has a signature, and is under a discovered `Console/Commands` path.
-- Duplicate signature: ensure unique `protected $signature` across modules.
-
-## See also
-
-- [Routes](./routes.md)
-- [Helpers](./helpers.md)
-- [Configs](./configs.md)
+- **Command not found**: ensure it extends `Illuminate\Console\Command`, has a `$signature`, and is under a discovered path.
+- **Duplicate signature**: ensure unique `$signature` values across modules.
