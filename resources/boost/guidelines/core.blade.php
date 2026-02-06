@@ -1,3 +1,4 @@
+@verbatim
 ## mozex/laravel-modules
 
 Auto-discovers module assets from `Modules/`. Namespace: `Modules\{Module}\...`
@@ -73,3 +74,4 @@ Custom: call `Modules::routeGroup()` / `Modules::registerRoutesUsing()` in provi
 PHPUnit: `<directory>./Modules/*/Tests</directory>` + `<include><directory>./Modules</directory></include>`
 Pest: `uses(TestCase::class)->in('../Modules/*/Tests/*/*');`
 PHPStan: `phpstan.php` with `...glob(__DIR__.'/Modules/*', GLOB_ONLYDIR)` in paths.
+@endverbatim
