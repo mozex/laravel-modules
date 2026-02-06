@@ -78,27 +78,27 @@ PHPStan: `phpstan.php` with `...glob(__DIR__.'/Modules/*', GLOB_ONLYDIR)` in pat
 ### Docs (read before working on a feature)
 | Feature | File |
 |---------|------|
-| Blade Components | `docs/features/blade-components.md` |
-| Caching | `docs/features/caching.md` |
-| Commands | `docs/features/commands.md` |
-| Configs | `docs/features/configs.md` |
-| Events & Listeners | `docs/features/events-listeners.md` |
-| Filament | `docs/features/filament.md` |
-| Helpers | `docs/features/helpers.md` |
-| Livewire | `docs/features/livewire-components.md` |
-| Migrations | `docs/features/migrations.md` |
-| Models & Factories | `docs/features/models-factories.md` |
-| Nova | `docs/features/nova-resources.md` |
-| Policies | `docs/features/policies.md` |
-| Routes | `docs/features/routes.md` |
-| Schedules | `docs/features/schedules.md` |
-| Seeders | `docs/features/seeders.md` |
-| Service Providers | `docs/features/service-providers.md` |
-| Translations | `docs/features/translations.md` |
-| Views | `docs/features/views.md` |
-| PHPUnit | `docs/integrations/phpunit.md` |
-| Pest | `docs/integrations/pest.md` |
-| PHPStan | `docs/integrations/phpstan.md` |
-| Overview & Facade API | `docs/README.md` |
+| Blade Components | `vendor/mozex/laravel-modules/docs/features/blade-components.md` |
+| Caching | `vendor/mozex/laravel-modules/docs/features/caching.md` |
+| Commands | `vendor/mozex/laravel-modules/docs/features/commands.md` |
+| Configs | `vendor/mozex/laravel-modules/docs/features/configs.md` |
+| Events & Listeners | `vendor/mozex/laravel-modules/docs/features/events-listeners.md` |
+| Filament | `vendor/mozex/laravel-modules/docs/features/filament.md` |
+| Helpers | `vendor/mozex/laravel-modules/docs/features/helpers.md` |
+| Livewire | `vendor/mozex/laravel-modules/docs/features/livewire-components.md` |
+| Migrations | `vendor/mozex/laravel-modules/docs/features/migrations.md` |
+| Models & Factories | `vendor/mozex/laravel-modules/docs/features/models-factories.md` |
+| Nova | `vendor/mozex/laravel-modules/docs/features/nova-resources.md` |
+| Policies | `vendor/mozex/laravel-modules/docs/features/policies.md` |
+| Routes | `vendor/mozex/laravel-modules/docs/features/routes.md` |
+| Schedules | `vendor/mozex/laravel-modules/docs/features/schedules.md` |
+| Seeders | `vendor/mozex/laravel-modules/docs/features/seeders.md` |
+| Service Providers | `vendor/mozex/laravel-modules/docs/features/service-providers.md` |
+| Translations | `vendor/mozex/laravel-modules/docs/features/translations.md` |
+| Views | `vendor/mozex/laravel-modules/docs/features/views.md` |
+| PHPUnit | `vendor/mozex/laravel-modules/docs/integrations/phpunit.md` |
+| Pest | `vendor/mozex/laravel-modules/docs/integrations/pest.md` |
+| PHPStan | `vendor/mozex/laravel-modules/docs/integrations/phpstan.md` |
+| Overview & Facade API | `vendor/mozex/laravel-modules/docs/README.md` |
 | Config reference | `config/modules.php` |
 @endverbatim
