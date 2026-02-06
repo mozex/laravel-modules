@@ -74,4 +74,31 @@ Custom: call `Modules::routeGroup()` / `Modules::registerRoutesUsing()` in provi
 PHPUnit: `<directory>./Modules/*/Tests</directory>` + `<include><directory>./Modules</directory></include>`
 Pest: `uses(TestCase::class)->in('../Modules/*/Tests/*/*');`
 PHPStan: `phpstan.php` with `...glob(__DIR__.'/Modules/*', GLOB_ONLYDIR)` in paths.
+
+### Docs (read before working on a feature)
+| Feature | File |
+|---------|------|
+| Blade Components | `docs/features/blade-components.md` |
+| Caching | `docs/features/caching.md` |
+| Commands | `docs/features/commands.md` |
+| Configs | `docs/features/configs.md` |
+| Events & Listeners | `docs/features/events-listeners.md` |
+| Filament | `docs/features/filament.md` |
+| Helpers | `docs/features/helpers.md` |
+| Livewire | `docs/features/livewire-components.md` |
+| Migrations | `docs/features/migrations.md` |
+| Models & Factories | `docs/features/models-factories.md` |
+| Nova | `docs/features/nova-resources.md` |
+| Policies | `docs/features/policies.md` |
+| Routes | `docs/features/routes.md` |
+| Schedules | `docs/features/schedules.md` |
+| Seeders | `docs/features/seeders.md` |
+| Service Providers | `docs/features/service-providers.md` |
+| Translations | `docs/features/translations.md` |
+| Views | `docs/features/views.md` |
+| PHPUnit | `docs/integrations/phpunit.md` |
+| Pest | `docs/integrations/pest.md` |
+| PHPStan | `docs/integrations/phpstan.md` |
+| Overview & Facade API | `docs/README.md` |
+| Config reference | `config/modules.php` |
 @endverbatim
