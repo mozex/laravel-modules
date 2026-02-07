@@ -25,7 +25,7 @@ jobs:
             carbon: "^3.8.4"
         exclude:
           - laravel: "10.*"
-            filament: "^4.0"
+            filament: "^4.3.1"
 
     name: Tests P${{ matrix.php }} - L${{ matrix.laravel }} - F${{ matrix.filament }} - ${{ matrix.os }} - ${{ matrix.dependency-version }}
     steps:
