@@ -2,6 +2,15 @@
 
 All notable changes to `laravel-modules` will be documented in this file.
 
+## 2.8.0 - 2026-02-07
+
+### What's Changed
+
+* Refine docs for precision and rewrite AI guidelines for minimal token usage by @mozex in https://github.com/mozex/laravel-modules/pull/18
+* Optimize performance with scout memoization and caching by @mozex in https://github.com/mozex/laravel-modules/pull/19
+
+**Full Changelog**: https://github.com/mozex/laravel-modules/compare/2.7.2...2.8.0
+
 ## 2.7.2 - 2026-01-24
 
 ### What's Changed
