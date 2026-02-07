@@ -21,7 +21,7 @@ abstract class BaseScout
 
     public static function instance(): static
     {
-        return self::$instances[static::class] ??= static::create(); // @phpstan-ignore-line
+        return self::$instances[static::class] ??= static::create();
     }
 
     public static function clearInstances(): void
