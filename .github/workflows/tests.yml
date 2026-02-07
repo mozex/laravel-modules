@@ -24,7 +24,7 @@ jobs:
             testbench: "10.*"
             carbon: "^3.8.4"
           - filament: "^3.3.0"
-            livewire: "^3.4"
+            livewire: "^3.5"
           - filament: "^4.0"
             livewire: "^3.5"
         exclude:
