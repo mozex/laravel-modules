@@ -19,16 +19,20 @@ class RoutesServiceProvider extends Feature
             return;
         }
 
+        $config = AssetType::Routes->config();
+        /** @var array<array-key, string> $commandsFilenames */
+        $commandsFilenames = $config['commands_filenames'];
+        /** @var array<array-key, string> $channelsFilenames */
+        $channelsFilenames = $config['channels_filenames'];
+
         [$commands, $rest] = AssetType::Routes->scout()->collect()
             ->partition(
-                fn (array $asset) => collect(AssetType::Routes->config()['commands_filenames'])
-                    ->contains(File::name($asset['path']))
+                fn (array $asset) => in_array(File::name($asset['path']), $commandsFilenames)
             );
 
         [$channels, $routes] = $rest
             ->partition(
-                fn (array $asset) => collect(AssetType::Routes->config()['channels_filenames'])
-                    ->contains(File::name($asset['path']))
+                fn (array $asset) => in_array(File::name($asset['path']), $channelsFilenames)
             );
 
         $this->callAfterResolving(Kernel::class, function (Kernel $kernel) use ($commands): void {

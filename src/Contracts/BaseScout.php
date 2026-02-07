@@ -11,9 +11,22 @@ use Spatie\StructureDiscoverer\Data\DiscoveredClass;
 
 abstract class BaseScout
 {
+    /** @var array<class-string, static> */
+    private static array $instances = [];
+
     public static function create(): static
     {
         return new static; // @phpstan-ignore-line
+    }
+
+    public static function instance(): static
+    {
+        return self::$instances[static::class] ??= static::create(); // @phpstan-ignore-line
+    }
+
+    public static function clearInstances(): void
+    {
+        self::$instances = [];
     }
 
     public function identifier(): string
@@ -21,9 +34,11 @@ abstract class BaseScout
         return static::class;
     }
 
+    private ?DiscoverCacheDriver $cacheDriverInstance = null;
+
     public function cacheDriver(): DiscoverCacheDriver
     {
-        return new FileDiscoverCacheDriver(
+        return $this->cacheDriverInstance ??= new FileDiscoverCacheDriver(
             directory: $this->cachePath(),
             serialize: false,
             filename: $this->cacheFile(),
@@ -120,6 +135,9 @@ abstract class BaseScout
      */
     public function transform(array $result): array
     {
+        /** @var array<string, array{active?: bool, order?: int}> $modulesConfig */
+        $modulesConfig = config('modules.modules', []);
+
         return collect($result)
             ->map(
                 fn (string|DiscoveredClass $item): array => $item instanceof DiscoveredClass
@@ -138,10 +156,10 @@ abstract class BaseScout
                     ]
             )
             ->sortBy(
-                fn (array $asset): int => (int) (config('modules.modules', [])[$asset['module']]['order'] ?? 9999)
+                fn (array $asset): int => (int) ($modulesConfig[$asset['module']]['order'] ?? 9999)
             )
             ->filter(
-                fn (array $asset) => config('modules.modules', [])[$asset['module']]['active'] ?? true
+                fn (array $asset) => $modulesConfig[$asset['module']]['active'] ?? true
             )
             ->values()
             ->toArray();
