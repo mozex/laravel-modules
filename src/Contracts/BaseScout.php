@@ -12,7 +12,9 @@ use Spatie\StructureDiscoverer\Data\DiscoveredClass;
 abstract class BaseScout
 {
     /** @var array<class-string, static> */
-    private static array $instances = [];
+    protected static array $instances = [];
+
+    protected ?DiscoverCacheDriver $cacheDriverInstance = null;
 
     public static function create(): static
     {
@@ -33,8 +35,6 @@ abstract class BaseScout
     {
         return static::class;
     }
-
-    private ?DiscoverCacheDriver $cacheDriverInstance = null;
 
     public function cacheDriver(): DiscoverCacheDriver
     {
@@ -135,8 +135,8 @@ abstract class BaseScout
      */
     public function transform(array $result): array
     {
-        /** @var array<string, array{active?: bool, order?: int}> $modulesConfig */
-        $modulesConfig = config('modules.modules', []);
+        /** @var array<string, array{active?: bool, order?: int}> $config */
+        $config = config('modules.modules', []);
 
         return collect($result)
             ->map(
@@ -156,10 +156,10 @@ abstract class BaseScout
                     ]
             )
             ->sortBy(
-                fn (array $asset): int => (int) ($modulesConfig[$asset['module']]['order'] ?? 9999)
+                fn (array $asset): int => (int) ($config[$asset['module']]['order'] ?? 9999)
             )
             ->filter(
-                fn (array $asset) => $modulesConfig[$asset['module']]['active'] ?? true
+                fn (array $asset) => $config[$asset['module']]['active'] ?? true
             )
             ->values()
             ->toArray();
