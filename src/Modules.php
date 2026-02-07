@@ -16,6 +16,10 @@ class Modules
     /** @var array<string, Closure> */
     public array $registerRoutesUsing = [];
 
+    private ?string $namespacePattern = null;
+
+    private ?string $pathPattern = null;
+
     public function __construct()
     {
         $this->setBasePath();
@@ -61,6 +65,8 @@ class Modules
     public function setBasePath(?string $path = null): void
     {
         $this->base_path = $path ?? base_path();
+        $this->namespacePattern = null;
+        $this->pathPattern = null;
     }
 
     public function basePath(string $path = ''): string
@@ -85,16 +91,20 @@ class Modules
 
     public function moduleNameFromNamespace(string $namespace): string
     {
+        $this->namespacePattern ??= '/'.config('modules.modules_directory').'\\\\(.*?)\\\\/';
+
         return Regex::match(
-            pattern: '/'.config('modules.modules_directory').'\\\\(.*?)\\\\/',
+            pattern: $this->namespacePattern,
             subject: $namespace
         )->groupOr(1, '');
     }
 
     public function moduleNameFromPath(string $path): ?string
     {
+        $this->pathPattern ??= '/'.config('modules.modules_directory').'\/(.*?)\//';
+
         return Regex::match(
-            pattern: '/'.config('modules.modules_directory').'\/(.*?)\//',
+            pattern: $this->pathPattern,
             subject: str($path)->replace('\\', '/')->toString()
         )->groupOr(1, '');
     }

@@ -7,14 +7,15 @@ use Mozex\Modules\Features\Feature;
 
 class MigrationsServiceProvider extends Feature
 {
+    public static function asset(): AssetType
+    {
+        return AssetType::Migrations;
+    }
+
     public function boot(): void
     {
-        if (AssetType::Migrations->isDeactive()) {
-            return;
-        }
-
         $this->loadMigrationsFrom(
-            AssetType::Migrations->scout()->collect()
+            static::asset()->scout()->collect()
                 ->pluck('path')
                 ->toArray()
         );

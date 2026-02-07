@@ -12,60 +12,80 @@ use ReflectionProperty;
 
 class FilamentServiceProvider extends Feature
 {
+    public static function asset(): array
+    {
+        return [
+            AssetType::FilamentResources,
+            AssetType::FilamentPages,
+            AssetType::FilamentWidgets,
+            AssetType::FilamentClusters,
+        ];
+    }
+
+    public static function shouldRegisterFeature(): bool
+    {
+        return parent::shouldRegisterFeature()
+            && class_exists(Filament::class);
+    }
+
     public function register(): void
     {
-        if (! class_exists(Filament::class)) {
-            return;
-        }
-
         $this->callAfterResolving(PanelRegistry::class, function (PanelRegistry $panelRegistry): void {
+            $resources = AssetType::FilamentResources->isActive()
+                ? AssetType::FilamentResources->scout()->collect()
+                : collect();
+
+            $pages = AssetType::FilamentPages->isActive()
+                ? AssetType::FilamentPages->scout()->collect()
+                : collect();
+
+            $widgets = AssetType::FilamentWidgets->isActive()
+                ? AssetType::FilamentWidgets->scout()->collect()
+                : collect();
+
+            $clusters = AssetType::FilamentClusters->isActive()
+                ? AssetType::FilamentClusters->scout()->collect()
+                : collect();
+
+            $modulesNamespace = (string) config('modules.modules_namespace');
+            $livewireReflection = new ReflectionProperty(Panel::class, 'livewireComponents');
+
             collect($panelRegistry->all())
-                ->each(function (Panel $panel): void {
-                    if (AssetType::FilamentResources->isActive()) {
-                        AssetType::FilamentResources->scout()->collect()
-                            ->where('panel', strtolower($panel->getId()))
-                            ->each(fn (array $asset): Panel => $panel->discoverResources(
-                                in: $asset['path'],
-                                for: $asset['namespace']
-                            ));
-                    }
+                ->each(function (Panel $panel) use ($resources, $pages, $widgets, $clusters, $modulesNamespace, $livewireReflection): void {
+                    $panelId = strtolower($panel->getId());
 
-                    if (AssetType::FilamentPages->isActive()) {
-                        AssetType::FilamentPages->scout()->collect()
-                            ->where('panel', strtolower($panel->getId()))
-                            ->each(fn (array $asset): Panel => $panel->discoverPages(
-                                in: $asset['path'],
-                                for: $asset['namespace']
-                            ));
-                    }
+                    $resources->where('panel', $panelId)
+                        ->each(fn (array $asset): Panel => $panel->discoverResources(
+                            in: $asset['path'],
+                            for: $asset['namespace']
+                        ));
 
-                    if (AssetType::FilamentWidgets->isActive()) {
-                        AssetType::FilamentWidgets->scout()->collect()
-                            ->where('panel', strtolower($panel->getId()))
-                            ->each(fn (array $asset): Panel => $panel->discoverWidgets(
-                                in: $asset['path'],
-                                for: $asset['namespace']
-                            ));
-                    }
+                    $pages->where('panel', $panelId)
+                        ->each(fn (array $asset): Panel => $panel->discoverPages(
+                            in: $asset['path'],
+                            for: $asset['namespace']
+                        ));
 
-                    if (AssetType::FilamentClusters->isActive()) {
-                        AssetType::FilamentClusters->scout()->collect()
-                            ->where('panel', strtolower($panel->getId()))
-                            ->each(fn (array $asset): Panel => $panel->discoverClusters(
-                                in: $asset['path'],
-                                for: $asset['namespace']
-                            ));
-                    }
+                    $widgets->where('panel', $panelId)
+                        ->each(fn (array $asset): Panel => $panel->discoverWidgets(
+                            in: $asset['path'],
+                            for: $asset['namespace']
+                        ));
+
+                    $clusters->where('panel', $panelId)
+                        ->each(fn (array $asset): Panel => $panel->discoverClusters(
+                            in: $asset['path'],
+                            for: $asset['namespace']
+                        ));
 
                     /** @var array<string, class-string> $livewireComponents */
-                    $livewireComponents = (new ReflectionProperty($panel, 'livewireComponents'))
-                        ->getValue($panel);
+                    $livewireComponents = $livewireReflection->getValue($panel);
 
                     collect($livewireComponents)
                         ->filter(
                             fn (string $class): bool => str_starts_with(
                                 haystack: $class,
-                                needle: (string) config('modules.modules_namespace')
+                                needle: $modulesNamespace
                             )
                         )
                         ->flip()

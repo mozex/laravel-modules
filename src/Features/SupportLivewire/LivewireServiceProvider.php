@@ -8,20 +8,23 @@ use Mozex\Modules\Features\Feature;
 
 class LivewireServiceProvider extends Feature
 {
+    public static function asset(): AssetType
+    {
+        return AssetType::LivewireComponents;
+    }
+
+    public static function shouldRegisterFeature(): bool
+    {
+        return parent::shouldRegisterFeature()
+            && class_exists(Livewire::class);
+    }
+
     public function boot(): void
     {
-        if (! class_exists(Livewire::class)) {
-            return;
-        }
-
-        if (AssetType::LivewireComponents->isDeactive()) {
-            return;
-        }
-
-        AssetType::LivewireComponents->scout()->collect()
+        static::asset()->scout()->collect()
             ->each(function (array $asset): void {
                 Livewire::component(
-                    $this->getViewName($asset, AssetType::LivewireComponents),
+                    $this->getViewName($asset, static::asset()),
                     $asset['namespace']
                 );
             });

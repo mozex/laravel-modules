@@ -53,6 +53,10 @@ class ModulesServiceProvider extends PackageServiceProvider
     protected function registerFeatures(): void
     {
         foreach ($this->getFeatures() as $feature) {
+            if (! $feature::shouldRegisterFeature()) {
+                continue;
+            }
+
             $this->app->register($feature);
         }
     }

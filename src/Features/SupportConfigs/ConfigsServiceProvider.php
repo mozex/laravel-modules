@@ -9,32 +9,35 @@ use Mozex\Modules\Features\Feature;
 
 class ConfigsServiceProvider extends Feature
 {
+    public static function asset(): AssetType
+    {
+        return AssetType::Configs;
+    }
+
     public function boot(): void
     {
-        if (AssetType::Configs->isDeactive()) {
+        if ($this->app instanceof CachesConfiguration && $this->app->configurationIsCached()) {
             return;
         }
 
-        if (! ($this->app instanceof CachesConfiguration && $this->app->configurationIsCached())) {
-            $config = $this->app->make('config');
+        $config = $this->app->make('config');
 
-            AssetType::Configs->scout()->collect()
-                ->each(function (array $asset) use ($config): void {
-                    $key = File::name($asset['path']);
+        static::asset()->scout()->collect()
+            ->each(function (array $asset) use ($config): void {
+                $key = File::name($asset['path']);
 
-                    $config->set(
-                        key: $key,
-                        value: AssetType::Configs->config()['priority']
-                            ? array_merge(
-                                $config->get($key, []),
-                                require $asset['path']
-                            )
-                            : array_merge(
-                                require $asset['path'],
-                                $config->get($key, [])
-                            )
-                    );
-                });
-        }
+                $config->set(
+                    key: $key,
+                    value: static::asset()->config()['priority']
+                        ? array_merge(
+                            $config->get($key, []),
+                            require $asset['path']
+                        )
+                        : array_merge(
+                            require $asset['path'],
+                            $config->get($key, [])
+                        )
+                );
+            });
     }
 }

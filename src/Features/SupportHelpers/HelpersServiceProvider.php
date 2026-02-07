@@ -7,13 +7,14 @@ use Mozex\Modules\Features\Feature;
 
 class HelpersServiceProvider extends Feature
 {
+    public static function asset(): AssetType
+    {
+        return AssetType::Helpers;
+    }
+
     public function register(): void
     {
-        if (AssetType::Helpers->isDeactive()) {
-            return;
-        }
-
-        AssetType::Helpers->scout()->collect()
+        static::asset()->scout()->collect()
             ->each(function (array $asset): void {
                 require_once $asset['path'];
             });
