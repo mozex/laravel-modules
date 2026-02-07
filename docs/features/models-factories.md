@@ -2,24 +2,14 @@
 
 ## Overview
 
-This feature makes Eloquent work seamlessly inside modules by wiring the two guessing mechanisms Laravel uses:
+Wires Laravel's two guessing mechanisms so Eloquent works seamlessly inside modules:
 
-- Model → Factory
-- Factory → Model
+- **Model → Factory**: `Modules\Blog\Models\Post::factory()` resolves to `Modules\Blog\Database\Factories\PostFactory`
+- **Factory → Model**: `(new PostFactory)->modelName()` resolves to `Modules\Blog\Models\Post`
 
-With this in place, calling `Module\Model::factory()` or `new Module\Factory()->modelName()` works exactly as it does for app-level classes, while respecting your module namespaces and
-directory layout.
-
-## What gets discovered
-
-- No runtime scanning of classes is needed. Instead, two resolvers are registered with `Illuminate\Database\Eloquent\Factories\Factory` to map between module Models and Factories using your configured sub-namespaces.
-- Namespaces used for guessing come from `config/modules.php`:
-  - `models.namespace` (default: `Models\\`)
-  - `factories.namespace` (default: `Database\\Factories\\`)
+No runtime scanning is needed — two namespace-based resolvers handle the mapping using your configured sub-namespaces.
 
 ## Default configuration
-
-In `config/modules.php`:
 
 ```php
 'models' => [
@@ -35,78 +25,53 @@ In `config/modules.php`:
 
 ## How name guessing works
 
-- Detect module from namespace: the module name is parsed from the fully-qualified class name (e.g., `Modules\Blog\Models\Post` → `Blog`).
-- Model → Factory:
-  - Input: `Modules\Blog\Models\Post`
-  - Output: `Modules\Blog\Database\Factories\PostFactory`
-- Factory → Model:
-  - Input: `Modules\Blog\Database\Factories\PostFactory`
-  - Output: `Modules\Blog\Models\Post`
-- Nested namespaces are preserved after the configured sub-namespace:
-  - `Modules\Shop\Models\Nested\Item` ↔︎ `Modules\Shop\Database\Factories\Nested\ItemFactory`
+1. The module name is parsed from the fully-qualified class name (e.g., `Modules\Blog\Models\Post` → `Blog`)
+2. The sub-namespace after the configured prefix is swapped:
+   - `Models\Post` ↔ `Database\Factories\PostFactory`
+   - `Models\Nested\Comment` ↔ `Database\Factories\Nested\CommentFactory`
+3. For non-module classes, Laravel's default resolvers are used as fallback
 
-## Directory layout examples
+## Directory layout
 
 ```
 Modules/Blog/
 ├── Models/
-│   ├── Post.php                           // Modules\Blog\Models\Post
+│   ├── Post.php
 │   └── Nested/
-│       └── Comment.php                    // Modules\Blog\Models\Nested\Comment
+│       └── Comment.php
 └── Database/
     └── Factories/
-        ├── PostFactory.php                // Modules\Blog\Database\Factories\PostFactory
+        ├── PostFactory.php
         └── Nested/
-            └── CommentFactory.php         // Modules\Blog\Database\Factories\Nested\CommentFactory
+            └── CommentFactory.php
 ```
 
 ## Usage
 
-- Model → Factory
-  ```php
-  $factory = Modules\Blog\Models\Post::factory();
-  // resolves to Modules\Blog\Database\Factories\PostFactory
-  ```
+```php
+// Model → Factory
+$factory = Modules\Blog\Models\Post::factory();
 
-- Factory → Model
-  ```php
-  $modelClass = (new Modules\Blog\Database\Factories\PostFactory)->modelName();
-  // returns Modules\Blog\Models\Post::class
-  ```
+// Factory → Model
+$modelClass = (new Modules\Blog\Database\Factories\PostFactory)->modelName();
+```
 
-## Configuration options
+## Configuration
 
-- Toggle per direction
-  - `'models.active' => false` disables Factory → Model guessing.
-  - `'factories.active' => false` disables Model → Factory guessing.
-- Customize sub-namespaces
-  - Change `'models.namespace'` and `'factories.namespace'` to match your directory structure.
+- `'models.active' => false` disables Factory → Model guessing.
+- `'factories.active' => false` disables Model → Factory guessing.
+- Change `'models.namespace'` and `'factories.namespace'` to match your directory structure.
 
-## Troubleshooting
+## IDE hint
 
-- Model/Factory not resolving: verify `'models.namespace'` and `'factories.namespace'` match your directory layout and namespaces.
-- Missing factory: create a matching factory class under `Database/Factories` with the `Factory` suffix.
+IDEs may not pick up the custom resolvers. To help, set `$model` explicitly on factories:
 
-## Editor hints
-
-- Some IDEs (e.g., PhpStorm) don’t pick up the custom model/factory resolvers for autocompletion and navigation. Functionally, everything works; this only affects IDE hints.
-- To help your editor, set the `$model` property explicitly on your factories:
-  ```php
-  namespace Modules\Blog\Database\Factories;
-
-  use Illuminate\Database\Eloquent\Factories\Factory;
-  use Modules\Blog\Models\Post;
-
-  class PostFactory extends Factory
-  {
-      protected $model = Post::class;
-
-      public function definition(): array
-      {
-          return [/* ... */];
-      }
-  }
-  ```
+```php
+class PostFactory extends Factory
+{
+    protected $model = Post::class;
+}
+```
 
 ## See also
 

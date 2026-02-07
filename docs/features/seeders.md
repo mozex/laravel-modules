@@ -2,19 +2,9 @@
 
 ## Overview
 
-The package discovers top-level module Database seeders so you can easily run them from your application seeder or tests. A module seeder is a class extending `Illuminate\Database\Seeder` named `{Module}DatabaseSeeder` and placed under `Modules/{Module}/Database/Seeders`.
-
-## What gets discovered
-
-- Classes that:
-  - extend `Illuminate\Database\Seeder`
-  - are named exactly `{Module}DatabaseSeeder` (e.g., `BlogDatabaseSeeder` for the `Blog` module)
-  - live in `Modules/{Module}/Database/Seeders`
-- Nested or other seeders (e.g., `UserSeeder`, `TeamDatabaseSeeder`) are not returned by discovery; reference them from your `{Module}DatabaseSeeder`.
+Discovers top-level module database seeders. Only classes named exactly `{Module}DatabaseSeeder` extending `Illuminate\Database\Seeder` are discovered. Other seeders should be called from within the module's main seeder.
 
 ## Default configuration
-
-In `config/modules.php`:
 
 ```php
 'seeders' => [
@@ -25,58 +15,48 @@ In `config/modules.php`:
 ],
 ```
 
-## Directory layout examples
+## Directory layout
 
 ```
 Modules/Blog/
 └── Database/
     └── Seeders/
         ├── BlogDatabaseSeeder.php        // discovered
-        └── PostSeeder.php                // not discovered directly
-
-Modules/Shop/
-└── Database/
-    └── Seeders/
-        ├── ShopDatabaseSeeder.php        // discovered
-        └── ProductSeeder.php             // not discovered directly
+        └── PostSeeder.php                // NOT discovered (call from BlogDatabaseSeeder)
 ```
 
 ## Usage
 
-- In your application `DatabaseSeeder`, call discovered module seeders:
-  ```php
-  use Mozex\Modules\Facades\Modules;
+In your application `DatabaseSeeder`:
 
-  class DatabaseSeeder extends \Illuminate\Database\Seeder
-  {
-      public function run(): void
-      {
-          $this->call(Modules::seeders());
-      }
-  }
-  ```
-- Inside each `{Module}DatabaseSeeder`, call your internal seeders as needed:
-  ```php
-  class BlogDatabaseSeeder extends \Illuminate\Database\Seeder
-  {
-      public function run(): void
-      {
-          $this->call(PostSeeder::class);
-      }
-  }
-  ```
+```php
+use Mozex\Modules\Facades\Modules;
 
-## Configuration options
+class DatabaseSeeder extends \Illuminate\Database\Seeder
+{
+    public function run(): void
+    {
+        $this->call(Modules::seeders());
+    }
+}
+```
 
-- Toggle discovery
-  - Set `'seeders.active' => false` to disable seeder discovery.
-- Change discovery patterns
-  - Edit `'seeders.patterns'` to add/remove directories, relative to each module root.
+Inside the module seeder, call internal seeders:
 
-## Troubleshooting
+```php
+class BlogDatabaseSeeder extends \Illuminate\Database\Seeder
+{
+    public function run(): void
+    {
+        $this->call(PostSeeder::class);
+    }
+}
+```
 
-- Not discovered: the top-level seeder must be named `{Module}DatabaseSeeder` and extend `Illuminate\Database\Seeder`.
-- Nothing runs: ensure your app’s `DatabaseSeeder` calls `$this->call(Modules::seeders())`.
+## Configuration
+
+- Set `'seeders.active' => false` to disable seeder discovery.
+- Edit `'seeders.patterns'` to change discovery directories.
 
 ## See also
 

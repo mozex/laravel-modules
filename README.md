@@ -65,7 +65,7 @@ Detailed documentation, including examples and best practices, lives in the `doc
 
 ## Requirements
 
-- PHP: ^8.1
+- PHP: ^8.2
 - Laravel: ^10.34.2 | ^11.29.0 | ^12.0
 
 ## Installation

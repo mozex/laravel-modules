@@ -2,17 +2,9 @@
 
 ## Overview
 
-The package discovers Nova resources inside your modules and registers them when Nova serves. Action resources are excluded. This lets you organize Nova resources per module without manual registration.
-
-## What gets discovered
-
-- Classes that extend `Laravel\Nova\Resource`
-- Action resources (extending `Laravel\Nova\Actions\ActionResource`) are excluded
-- Located in directories matching the configured patterns (default: `*/Nova` under each module)
+Discovers Nova resources inside modules and registers them during Nova's `serving` event. Classes extending `Laravel\Nova\Actions\ActionResource` are excluded.
 
 ## Default configuration
-
-In `config/modules.php`:
 
 ```php
 'nova-resources' => [
@@ -23,34 +15,26 @@ In `config/modules.php`:
 ],
 ```
 
-## Directory layout examples
+## Directory layout
 
 ```
 Modules/Blog/
 └── Nova/
-    └── Post.php               // Modules\Blog\Nova\Post
+    └── Post.php               // extends Laravel\Nova\Resource (discovered)
 
 Modules/Shop/
 └── Nova/
-    ├── Product.php            // Modules\Shop\Nova\Product
-    └── WrongResource.php      // not extending Nova Resource (ignored)
+    └── Product.php            // discovered
 ```
 
 ## Usage
 
-- Define Nova resource classes under `Modules/{Module}/Nova`.
-- The package will register them automatically during Nova’s `serving` event.
+Define Nova resource classes under `Modules/{Module}/Nova`. They are registered automatically.
 
-## Configuration options
+## Configuration
 
-- Toggle discovery
-  - Set `'nova-resources.active' => false` to disable discovery.
-- Change discovery patterns
-  - Edit `'nova-resources.patterns'` to add/remove directories, relative to each module root.
-
-## Troubleshooting
-
-- Resource not registered: ensure it extends `Laravel\Nova\Resource` (not an ActionResource), the class namespace matches the file path, and the feature is active.
+- Set `'nova-resources.active' => false` to disable discovery.
+- Edit `'nova-resources.patterns'` to change discovery directories.
 
 ## See also
 

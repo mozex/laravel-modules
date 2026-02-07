@@ -2,17 +2,9 @@
 
 ## Overview
 
-Provide module-specific language lines under each module and use them via namespaced keys or JSON translations. The package discovers translation directories and registers both PHP array and JSON paths for Laravel’s translator.
-
-## What gets discovered
-
-- Directories matching the configured patterns (default: `*/Lang` under each module)
-- PHP array files (e.g., `en/messages.php`) are loaded under a module namespace
-- JSON files (e.g., `en.json`) are added as JSON translation paths
+Discovers module translation directories and registers both PHP array (namespaced) and JSON translation paths with Laravel's translator.
 
 ## Default configuration
-
-In `config/modules.php`:
 
 ```php
 'translations' => [
@@ -23,49 +15,35 @@ In `config/modules.php`:
 ],
 ```
 
-## Directory layout examples
+## Directory layout
 
 ```
 Modules/Blog/
 └── Lang/
     ├── en/
-    │   ├── auth.php                  // return [...]
-    │   └── messages.php              // return [...]
+    │   └── messages.php              // return ['welcome' => 'Welcome']
     ├── tr/
-    │   └── messages.php              // return [...]
-    └── en.json                       // { "Welcome": "Welcome" }
-
-Modules/Shop/
-└── Lang/
-    └── en/
-        └── cart.php                  // return [...]
+    │   └── messages.php
+    └── en.json                       // {"Welcome": "Welcome"}
 ```
 
 ## Usage
 
-- PHP array translations: use the module namespace (kebab‑case of the module name) + file + key
-  ```php
-  __('blog::messages.welcome')
-  trans('shop::cart.added')
-  ```
+PHP array translations use the module namespace (kebab-case) + file + key:
 
-- JSON translations: available via `__('Text')` from any module if a matching JSON entry exists in module `Lang/*.json`.
+```php
+__('blog::messages.welcome')
+trans('shop::cart.added')
+```
 
-## Configuration options
+JSON translations are available via `__('Text')` from any module's `Lang/*.json` files.
 
-- Toggle discovery
-  - Set `'translations.active' => false` to disable translation loading.
-- Change discovery patterns
-  - Edit `'translations.patterns'` to add/remove directories, relative to each module root.
+## Configuration
+
+- Set `'translations.active' => false` to disable translation loading.
+- Edit `'translations.patterns'` to change discovery directories.
 
 ## Troubleshooting
 
-- Key not found: verify the namespace and path mapping. Example: `Modules/Blog/Lang/en/messages.php` → `__('blog::messages.key')`.
-- Wrong locale: ensure your app locale matches the folder/file (e.g., `en/`, `tr/`) or provide fallbacks.
-- JSON not loading: place JSON files directly under the module `Lang` directory (e.g., `Modules/Blog/Lang/en.json`).
-
-## See also
-
-- [Views](./views.md)
-- [Service Providers](./service-providers.md)
-
+- **Key not found**: verify namespace mapping — `Modules/Blog/Lang/en/messages.php` → `__('blog::messages.key')`.
+- **JSON not loading**: place JSON files directly under the `Lang` directory (`Modules/Blog/Lang/en.json`).

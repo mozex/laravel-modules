@@ -1,246 +1,107 @@
-## mozex/laravel-modules — Modular Laravel, zero‑config
+@verbatim
+## mozex/laravel-modules
 
-Split a Laravel app into first‑class modules under `Modules/`. Auto‑discovers: configs, routes, views, Blade components, translations, helpers, commands, service providers, migrations, seeders, models, factories, policies, events, listeners, Livewire, Filament, Nova, schedules.
+Auto-discovers module assets from `Modules/` (not `app/Modules`). Namespace: `Modules\{Module}\...`
+Config: `config/modules.php`. Cache: `php artisan modules:cache` / `modules:clear` (avoid caching in local dev).
 
-### Boost integration
-- Boost "search-docs" does NOT include this package — prefer local `./docs/**`.
-- Useful tools: `list-artisan-commands`, `get-config` (modules.*), `list-routes`, `tinker`.
-
-### Conventions
-- Root: `Modules/` (not `app/Modules`). Namespace: `Modules\{Module}\...`
-- Kebab‑cased aliases: `Blog` → `blog`, `UserAdmin` → `user-admin`
-- Config: `config/modules.php` (feature toggles, patterns, options)
-- Cache: `php artisan modules:cache` / `modules:clear` — avoid caching in local dev
-
-### Module activation & ordering
+### Module config
 ```php
-// config/modules.php
 'modules' => [
-    'Shared' => ['active' => true, 'order' => 1],  // loads first
-    'Blog' => ['active' => true, 'order' => 2],
-    'Legacy' => ['active' => false],  // disabled entirely
+    'Shared' => ['active' => true, 'order' => 1], // lower=earlier
+    'Legacy' => ['active' => false],               // fully disabled
 ],
 ```
-- `active`: false disables module completely (no asset discovery)
-- `order`: lower values load earlier; default 0. Use for inter-module dependencies.
 
-### Module layout
+### Structure & auto-discovery
+Each feature has `active` (bool) + `patterns` (globs) in config/modules.php.
 ```
 Modules/{Module}/
-├── Config/                         # merged configs (filename = key)
-├── Console/Commands/               # artisan commands
-├── Console/Kernel.php              # schedule() for Laravel <10
-├── Database/{Factories,Migrations,Seeders}/
-├── Filament/{Panel}/{Resources,Pages,Widgets,Clusters}/
-├── Helpers/                        # auto-required PHP files
-├── Lang/                           # en/*.php (namespaced) + *.json
-├── Listeners/                      # event listeners
-├── Livewire/                       # livewire components
-├── Models/                         # eloquent models
-├── Nova/                           # nova resources
-├── Policies/                       # gate policies
-├── Providers/                      # service providers (auto-registered)
-├── Resources/views/                # views + anonymous components
-├── Routes/                         # web.php, api.php, channels.php, console.php, custom
-└── View/Components/                # class-based Blade components
+  Config/*.php                    → config('filename.key'); priority: true=module wins
+  Console/Commands/               → Artisan commands (extends Command)
+  Console/Kernel.php              → schedule() for Laravel <10 (extends Mozex\Modules\Contracts\ConsoleKernel)
+  Database/Factories/             → Model↔Factory auto-mapping by namespace (nested preserved)
+  Database/Migrations/            → registered with migrator
+  Database/Seeders/               → only {Module}DatabaseSeeder; via Modules::seeders()
+  Filament/{PanelId}/Resources|Pages|Widgets|Clusters/  → per-panel (dir=panel id lowercase)
+  Helpers/*.php                   → require_once in register(); guard with function_exists
+  Lang/                           → __('module::file.key') + JSON translations
+  Listeners/                      → Laravel event auto-discovery
+  Livewire/                       → <livewire:module::name /> or nested.path
+  Models/                         → factory/policy guessing by namespace (set $model in factories for IDE)
+  Nova/                           → Nova\Resource subclasses (excl. ActionResource)
+  Policies/                       → Models\X → Policies\XPolicy (nested: Models\A\B → Policies\A\BPolicy)
+  Providers/                      → ServiceProvider subclasses auto-registered in register()
+  Resources/views/                → view('module::path') + <x-module::component />
+  Routes/*.php                    → grouped by filename; channels.php, console.php special
+  View/Components/                → <x-module::path.component />
 ```
 
----
+### Naming
+Module dir → kebab-case alias: Blog→blog, UserAdmin→user-admin, PWA→pwa (all-caps→lowercase).
 
-## Modules Facade API
-
+### Facade (Mozex\Modules\Facades\Modules)
 ```php
-use Mozex\Modules\Facades\Modules;
-
-// Path helpers
-Modules::basePath('path/to/file');      // base_path() + suffix
-Modules::modulesPath('Blog/Config');    // Modules directory + suffix
-
-// Module name extraction (useful for dynamic logic)
-Modules::moduleNameFromNamespace('Modules\\Blog\\Models\\Post');  // 'Blog'
-Modules::moduleNameFromPath('/path/Modules/Blog/file.php');       // 'Blog'
-
-// Get all module seeders
-Modules::seeders();  // ['Modules\\Blog\\Database\\Seeders\\BlogDatabaseSeeder', ...]
-
-// Route customization (call from service provider register() method)
-Modules::routeGroup('admin', prefix: 'admin', middleware: ['web','auth'], as: 'admin::');
-Modules::registerRoutesUsing('localized', fn ($attrs, $routes) => Route::localized(...));
-
-// Inspect registered groups
-Modules::getRouteGroups();        // ['api' => [...], 'web' => [...], ...]
-Modules::getRegisterRoutesUsing();
-
-// Testing: override base path
-Modules::setBasePath('/custom/path');
+Modules::basePath('suffix')                     // project base + suffix
+Modules::modulesPath('Blog/Config')             // Modules dir + suffix
+Modules::moduleNameFromNamespace($fqcn)         // → 'Blog'
+Modules::moduleNameFromPath($path)              // → 'Blog'
+Modules::seeders()                              // all {Module}DatabaseSeeder classes
+Modules::routeGroup('name', prefix:, middleware:, as:)
+Modules::registerRoutesUsing('name', Closure)   // custom route registrar
+Modules::getRouteGroups()                       // inspect registered groups
+Modules::getRegisterRoutesUsing()               // inspect custom registrars
+Modules::setBasePath('/path')                   // test override
 ```
 
----
+### Routes detail
+Defaults: 'api' (prefix:'api', mw:['api']), 'web' (mw:['web']). Filename=group key.
+Unmatched filenames → no middleware/prefix. Attributes accept closures.
+`channels.php` → broadcast channels. `console.php` → console kernel (Laravel 10+).
+Custom: call `Modules::routeGroup()` / `Modules::registerRoutesUsing()` in provider register().
 
-## Feature reference
-
-@verbatim
-<code-snippet name="Views & components" lang="blade">
-{{-- Views: Modules/Blog/Resources/views/home.blade.php --}}
-{{ view('blog::home') }}
-@include('invoice::inc.view')
-
-{{-- Anonymous components: Resources/views/components/ --}}
-<x-blog::form.input />
-<x-shop::button.checkout />
-
-{{-- Class-based: View/Components/Post/Card.php --}}
-<x-blog::post.card :post="$post" />
-</code-snippet>
-@endverbatim
-
-@verbatim
-<code-snippet name="Livewire" lang="blade">
-<livewire:blog::posts />
-<livewire:blog::nested.manage.comments />
-</code-snippet>
-@endverbatim
-
-@verbatim
-<code-snippet name="Routes" lang="php">
-// Modules/Blog/Routes/web.php (uses 'web' middleware)
-Route::get('/blog', fn () => 'Blog');
-
-// Modules/Shop/Routes/api.php (uses 'api' prefix + 'api' middleware)
-Route::get('/products', fn () => Product::all());
-
-// Default groups (registered in Modules constructor):
-// - 'api': prefix 'api', middleware ['api']
-// - 'web': middleware ['web']
-
-// Custom group (call from service provider register())
-Modules::routeGroup('admin', prefix: 'admin', middleware: ['web','auth'], as: 'admin::');
-
-// Custom registrar for special routing (e.g., localization)
-Modules::registerRoutesUsing('localized', function (array $attributes, $routes) {
-    Route::localized(fn () => Route::group($attributes, $routes));
-});
-
-// Broadcast channels: Modules/*/Routes/channels.php
-// Console routes: Modules/*/Routes/console.php (Laravel 10+)
-</code-snippet>
-@endverbatim
-
-@verbatim
-<code-snippet name="Configs & translations" lang="php">
-// Config: Modules/Blog/Config/blog.php → config('blog.key')
-// Merging runs when config is NOT cached; module values win when priority=true (default)
-config('blog.feature.enabled');
-
-// Translations: Lang/en/messages.php + Lang/*.json
-__('blog::messages.welcome');  // namespaced
-__('Welcome');                 // JSON (any module)
-</code-snippet>
-@endverbatim
-
-@verbatim
-<code-snippet name="Models, factories & policies" lang="php">
-// Auto-mapped: Models\Post ↔ Database\Factories\PostFactory ↔ Policies\PostPolicy
-Modules\Blog\Models\Post::factory();
-(new PostFactory)->modelName();  // → Modules\Blog\Models\Post
-Gate::getPolicyFor(Post::class); // → Modules\Blog\Policies\PostPolicy
-
-// Nested namespaces preserved:
-// Models\Nested\Item ↔ Database\Factories\Nested\ItemFactory ↔ Policies\Nested\ItemPolicy
-
-// IDE hint: set protected $model = Post::class in factories
-</code-snippet>
-@endverbatim
-
-@verbatim
-<code-snippet name="Commands, helpers & providers" lang="php">
-// Command: Console/Commands/*.php extending Illuminate\Console\Command
-protected $signature = 'shop:sync';
-
-// Helper: Helpers/*.php (auto-required at registration, use function_exists guard)
-if (! function_exists('format_price')) { function format_price(int $cents): string { /* ... */ } }
-
-// Provider: Providers/*.php extending ServiceProvider (auto-registered)
-class BlogServiceProvider extends Illuminate\Support\ServiceProvider {}
-</code-snippet>
-@endverbatim
-
-@verbatim
-<code-snippet name="Seeders & events" lang="php">
-// Seeder: Database/Seeders/{Module}DatabaseSeeder.php (exact naming required)
-$this->call(Modules::seeders());  // seed all modules
-
-// Events: Listeners/*.php auto-discovered
-// Listeners can handle events from any module or app
-Event::dispatch(new Modules\Blog\Events\PostPublished($post));
-</code-snippet>
-@endverbatim
-
-@verbatim
-<code-snippet name="Schedules" lang="php">
-// Laravel 10+: Routes/console.php
-use Illuminate\Support\Facades\Schedule;
-Schedule::command('blog:reindex')->hourly();
-
-// Laravel <10: Console/Kernel extending Mozex\Modules\Contracts\ConsoleKernel
-class Kernel extends ConsoleKernel {
-    public function schedule(Schedule $schedule): void {
-        $schedule->command('blog:sync')->daily();
-    }
-}
-</code-snippet>
-@endverbatim
-
-### Filament
-Place assets in `Modules/{Module}/Filament/{Panel}/{Resources|Pages|Widgets|Clusters}`.
-Panel folder name (lowercased) = panel id: `Admin/` → `admin`, `Dashboard/` → `dashboard`.
-Auto-discovered per panel; ensure matching panel providers exist in app.
-
-### Nova
-Resources extending `Laravel\Nova\Resource` in `*/Nova` auto-registered (excludes ActionResource).
-
----
-
-## Configuration reference
-
-Key `config/modules.php` options:
-
+### Config keys
 | Key | Default | Purpose |
 |-----|---------|---------|
-| `modules_directory` | `'Modules'` | Root directory for modules |
-| `modules_namespace` | `'Modules\\'` | PSR-4 namespace prefix |
-| `modules.{Name}.active` | `true` | Enable/disable specific module |
-| `modules.{Name}.order` | `0` | Load order (lower = earlier) |
-| `configs.priority` | `true` | Module configs override app (true) or provide defaults (false) |
-| `routes.commands_filenames` | `['console']` | Files treated as console routes |
-| `routes.channels_filenames` | `['channels']` | Files treated as broadcast channels |
+| modules_directory | Modules | root dir |
+| modules_namespace | Modules\\ | PSR-4 prefix |
+| configs.priority | true | true=module overrides app |
+| routes.commands_filenames | ['console'] | console route files |
+| routes.channels_filenames | ['channels'] | channel files |
+| models.namespace | Models\\ | model sub-namespace |
+| factories.namespace | Database\\Factories\\ | factory sub-namespace |
+| policies.namespace | Policies\\ | policy sub-namespace |
+| modules.{Name}.active | true | enable/disable specific module |
+| modules.{Name}.order | 0 | load order (lower=earlier) |
 
-Each feature section has `active` (bool) and `patterns` (array of globs).
+### Testing
+PHPUnit: `<directory>./Modules/*/Tests</directory>` + `<include><directory>./Modules</directory></include>`
+Pest: `uses(TestCase::class)->in('../Modules/*/Tests/*/*');`
+PHPStan: `phpstan.php` with `...glob(__DIR__.'/Modules/*', GLOB_ONLYDIR)` in paths, excluding Tests/Database/Resources.
 
----
-
-## Testing integration
-
-@verbatim
-<code-snippet name="PHPUnit/Pest config" lang="xml">
-<!-- phpunit.xml -->
-<testsuite name="Modules"><directory>./Modules/*/Tests</directory></testsuite>
-<source><include><directory>./app</directory><directory>./Modules</directory></include></source>
-</code-snippet>
+### Docs (read before working on a feature)
+| Feature | File |
+|---------|------|
+| Blade Components | `vendor/mozex/laravel-modules/docs/features/blade-components.md` |
+| Caching | `vendor/mozex/laravel-modules/docs/features/caching.md` |
+| Commands | `vendor/mozex/laravel-modules/docs/features/commands.md` |
+| Configs | `vendor/mozex/laravel-modules/docs/features/configs.md` |
+| Events & Listeners | `vendor/mozex/laravel-modules/docs/features/events-listeners.md` |
+| Filament | `vendor/mozex/laravel-modules/docs/features/filament.md` |
+| Helpers | `vendor/mozex/laravel-modules/docs/features/helpers.md` |
+| Livewire | `vendor/mozex/laravel-modules/docs/features/livewire-components.md` |
+| Migrations | `vendor/mozex/laravel-modules/docs/features/migrations.md` |
+| Models & Factories | `vendor/mozex/laravel-modules/docs/features/models-factories.md` |
+| Nova | `vendor/mozex/laravel-modules/docs/features/nova-resources.md` |
+| Policies | `vendor/mozex/laravel-modules/docs/features/policies.md` |
+| Routes | `vendor/mozex/laravel-modules/docs/features/routes.md` |
+| Schedules | `vendor/mozex/laravel-modules/docs/features/schedules.md` |
+| Seeders | `vendor/mozex/laravel-modules/docs/features/seeders.md` |
+| Service Providers | `vendor/mozex/laravel-modules/docs/features/service-providers.md` |
+| Translations | `vendor/mozex/laravel-modules/docs/features/translations.md` |
+| Views | `vendor/mozex/laravel-modules/docs/features/views.md` |
+| PHPUnit | `vendor/mozex/laravel-modules/docs/integrations/phpunit.md` |
+| Pest | `vendor/mozex/laravel-modules/docs/integrations/pest.md` |
+| PHPStan | `vendor/mozex/laravel-modules/docs/integrations/phpstan.md` |
+| Overview & Facade API | `vendor/mozex/laravel-modules/docs/README.md` |
+| Config reference | `config/modules.php` |
 @endverbatim
-
-@verbatim
-<code-snippet name="Pest setup" lang="php">
-// tests/Pest.php
-uses(TestCase::class, RefreshDatabase::class)->in('../Modules/*/Tests/*/*');
-</code-snippet>
-@endverbatim
-
-@verbatim
-<code-snippet name="Test with custom base path" lang="php">
-// In test setup, override modules path if needed
-Modules::setBasePath('/path/to/workbench');
-</code-snippet>
-@endverbatim
-
-PHPStan: use `phpstan.php` globbing `Modules/*`, excluding Tests/Database/Resources.
