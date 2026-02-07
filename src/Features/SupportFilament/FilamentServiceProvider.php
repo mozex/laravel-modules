@@ -12,12 +12,24 @@ use ReflectionProperty;
 
 class FilamentServiceProvider extends Feature
 {
+    public static function asset(): array
+    {
+        return [
+            AssetType::FilamentResources,
+            AssetType::FilamentPages,
+            AssetType::FilamentWidgets,
+            AssetType::FilamentClusters,
+        ];
+    }
+
+    public static function shouldRegisterFeature(): bool
+    {
+        return parent::shouldRegisterFeature()
+            && class_exists(Filament::class);
+    }
+
     public function register(): void
     {
-        if (! class_exists(Filament::class)) {
-            return;
-        }
-
         $this->callAfterResolving(PanelRegistry::class, function (PanelRegistry $panelRegistry): void {
             $resources = AssetType::FilamentResources->isActive()
                 ? AssetType::FilamentResources->scout()->collect()
