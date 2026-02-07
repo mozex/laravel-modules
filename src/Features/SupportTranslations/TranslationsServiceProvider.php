@@ -7,13 +7,14 @@ use Mozex\Modules\Features\Feature;
 
 class TranslationsServiceProvider extends Feature
 {
+    public static function asset(): AssetType
+    {
+        return AssetType::Translations;
+    }
+
     public function boot(): void
     {
-        if (AssetType::Translations->isDeactive()) {
-            return;
-        }
-
-        AssetType::Translations->scout()->collect()
+        static::asset()->scout()->collect()
             ->each(function (array $asset): void {
                 $this->loadTranslationsFrom(
                     path: $asset['path'],

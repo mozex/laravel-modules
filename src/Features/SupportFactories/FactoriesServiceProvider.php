@@ -10,19 +10,20 @@ use ReflectionProperty;
 
 class FactoriesServiceProvider extends Feature
 {
+    public static function asset(): AssetType
+    {
+        return AssetType::Factories;
+    }
+
     public function boot(): void
     {
-        if (AssetType::Factories->isDeactive()) {
-            return;
-        }
-
         Factory::guessFactoryNamesUsing(function (string $modelName) {
             if ($module = Modules::moduleNameFromNamespace($modelName)) {
                 return sprintf(
                     '%s%s\\%s%sFactory',
                     config('modules.modules_namespace'),
                     $module,
-                    AssetType::Factories->config()['namespace'],
+                    static::asset()->config()['namespace'],
                     str($modelName)->after(
                         sprintf(
                             '%s%s\\%s',

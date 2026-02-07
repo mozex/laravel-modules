@@ -2,12 +2,29 @@
 
 namespace Mozex\Modules\Features;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\ServiceProvider;
 use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\Facades\Modules;
 
 abstract class Feature extends ServiceProvider
 {
+    /**
+     * @return AssetType|array<AssetType>
+     */
+    abstract public static function asset(): AssetType|array;
+
+    public static function shouldRegisterFeature(): bool
+    {
+        foreach (Arr::wrap(static::asset()) as $asset) {
+            if ($asset->isActive()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public function register(): void
     {
         //

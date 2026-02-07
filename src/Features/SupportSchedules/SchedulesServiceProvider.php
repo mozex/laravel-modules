@@ -8,14 +8,15 @@ use Mozex\Modules\Features\Feature;
 
 class SchedulesServiceProvider extends Feature
 {
+    public static function asset(): AssetType
+    {
+        return AssetType::Schedules;
+    }
+
     public function boot(): void
     {
-        if (AssetType::Schedules->isDeactive()) {
-            return;
-        }
-
         $this->callAfterResolving(Schedule::class, function (Schedule $schedule): void {
-            AssetType::Schedules->scout()->collect()
+            static::asset()->scout()->collect()
                 ->each(function (array $asset) use ($schedule): void {
                     (new $asset['namespace'])->schedule($schedule);
                 });

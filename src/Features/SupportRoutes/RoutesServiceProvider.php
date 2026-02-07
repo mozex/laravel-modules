@@ -13,19 +13,20 @@ use Mozex\Modules\Features\Feature;
 
 class RoutesServiceProvider extends Feature
 {
+    public static function asset(): AssetType
+    {
+        return AssetType::Routes;
+    }
+
     public function boot(): void
     {
-        if (AssetType::Routes->isDeactive()) {
-            return;
-        }
-
-        $config = AssetType::Routes->config();
+        $config = static::asset()->config();
         /** @var array<array-key, string> $commandsFilenames */
         $commandsFilenames = $config['commands_filenames'];
         /** @var array<array-key, string> $channelsFilenames */
         $channelsFilenames = $config['channels_filenames'];
 
-        [$commands, $rest] = AssetType::Routes->scout()->collect()
+        [$commands, $rest] = static::asset()->scout()->collect()
             ->partition(
                 fn (array $asset) => in_array(File::name($asset['path']), $commandsFilenames)
             );

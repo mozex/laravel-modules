@@ -12,19 +12,20 @@ use ReflectionProperty;
 
 class PoliciesServiceProvider extends Feature
 {
+    public static function asset(): AssetType
+    {
+        return AssetType::Policies;
+    }
+
     public function boot(): void
     {
-        if (AssetType::Policies->isDeactive()) {
-            return;
-        }
-
         Gate::guessPolicyNamesUsing(function (string $modelName) {
             if ($module = Modules::moduleNameFromNamespace($modelName)) {
                 return sprintf(
                     '%s%s\\%s%sPolicy',
                     config('modules.modules_namespace'),
                     $module,
-                    AssetType::Policies->config()['namespace'],
+                    static::asset()->config()['namespace'],
                     str($modelName)->after(
                         sprintf(
                             '%s%s\\%s',

@@ -7,13 +7,14 @@ use Mozex\Modules\Features\Feature;
 
 class RegisterServiceProviders extends Feature
 {
+    public static function asset(): AssetType
+    {
+        return AssetType::ServiceProviders;
+    }
+
     public function register(): void
     {
-        if (AssetType::ServiceProviders->isDeactive()) {
-            return;
-        }
-
-        AssetType::ServiceProviders->scout()->collect()
+        static::asset()->scout()->collect()
             ->each(function (array $asset): void {
                 $this->app->register($asset['namespace']);
             });

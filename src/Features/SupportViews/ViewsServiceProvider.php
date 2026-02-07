@@ -7,13 +7,14 @@ use Mozex\Modules\Features\Feature;
 
 class ViewsServiceProvider extends Feature
 {
+    public static function asset(): AssetType
+    {
+        return AssetType::Views;
+    }
+
     public function boot(): void
     {
-        if (AssetType::Views->isDeactive()) {
-            return;
-        }
-
-        AssetType::Views->scout()->collect()
+        static::asset()->scout()->collect()
             ->each(function (array $asset): void {
                 $this->loadViewsFrom(
                     path: $asset['path'],

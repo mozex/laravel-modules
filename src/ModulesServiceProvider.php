@@ -2,7 +2,6 @@
 
 namespace Mozex\Modules;
 
-use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\Features\SupportCaching\CacheCommand;
 use Mozex\Modules\Features\SupportCaching\ClearCommand;
 use Spatie\LaravelPackageTools\Package;
@@ -20,29 +19,29 @@ class ModulesServiceProvider extends PackageServiceProvider
     }
 
     /**
-     * @return array<int, array{class-string, ?AssetType}>
+     * @return array<int, class-string>
      */
     protected function getFeatures(): array
     {
         return [
-            [Features\SupportConfigs\ConfigsServiceProvider::class, AssetType::Configs],
-            [Features\SupportServiceProviders\RegisterServiceProviders::class, AssetType::ServiceProviders],
-            [Features\SupportHelpers\HelpersServiceProvider::class, AssetType::Helpers],
-            [Features\SupportCommands\CommandsServiceProvider::class, AssetType::Commands],
-            [Features\SupportMigrations\MigrationsServiceProvider::class, AssetType::Migrations],
-            [Features\SupportTranslations\TranslationsServiceProvider::class, AssetType::Translations],
-            [Features\SupportViews\ViewsServiceProvider::class, AssetType::Views],
-            [Features\SupportBladeComponents\BladeComponentsServiceProvider::class, AssetType::BladeComponents],
-            [Features\SupportModels\ModelsServiceProvider::class, AssetType::Models],
-            [Features\SupportFactories\FactoriesServiceProvider::class, AssetType::Factories],
-            [Features\SupportPolicies\PoliciesServiceProvider::class, AssetType::Policies],
-            [Features\SupportRoutes\RoutesServiceProvider::class, AssetType::Routes],
-            [Features\SupportSchedules\SchedulesServiceProvider::class, AssetType::Schedules],
-            [Features\SupportListeners\ListenersServiceProvider::class, AssetType::Listeners],
-            [Features\SupportEvents\EventsServiceProvider::class, AssetType::Listeners],
-            [Features\SupportLivewire\LivewireServiceProvider::class, AssetType::LivewireComponents],
-            [Features\SupportFilament\FilamentServiceProvider::class, null],
-            [Features\SupportNova\NovaServiceProvider::class, AssetType::NovaResources],
+            Features\SupportConfigs\ConfigsServiceProvider::class,
+            Features\SupportServiceProviders\RegisterServiceProviders::class,
+            Features\SupportHelpers\HelpersServiceProvider::class,
+            Features\SupportCommands\CommandsServiceProvider::class,
+            Features\SupportMigrations\MigrationsServiceProvider::class,
+            Features\SupportTranslations\TranslationsServiceProvider::class,
+            Features\SupportViews\ViewsServiceProvider::class,
+            Features\SupportBladeComponents\BladeComponentsServiceProvider::class,
+            Features\SupportModels\ModelsServiceProvider::class,
+            Features\SupportFactories\FactoriesServiceProvider::class,
+            Features\SupportPolicies\PoliciesServiceProvider::class,
+            Features\SupportRoutes\RoutesServiceProvider::class,
+            Features\SupportSchedules\SchedulesServiceProvider::class,
+            Features\SupportListeners\ListenersServiceProvider::class,
+            Features\SupportEvents\EventsServiceProvider::class,
+            Features\SupportLivewire\LivewireServiceProvider::class,
+            Features\SupportFilament\FilamentServiceProvider::class,
+            Features\SupportNova\NovaServiceProvider::class,
         ];
     }
 
@@ -53,8 +52,8 @@ class ModulesServiceProvider extends PackageServiceProvider
 
     protected function registerFeatures(): void
     {
-        foreach ($this->getFeatures() as [$feature, $assetType]) {
-            if ($assetType !== null && $assetType->isDeactive()) {
+        foreach ($this->getFeatures() as $feature) {
+            if (! $feature::shouldRegisterFeature()) {
                 continue;
             }
 

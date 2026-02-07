@@ -12,12 +12,13 @@ use SplFileInfo;
 
 class ListenersServiceProvider extends Feature
 {
+    public static function asset(): AssetType
+    {
+        return AssetType::Listeners;
+    }
+
     public function boot(): void
     {
-        if (AssetType::Listeners->isDeactive()) {
-            return;
-        }
-
         DiscoverEvents::guessClassNamesUsing(function (SplFileInfo $file, string $basePath) {
             if (Modules::moduleNameFromPath($file->getRealPath())) {
                 return str($file->getRealPath())

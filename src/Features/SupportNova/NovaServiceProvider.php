@@ -8,20 +8,24 @@ use Mozex\Modules\Features\Feature;
 
 class NovaServiceProvider extends Feature
 {
+    public static function asset(): AssetType
+    {
+        return AssetType::NovaResources;
+    }
+
+    public static function shouldRegisterFeature(): bool
+    {
+        return parent::shouldRegisterFeature()
+            && class_exists(Nova::class);
+    }
+
     public function boot(): void
     {
-        if (! class_exists(Nova::class)) {
-            return;
-        }
-
-        if (AssetType::NovaResources->isDeactive()) {
-            return;
-        }
-
+        /** @phpstan-ignore class.notFound */
         Nova::serving(function (): void {
             // @phpstan-ignore-next-line
             Nova::resources(
-                AssetType::NovaResources->scout()->collect()
+                static::asset()->scout()->collect()
                     ->pluck('namespace')
                     ->toArray()
             );

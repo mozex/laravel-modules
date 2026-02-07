@@ -7,9 +7,19 @@ use Mozex\Modules\Enums\AssetType;
 
 class EventsServiceProvider extends EventServiceProvider
 {
+    public static function asset(): AssetType
+    {
+        return AssetType::Listeners;
+    }
+
+    public static function shouldRegisterFeature(): bool
+    {
+        return static::asset()->isActive();
+    }
+
     public function shouldDiscoverEvents(): bool
     {
-        return AssetType::Listeners->isActive();
+        return static::shouldRegisterFeature();
     }
 
     /**
@@ -17,7 +27,7 @@ class EventsServiceProvider extends EventServiceProvider
      */
     protected function discoverEventsWithin(): array
     {
-        return AssetType::Listeners->scout()
+        return static::asset()->scout()
             ->collect()
             ->pluck('path')
             ->toArray();
