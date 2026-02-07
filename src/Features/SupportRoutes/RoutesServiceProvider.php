@@ -21,19 +21,21 @@ class RoutesServiceProvider extends Feature
     public function boot(): void
     {
         $config = static::asset()->config();
-        /** @var array<array-key, string> $commandsFilenames */
-        $commandsFilenames = $config['commands_filenames'];
-        /** @var array<array-key, string> $channelsFilenames */
-        $channelsFilenames = $config['channels_filenames'];
 
         [$commands, $rest] = static::asset()->scout()->collect()
             ->partition(
-                fn (array $asset) => in_array(File::name($asset['path']), $commandsFilenames)
+                fn (array $asset) => in_array(
+                    File::name($asset['path']),
+                    $config['commands_filenames']
+                )
             );
 
         [$channels, $routes] = $rest
             ->partition(
-                fn (array $asset) => in_array(File::name($asset['path']), $channelsFilenames)
+                fn (array $asset) => in_array(
+                    File::name($asset['path']),
+                    $config['channels_filenames']
+                )
             );
 
         $this->callAfterResolving(Kernel::class, function (Kernel $kernel) use ($commands): void {
