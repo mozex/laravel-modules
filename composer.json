@@ -28,9 +28,8 @@
         "laravel/pint": "^1.16.1",
         "livewire/livewire": "^3.4",
         "orchestra/testbench": "^8.21|^9.2|^10.0",
-        "pestphp/pest": "^2.36.1|^3.0.0",
-        "pestphp/pest-plugin-arch": "^2.7.0|^3.0.0",
-        "pestphp/pest-plugin-type-coverage": "^2.8.2|^3.0.0",
+        "pestphp/pest": "^2.36.1|^3.0.0|^4.0.0",
+        "pestphp/pest-plugin-type-coverage": "^2.8.2|^3.0.0|^4.0.0",
         "phpstan/extension-installer": "^1.1",
         "rector/rector": "^1.1.0|^2.0.9",
         "spatie/ray": "^1.41"
