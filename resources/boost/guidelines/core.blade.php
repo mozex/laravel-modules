@@ -1,9 +1,8 @@
 @verbatim
 ## mozex/laravel-modules
 
-Auto-discovers module assets from `Modules/`. Namespace: `Modules\{Module}\...`
-Config: `config/modules.php`. Cache: `php artisan modules:cache` / `modules:clear`.
-Docs: `./docs/**` (Boost search-docs excludes this package).
+Auto-discovers module assets from `Modules/` (not `app/Modules`). Namespace: `Modules\{Module}\...`
+Config: `config/modules.php`. Cache: `php artisan modules:cache` / `modules:clear` (avoid caching in local dev).
 
 ### Module config
 ```php
@@ -19,8 +18,8 @@ Each feature has `active` (bool) + `patterns` (globs) in config/modules.php.
 Modules/{Module}/
   Config/*.php                    → config('filename.key'); priority: true=module wins
   Console/Commands/               → Artisan commands (extends Command)
-  Console/Kernel.php              → schedule() (extends Mozex\Modules\Contracts\ConsoleKernel)
-  Database/Factories/             → Model↔Factory auto-mapping by namespace
+  Console/Kernel.php              → schedule() for Laravel <10 (extends Mozex\Modules\Contracts\ConsoleKernel)
+  Database/Factories/             → Model↔Factory auto-mapping by namespace (nested preserved)
   Database/Migrations/            → registered with migrator
   Database/Seeders/               → only {Module}DatabaseSeeder; via Modules::seeders()
   Filament/{PanelId}/Resources|Pages|Widgets|Clusters/  → per-panel (dir=panel id lowercase)
@@ -28,9 +27,9 @@ Modules/{Module}/
   Lang/                           → __('module::file.key') + JSON translations
   Listeners/                      → Laravel event auto-discovery
   Livewire/                       → <livewire:module::name /> or nested.path
-  Models/                         → factory/policy guessing by namespace
+  Models/                         → factory/policy guessing by namespace (set $model in factories for IDE)
   Nova/                           → Nova\Resource subclasses (excl. ActionResource)
-  Policies/                       → Models\X → Policies\XPolicy auto-mapping
+  Policies/                       → Models\X → Policies\XPolicy (nested: Models\A\B → Policies\A\BPolicy)
   Providers/                      → ServiceProvider subclasses auto-registered in register()
   Resources/views/                → view('module::path') + <x-module::component />
   Routes/*.php                    → grouped by filename; channels.php, console.php special
@@ -49,6 +48,8 @@ Modules::moduleNameFromPath($path)              // → 'Blog'
 Modules::seeders()                              // all {Module}DatabaseSeeder classes
 Modules::routeGroup('name', prefix:, middleware:, as:)
 Modules::registerRoutesUsing('name', Closure)   // custom route registrar
+Modules::getRouteGroups()                       // inspect registered groups
+Modules::getRegisterRoutesUsing()               // inspect custom registrars
 Modules::setBasePath('/path')                   // test override
 ```
 
@@ -69,11 +70,13 @@ Custom: call `Modules::routeGroup()` / `Modules::registerRoutesUsing()` in provi
 | models.namespace | Models\\ | model sub-namespace |
 | factories.namespace | Database\\Factories\\ | factory sub-namespace |
 | policies.namespace | Policies\\ | policy sub-namespace |
+| modules.{Name}.active | true | enable/disable specific module |
+| modules.{Name}.order | 0 | load order (lower=earlier) |
 
 ### Testing
 PHPUnit: `<directory>./Modules/*/Tests</directory>` + `<include><directory>./Modules</directory></include>`
 Pest: `uses(TestCase::class)->in('../Modules/*/Tests/*/*');`
-PHPStan: `phpstan.php` with `...glob(__DIR__.'/Modules/*', GLOB_ONLYDIR)` in paths.
+PHPStan: `phpstan.php` with `...glob(__DIR__.'/Modules/*', GLOB_ONLYDIR)` in paths, excluding Tests/Database/Resources.
 
 ### Docs (read before working on a feature)
 | Feature | File |
