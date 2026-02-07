@@ -9,7 +9,7 @@ beforeEach(function (): void {
     }
 });
 
-function measureMedian(Closure $fn, int $iterations = 10): float
+function measureMedian(Closure $fn, int $iterations): float
 {
     $times = [];
 
@@ -41,7 +41,7 @@ test('benchmark: scout get() with cache', function (): void {
 
         $median = measureMedian(function () use ($scout): void {
             $scout->get();
-        }, 20);
+        }, 200);
 
         $results[$scout->asset()->title()] = round($median, 3);
 
@@ -62,7 +62,7 @@ test('benchmark: scout get() without cache', function (): void {
 
         $median = measureMedian(function () use ($scout): void {
             $scout->getWithoutCache();
-        }, 5); // Fewer iterations since uncached is slow
+        }, 100); // Fewer iterations since uncached is slow
 
         $results[$scout->asset()->title()] = round($median, 3);
     });
@@ -80,7 +80,7 @@ test('benchmark: full module boot with cache', function (): void {
     $median = measureMedian(function (): void {
         // Simulate what happens during boot: each active scout fetches results
         AssetType::activeScouts()->each(fn (BaseScout $scout) => $scout->get());
-    }, 20);
+    }, 200);
 
     dump('=== Full module boot (all scouts, cached) ===');
     dump(['median_ms' => round($median, 3)]);
@@ -97,7 +97,7 @@ test('benchmark: full module boot without cache', function (): void {
 
     $median = measureMedian(function (): void {
         AssetType::activeScouts()->each(fn (BaseScout $scout) => $scout->getWithoutCache());
-    }, 3); // Very few iterations since uncached is expensive
+    }, 50); // Very few iterations since uncached is expensive
 
     dump('=== Full module boot (all scouts, uncached) ===');
     dump(['median_ms' => round($median, 3)]);
@@ -106,19 +106,15 @@ test('benchmark: full module boot without cache', function (): void {
 });
 
 test('benchmark: repeated scout calls (memoization test)', function (): void {
-    // This tests the benefit of Fix 1 (scout memoization)
-    // Simulates what FilamentServiceProvider did before fix: 4 scouts * N panels
-
     AssetType::activeScouts()->each(fn (BaseScout $scout) => $scout->cache());
 
-    // Without memoization benefit: create new scout each time
     $withoutMemo = measureMedian(function (): void {
         for ($i = 0; $i < 10; $i++) {
             AssetType::activeScouts()->each(fn (BaseScout $scout) => $scout->get());
         }
-    }, 5);
+    }, 50);
 
-    dump('=== Repeated scout calls (10x all scouts, cached) ===');
+    dump('=== Repeated scout calls (50x all scouts, cached) ===');
     dump(['median_ms' => round($withoutMemo, 3)]);
 
     AssetType::activeScouts()->each(fn (BaseScout $scout) => $scout->clear());
