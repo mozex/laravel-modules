@@ -22,9 +22,9 @@ return [
         ],
         'excludePaths' => [
             'analyseAndScan' => [
-                __DIR__ . '/Modules/*/Tests/*',
-                __DIR__ . '/Modules/*/Database/*',
-                __DIR__ . '/Modules/*/Resources/*',
+                ...glob(__DIR__ . '/Modules/*/Tests', GLOB_ONLYDIR),
+                ...glob(__DIR__ . '/Modules/*/Database', GLOB_ONLYDIR),
+                ...glob(__DIR__ . '/Modules/*/Resources', GLOB_ONLYDIR),
             ],
         ],
         'databaseMigrationsPath' => glob('Modules/*/Database/Migrations', GLOB_ONLYDIR),
