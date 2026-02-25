@@ -35,6 +35,8 @@ The second `*` in each pattern is the panel name. It's lowercased to form the pa
 ],
 ```
 
+Filament features are automatically skipped when Filament is not installed — no configuration needed.
+
 ## How panel mapping works
 
 - The panel name is extracted from the directory path: `Filament/{Panel}/Resources`.
@@ -69,6 +71,10 @@ Modules/Blog/
 
 - Disable any feature by setting `'active' => false` in its section.
 - Adjust glob patterns to match your directory structure.
+
+## Version compatibility
+
+This version of the package requires Filament v5, which in turn requires Livewire v4. If your application still uses Filament v3/v4 or Livewire v3, use the [2.x branch](https://github.com/mozex/laravel-modules/tree/2.x) instead.
 
 ## Troubleshooting
 
