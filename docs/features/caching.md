@@ -18,7 +18,7 @@ Speed up module discovery with two Artisan commands. Discovery caching stores th
 
 ## What is cached
 
-The discovery metadata for each active feature: views, routes, blade components, helpers, migrations, listeners, livewire components, filament assets, nova resources, configs, translations, service providers, commands, and schedules.
+The discovery metadata for each active feature: views, routes, blade components, helpers, migrations, listeners, livewire components, filament assets, nova resources, configs, translations, service providers, and commands.
 
 ## When to rebuild
 

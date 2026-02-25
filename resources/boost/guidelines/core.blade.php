@@ -18,7 +18,6 @@ Each feature has `active` (bool) + `patterns` (globs) in config/modules.php.
 Modules/{Module}/
   Config/*.php                    → config('filename.key'); priority: true=module wins
   Console/Commands/               → Artisan commands (extends Command)
-  Console/Kernel.php              → schedule() for Laravel <10 (extends Mozex\Modules\Contracts\ConsoleKernel)
   Database/Factories/             → Model↔Factory auto-mapping by namespace (nested preserved)
   Database/Migrations/            → registered with migrator
   Database/Seeders/               → only {Module}DatabaseSeeder; via Modules::seeders()
@@ -94,7 +93,6 @@ PHPStan: `phpstan.php` with `...glob(__DIR__.'/Modules/*', GLOB_ONLYDIR)` in pat
 | Nova | `vendor/mozex/laravel-modules/docs/features/nova-resources.md` |
 | Policies | `vendor/mozex/laravel-modules/docs/features/policies.md` |
 | Routes | `vendor/mozex/laravel-modules/docs/features/routes.md` |
-| Schedules | `vendor/mozex/laravel-modules/docs/features/schedules.md` |
 | Seeders | `vendor/mozex/laravel-modules/docs/features/seeders.md` |
 | Service Providers | `vendor/mozex/laravel-modules/docs/features/service-providers.md` |
 | Translations | `vendor/mozex/laravel-modules/docs/features/translations.md` |

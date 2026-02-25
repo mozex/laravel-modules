@@ -47,12 +47,6 @@ return [
             '*/Lang',
         ],
     ],
-    AssetType::Schedules->value => [
-        'active' => true,
-        'patterns' => [
-            '*/Console',
-        ],
-    ],
     AssetType::Configs->value => [
         'active' => true,
         'patterns' => [
