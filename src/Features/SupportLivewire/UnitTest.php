@@ -1,11 +1,5 @@
 <?php
 
-use Livewire\Mechanisms\ComponentRegistry;
-use Modules\First\Livewire\BaseChained;
-use Modules\First\Livewire\Chained;
-use Modules\First\Livewire\Teams;
-use Modules\Second\Livewire\ListUsers;
-use Modules\Second\Livewire\WrongComponents;
 use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\Features\SupportLivewire\LivewireComponentsScout;
 
@@ -36,13 +30,12 @@ test('discovering will work', function (bool $cache): void {
     $collection = $discoverer->collect();
 
     expect($collection)
+        ->toHaveCount(3)
         ->each->toHaveKeys(['module', 'path', 'namespace'])
-        ->and($collection->pluck('namespace'))
-        ->toContain(Teams::class)
-        ->toContain(ListUsers::class)
-        ->toContain(Chained::class)
-        ->not->toContain(BaseChained::class)
-        ->not->toContain(WrongComponents::class);
+        ->and($collection->pluck('module')->toArray())
+        ->toContain('First')
+        ->toContain('Second')
+        ->toContain('PWA');
 
     if ($cache) {
         $discoverer->clear();
@@ -58,13 +51,6 @@ it('can register livewire components', function (bool $cache): void {
     if ($cache) {
         $discoverer->cache();
     }
-
-    $components = app(ComponentRegistry::class);
-
-    $discoverer->collect()
-        ->each(function (array $asset) use ($components): void {
-            expect($components->getName($asset['namespace']))->not->toBeNull();
-        });
 
     expect(Blade::render(
         string: '<livewire:first::teams/>',
@@ -90,7 +76,82 @@ it('can register livewire components', function (bool $cache): void {
             string: '<livewire:first::nested.nested-users/>',
             deleteCachedView: true
         ))
-        ->toContain('Nested Users Livewire Component');
+        ->toContain('Nested Users Livewire Component')
+        ->and(Blade::render(
+            string: '<livewire:first::edge-case/>',
+            deleteCachedView: true
+        ))
+        ->toContain('Edge Case Livewire Component');
+
+    if ($cache) {
+        $discoverer->clear();
+    }
+})->with([
+    'without cache' => false,
+    'with cache' => true,
+]);
+
+it('can register multi-file components', function (bool $cache): void {
+    $discoverer = LivewireComponentsScout::create();
+
+    if ($cache) {
+        $discoverer->cache();
+    }
+
+    expect(Blade::render(
+        string: '<livewire:first::toggle/>',
+        deleteCachedView: true
+    ))
+        ->toContain('Toggle: Off');
+
+    if ($cache) {
+        $discoverer->clear();
+    }
+})->with([
+    'without cache' => false,
+    'with cache' => true,
+]);
+
+it('can discover components from multiple view paths', function (bool $cache): void {
+    $discoverer = LivewireComponentsScout::create();
+
+    if ($cache) {
+        $discoverer->cache();
+    }
+
+    // Component from primary view path (Resources/views/livewire)
+    expect(Blade::render(
+        string: '<livewire:first::counter/>',
+        deleteCachedView: true
+    ))
+        ->toContain('Counter: 2')
+        // Component from additional view path (Resources/views/extra-livewire)
+        ->and(Blade::render(
+            string: '<livewire:first::greeting/>',
+            deleteCachedView: true
+        ))
+        ->toContain('Hello from extra livewire directory');
+
+    if ($cache) {
+        $discoverer->clear();
+    }
+})->with([
+    'without cache' => false,
+    'with cache' => true,
+])->skip('Livewire addNamespace() only supports one view path per namespace — awaiting upstream support.');
+
+it('can register single-file components', function (bool $cache): void {
+    $discoverer = LivewireComponentsScout::create();
+
+    if ($cache) {
+        $discoverer->cache();
+    }
+
+    expect(Blade::render(
+        string: '<livewire:first::counter/>',
+        deleteCachedView: true
+    ))
+        ->toContain('Counter: 2');
 
     if ($cache) {
         $discoverer->clear();

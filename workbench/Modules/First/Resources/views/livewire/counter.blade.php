@@ -3,7 +3,7 @@
 use Livewire\Component;
 
 new class extends Component {
-    public int $count = 0;
+    public int $count = 2;
 
     public function increment(): void
     {
