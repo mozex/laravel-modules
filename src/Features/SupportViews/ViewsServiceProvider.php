@@ -4,6 +4,7 @@ namespace Mozex\Modules\Features\SupportViews;
 
 use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\Features\Feature;
+use Override;
 
 class ViewsServiceProvider extends Feature
 {
@@ -12,6 +13,7 @@ class ViewsServiceProvider extends Feature
         return AssetType::Views;
     }
 
+    #[Override]
     public function boot(): void
     {
         static::asset()->scout()->collect()

@@ -4,6 +4,7 @@ namespace Mozex\Modules\Features\SupportTranslations;
 
 use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\Features\Feature;
+use Override;
 
 class TranslationsServiceProvider extends Feature
 {
@@ -12,6 +13,7 @@ class TranslationsServiceProvider extends Feature
         return AssetType::Translations;
     }
 
+    #[Override]
     public function boot(): void
     {
         static::asset()->scout()->collect()

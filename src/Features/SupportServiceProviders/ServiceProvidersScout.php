@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Mozex\Modules\Contracts\ModuleClassScout;
 use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\ExtendsDiscoverCondition;
+use Override;
 use Spatie\StructureDiscoverer\Discover;
 
 class ServiceProvidersScout extends ModuleClassScout
@@ -15,6 +16,7 @@ class ServiceProvidersScout extends ModuleClassScout
         return AssetType::ServiceProviders;
     }
 
+    #[Override]
     protected function definition(): Discover
     {
         return parent::definition()

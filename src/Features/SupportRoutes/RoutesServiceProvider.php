@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\Facades\Modules;
 use Mozex\Modules\Features\Feature;
+use Override;
 
 class RoutesServiceProvider extends Feature
 {
@@ -18,6 +19,7 @@ class RoutesServiceProvider extends Feature
         return AssetType::Routes;
     }
 
+    #[Override]
     public function boot(): void
     {
         $config = static::asset()->config();

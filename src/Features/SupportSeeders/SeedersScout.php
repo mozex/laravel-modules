@@ -7,6 +7,7 @@ use Mozex\Modules\Contracts\ModuleClassScout;
 use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\ExtendsDiscoverCondition;
 use Mozex\Modules\Facades\Modules;
+use Override;
 use Spatie\StructureDiscoverer\Data\DiscoveredClass;
 use Spatie\StructureDiscoverer\Discover;
 
@@ -17,6 +18,7 @@ class SeedersScout extends ModuleClassScout
         return AssetType::Seeders;
     }
 
+    #[Override]
     protected function definition(): Discover
     {
         return parent::definition()

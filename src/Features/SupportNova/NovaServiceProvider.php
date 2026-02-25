@@ -5,6 +5,7 @@ namespace Mozex\Modules\Features\SupportNova;
 use Laravel\Nova\Nova;
 use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\Features\Feature;
+use Override;
 
 class NovaServiceProvider extends Feature
 {
@@ -13,12 +14,14 @@ class NovaServiceProvider extends Feature
         return AssetType::NovaResources;
     }
 
+    #[Override]
     public static function shouldRegisterFeature(): bool
     {
         return parent::shouldRegisterFeature()
             && class_exists(Nova::class);
     }
 
+    #[Override]
     public function boot(): void
     {
         /** @phpstan-ignore class.notFound */
