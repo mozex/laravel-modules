@@ -6,14 +6,17 @@ namespace App\Providers;
 
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Mozex\Modules\Facades\Modules;
+use Override;
 
 class EventServiceProvider extends ServiceProvider
 {
+    #[Override]
     public function shouldDiscoverEvents(): bool
     {
         return true;
     }
 
+    #[Override]
     protected function discoverEventsWithin(): array
     {
         return [
@@ -21,6 +24,7 @@ class EventServiceProvider extends ServiceProvider
         ];
     }
 
+    #[Override]
     protected function eventDiscoveryBasePath(): string
     {
         return realpath(Modules::basePath());
