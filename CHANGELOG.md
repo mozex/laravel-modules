@@ -2,6 +2,68 @@
 
 All notable changes to `laravel-modules` will be documented in this file.
 
+## 3.0.0 - 2026-02-25
+
+### Laravel Modules v3.0.0
+
+A major release that brings full Livewire v4 and Filament v5 support, adds Single-File and Multi-File Component discovery, and modernizes the platform requirements.
+
+#### Highlights
+
+##### Full Livewire v4 Component Support
+
+All three Livewire v4 component types are now auto-discovered from your modules:
+
+- **Class-based** components (as before)
+- **Single-File Components (SFC)** — PHP and Blade in one `.blade.php` file
+- **Multi-File Components (MFC)** — a named directory with `{name}.php` and `{name}.blade.php`
+
+Place SFCs and MFCs in your module's `Resources/views/livewire/` directory and they're automatically registered under the module namespace:
+
+```blade
+<livewire:blog::counter />  {{-- SFC --}}
+<livewire:blog::toggle />   {{-- MFC --}}
+
+```
+##### Namespace-Based Registration
+
+Livewire component registration now uses `Livewire::addNamespace()`, aligning with Livewire v4's recommended approach for packages. This replaces the previous per-class `Livewire::component()` registration, resulting in cleaner integration and native support for all component types.
+
+##### Filament v5 Support
+
+Full compatibility with Filament v5. Module-based Resources, Pages, Widgets, and Clusters continue to be auto-discovered per panel.
+
+#### Breaking Changes
+
+- **PHP 8.3+ required** (dropped PHP 8.2)
+- **Laravel 11.29+ required** (dropped Laravel 10)
+- **Livewire v4 required** (dropped v3) — Composer will prevent installation with Livewire <4.0
+- **Filament v5 required** (dropped v3/v4) — Composer will prevent installation with Filament <5.0
+- **`LivewireComponentsScout`** changed from `ModuleClassScout` to `ModuleDirectoryScout` — scout output is now directory-based instead of class-based
+- **Removed `SupportSchedules` feature** and `Mozex\Modules\Contracts\ConsoleKernel` — use `Routes/console.php` with the `Schedule` facade instead
+
+#### New Configuration
+
+Add `view_path` to the `livewire-components` section if you've published the config:
+
+```php
+'livewire-components' => [
+    'active' => true,
+    'patterns' => [
+        '*/Livewire',
+    ],
+    'view_path' => 'Resources/views/livewire', // New in v3
+],
+
+```
+#### Upgrading
+
+See [UPGRADE.md](UPGRADE.md) for the full step-by-step upgrade guide.
+
+If your application is not ready to upgrade to Livewire v4 or Filament v5, continue using the [2.x branch](https://github.com/mozex/laravel-modules/tree/2.x) which supports PHP 8.2, Laravel 10/11/12, Livewire v3, and Filament v3/v4.
+
+**Full Changelog**: https://github.com/mozex/laravel-modules/compare/2.8.0...3.0.0
+
 ## 2.8.0 - 2026-02-07
 
 ### What's Changed
