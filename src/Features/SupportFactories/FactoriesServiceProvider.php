@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\Facades\Modules;
 use Mozex\Modules\Features\Feature;
+use Override;
 use ReflectionProperty;
 
 class FactoriesServiceProvider extends Feature
@@ -15,6 +16,7 @@ class FactoriesServiceProvider extends Feature
         return AssetType::Factories;
     }
 
+    #[Override]
     public function boot(): void
     {
         Factory::guessFactoryNamesUsing(function (string $modelName) {

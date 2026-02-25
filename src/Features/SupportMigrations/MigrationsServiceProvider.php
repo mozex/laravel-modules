@@ -4,6 +4,7 @@ namespace Mozex\Modules\Features\SupportMigrations;
 
 use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\Features\Feature;
+use Override;
 
 class MigrationsServiceProvider extends Feature
 {
@@ -12,6 +13,7 @@ class MigrationsServiceProvider extends Feature
         return AssetType::Migrations;
     }
 
+    #[Override]
     public function boot(): void
     {
         $this->loadMigrationsFrom(

@@ -4,6 +4,7 @@ namespace Mozex\Modules\Features\SupportEvents;
 
 use Illuminate\Foundation\Support\Providers\EventServiceProvider;
 use Mozex\Modules\Enums\AssetType;
+use Override;
 
 class EventsServiceProvider extends EventServiceProvider
 {
@@ -17,6 +18,7 @@ class EventsServiceProvider extends EventServiceProvider
         return static::asset()->isActive();
     }
 
+    #[Override]
     public function shouldDiscoverEvents(): bool
     {
         return static::shouldRegisterFeature();
@@ -25,6 +27,7 @@ class EventsServiceProvider extends EventServiceProvider
     /**
      * @return array<string>
      */
+    #[Override]
     protected function discoverEventsWithin(): array
     {
         return static::asset()->scout()
@@ -33,5 +36,6 @@ class EventsServiceProvider extends EventServiceProvider
             ->toArray();
     }
 
+    #[Override]
     protected function configureEmailVerification(): void {}
 }

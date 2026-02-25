@@ -7,6 +7,7 @@ use Laravel\Nova\Resource;
 use Mozex\Modules\Contracts\ModuleClassScout;
 use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\ExtendsDiscoverCondition;
+use Override;
 use Spatie\StructureDiscoverer\Data\DiscoveredClass;
 use Spatie\StructureDiscoverer\Discover;
 
@@ -17,6 +18,7 @@ class NovaResourcesScout extends ModuleClassScout
         return AssetType::NovaResources;
     }
 
+    #[Override]
     protected function definition(): Discover
     {
         return parent::definition()

@@ -4,6 +4,7 @@ namespace Mozex\Modules\Features\SupportFilament;
 
 use Exception;
 use Mozex\Modules\Contracts\ModuleDirectoryScout;
+use Override;
 use Spatie\Regex\Regex;
 
 abstract class FilamentScout extends ModuleDirectoryScout
@@ -12,6 +13,7 @@ abstract class FilamentScout extends ModuleDirectoryScout
      * @param  array<array-key, string>  $result
      * @return array<array-key, array{module: string, path: string, namespace: class-string, panel: string}>
      */
+    #[Override]
     public function transform(array $result): array
     {
         return collect(parent::transform($result))
