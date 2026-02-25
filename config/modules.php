@@ -95,6 +95,7 @@ return [
         'patterns' => [
             '*/Livewire',
         ],
+        'view_path' => 'Resources/views/livewire',
     ],
     AssetType::FilamentResources->value => [
         'active' => true,
