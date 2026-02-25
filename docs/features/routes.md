@@ -95,7 +95,7 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
 
 ## Console routes
 
-`console.php` files are added to the console kernel on Laravel 10+. For schedule registration on older versions, see [Schedules](./schedules.md).
+`console.php` files are added to the console kernel. Use the `Schedule` facade inside `console.php` to register scheduled tasks per module.
 
 ## Configuration
 
