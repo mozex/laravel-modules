@@ -68,6 +68,8 @@ Detailed documentation, including examples and best practices, lives in the `doc
 - PHP: ^8.2
 - Laravel: ^10.34.2 | ^11.29.0 | ^12.0
 
+> **Upgrading?** If you need support for Livewire v4, Filament v5, or Laravel 13, use the [3.x version](https://github.com/mozex/laravel-modules) of this package.
+
 ## Installation
 
 Install via Composer:
@@ -75,6 +77,27 @@ Install via Composer:
 ```bash
 composer require mozex/laravel-modules
 ```
+
+Register the `Modules` namespace in your project's `composer.json` so PHP can autoload module classes:
+
+```json
+{
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/",
+            "Modules\\": "Modules/"
+        }
+    }
+}
+```
+
+Then regenerate the autoloader:
+
+```bash
+composer dump-autoload
+```
+
+> If you use a custom `modules_directory` or `modules_namespace` in the config, adjust the path and namespace above accordingly.
 
 Publish the config file (optional, only if you want to tweak defaults):
 
