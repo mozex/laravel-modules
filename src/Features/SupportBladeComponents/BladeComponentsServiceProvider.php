@@ -5,6 +5,7 @@ namespace Mozex\Modules\Features\SupportBladeComponents;
 use Illuminate\Support\Facades\Blade;
 use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\Features\Feature;
+use Override;
 
 class BladeComponentsServiceProvider extends Feature
 {
@@ -13,6 +14,7 @@ class BladeComponentsServiceProvider extends Feature
         return AssetType::BladeComponents;
     }
 
+    #[Override]
     public function boot(): void
     {
         static::asset()->scout()->collect()

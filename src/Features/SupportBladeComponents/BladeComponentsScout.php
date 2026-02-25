@@ -6,6 +6,7 @@ use Illuminate\View\Component;
 use Mozex\Modules\Contracts\ModuleClassScout;
 use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\ExtendsDiscoverCondition;
+use Override;
 use Spatie\StructureDiscoverer\Discover;
 
 class BladeComponentsScout extends ModuleClassScout
@@ -15,6 +16,7 @@ class BladeComponentsScout extends ModuleClassScout
         return AssetType::BladeComponents;
     }
 
+    #[Override]
     protected function definition(): Discover
     {
         return parent::definition()
