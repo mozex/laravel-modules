@@ -15,6 +15,8 @@ Discovers Nova resources inside modules and registers them during Nova's `servin
 ],
 ```
 
+Nova features are automatically skipped when Nova is not installed — no configuration needed.
+
 ## Directory layout
 
 ```
