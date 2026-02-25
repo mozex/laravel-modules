@@ -17,7 +17,6 @@ use Mozex\Modules\Features\SupportLivewire\LivewireComponentsScout;
 use Mozex\Modules\Features\SupportMigrations\MigrationsScout;
 use Mozex\Modules\Features\SupportNova\NovaResourcesScout;
 use Mozex\Modules\Features\SupportRoutes\RoutesScout;
-use Mozex\Modules\Features\SupportSchedules\SchedulesScout;
 use Mozex\Modules\Features\SupportSeeders\SeedersScout;
 use Mozex\Modules\Features\SupportServiceProviders\ServiceProvidersScout;
 use Mozex\Modules\Features\SupportTranslations\TranslationsScout;
@@ -31,7 +30,6 @@ enum AssetType: string
     case ServiceProviders = 'service-providers';
     case Seeders = 'seeders';
     case Translations = 'translations';
-    case Schedules = 'schedules';
     case Configs = 'configs';
     case Views = 'views';
     case BladeComponents = 'blade-components';
@@ -56,7 +54,6 @@ enum AssetType: string
             self::ServiceProviders => ServiceProvidersScout::instance(),
             self::Seeders => SeedersScout::instance(),
             self::Translations => TranslationsScout::instance(),
-            self::Schedules => SchedulesScout::instance(),
             self::Configs => ConfigsScout::instance(),
             self::Views => ViewsScout::instance(),
             self::BladeComponents => BladeComponentsScout::instance(),
@@ -73,7 +70,7 @@ enum AssetType: string
     }
 
     /**
-     * @return array{active?: bool, patterns?: array<array-key, string>, namespace?: string, priority?: bool, commands_filenames?: array<array-key, string>, channels_filenames?: array<array-key, string>}
+     * @return array{active?: bool, patterns?: array<array-key, string>, namespace?: string, priority?: bool, commands_filenames?: array<array-key, string>, channels_filenames?: array<array-key, string>, view_path?: string}
      */
     public function config(): array
     {

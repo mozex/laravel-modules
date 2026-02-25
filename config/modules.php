@@ -47,12 +47,6 @@ return [
             '*/Lang',
         ],
     ],
-    AssetType::Schedules->value => [
-        'active' => true,
-        'patterns' => [
-            '*/Console',
-        ],
-    ],
     AssetType::Configs->value => [
         'active' => true,
         'patterns' => [
@@ -101,6 +95,7 @@ return [
         'patterns' => [
             '*/Livewire',
         ],
+        'view_path' => 'Resources/views/livewire',
     ],
     AssetType::FilamentResources->value => [
         'active' => true,

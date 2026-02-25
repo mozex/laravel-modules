@@ -20,7 +20,6 @@ Feature-by-feature documentation for the `mozex/laravel-modules` package.
   - [Service Providers](./features/service-providers.md)
   - [Translations](./features/translations.md)
   - [Caching](./features/caching.md)
-  - [Schedules](./features/schedules.md)
   - [Livewire Components](./features/livewire-components.md)
   - [Filament](./features/filament.md) — Resources, Pages, Widgets, Clusters
   - [Nova Resources](./features/nova-resources.md)
@@ -34,6 +33,22 @@ Feature-by-feature documentation for the `mozex/laravel-modules` package.
 - Modules root: `Modules/` (configure via `modules_directory` in `config/modules.php`)
 - Module namespace: `Modules\\` (configure via `modules_namespace`)
 - Per-feature toggles and patterns live in `config/modules.php` under each feature section
+
+### PSR-4 autoload requirement
+
+Your project's `composer.json` must map the modules namespace so PHP can autoload module classes (models, service providers, Livewire components, Filament resources, etc.):
+
+```json
+{
+    "autoload": {
+        "psr-4": {
+            "Modules\\": "Modules/"
+        }
+    }
+}
+```
+
+Run `composer dump-autoload` after adding this entry. If you customise `modules_directory` or `modules_namespace`, adjust the mapping to match.
 
 ## Module activation & ordering
 

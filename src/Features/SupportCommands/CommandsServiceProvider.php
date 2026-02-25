@@ -4,6 +4,7 @@ namespace Mozex\Modules\Features\SupportCommands;
 
 use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\Features\Feature;
+use Override;
 
 class CommandsServiceProvider extends Feature
 {
@@ -12,6 +13,7 @@ class CommandsServiceProvider extends Feature
         return AssetType::Commands;
     }
 
+    #[Override]
     public function boot(): void
     {
         $this->commands(

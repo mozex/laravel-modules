@@ -3,6 +3,7 @@
 namespace Mozex\Modules\Tests;
 
 use Orchestra\Testbench\Foundation\Console\Kernel as ConsoleKernel;
+use Override;
 use Throwable;
 
 class Kernel extends ConsoleKernel
@@ -12,12 +13,13 @@ class Kernel extends ConsoleKernel
     /**
      * @throws Throwable
      */
-    #[\Override]
+    #[Override]
     protected function reportException(Throwable $e)
     {
         throw $e;
     }
 
+    #[Override]
     protected function shouldDiscoverCommands(): bool
     {
         return static::class === self::class;

@@ -4,6 +4,7 @@ namespace Mozex\Modules\Features\SupportServiceProviders;
 
 use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\Features\Feature;
+use Override;
 
 class RegisterServiceProviders extends Feature
 {
@@ -12,6 +13,7 @@ class RegisterServiceProviders extends Feature
         return AssetType::ServiceProviders;
     }
 
+    #[Override]
     public function register(): void
     {
         static::asset()->scout()->collect()

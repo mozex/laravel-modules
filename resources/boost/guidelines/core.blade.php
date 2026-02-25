@@ -2,7 +2,9 @@
 ## mozex/laravel-modules
 
 Auto-discovers module assets from `Modules/` (not `app/Modules`). Namespace: `Modules\{Module}\...`
+Requires PHP ^8.3, Laravel ^11.29|^12|^13. Optional: Livewire ^4, Filament ^5.
 Config: `config/modules.php`. Cache: `php artisan modules:cache` / `modules:clear` (avoid caching in local dev).
+PSR-4 setup: add `"Modules\\": "Modules/"` to project's `composer.json` autoload.
 
 ### Module config
 ```php
@@ -18,7 +20,6 @@ Each feature has `active` (bool) + `patterns` (globs) in config/modules.php.
 Modules/{Module}/
   Config/*.php                    → config('filename.key'); priority: true=module wins
   Console/Commands/               → Artisan commands (extends Command)
-  Console/Kernel.php              → schedule() for Laravel <10 (extends Mozex\Modules\Contracts\ConsoleKernel)
   Database/Factories/             → Model↔Factory auto-mapping by namespace (nested preserved)
   Database/Migrations/            → registered with migrator
   Database/Seeders/               → only {Module}DatabaseSeeder; via Modules::seeders()
@@ -26,7 +27,8 @@ Modules/{Module}/
   Helpers/*.php                   → require_once in register(); guard with function_exists
   Lang/                           → __('module::file.key') + JSON translations
   Listeners/                      → Laravel event auto-discovery
-  Livewire/                       → <livewire:module::name /> or nested.path
+  Livewire/                       → <livewire:module::name /> (class, SFC, MFC)
+  Resources/views/livewire/       → SFCs (.blade.php) and MFCs ({name}/{name}.php+.blade.php)
   Models/                         → factory/policy guessing by namespace (set $model in factories for IDE)
   Nova/                           → Nova\Resource subclasses (excl. ActionResource)
   Policies/                       → Models\X → Policies\XPolicy (nested: Models\A\B → Policies\A\BPolicy)
@@ -56,7 +58,7 @@ Modules::setBasePath('/path')                   // test override
 ### Routes detail
 Defaults: 'api' (prefix:'api', mw:['api']), 'web' (mw:['web']). Filename=group key.
 Unmatched filenames → no middleware/prefix. Attributes accept closures.
-`channels.php` → broadcast channels. `console.php` → console kernel (Laravel 10+).
+`channels.php` → broadcast channels. `console.php` → console commands + scheduling via Schedule facade.
 Custom: call `Modules::routeGroup()` / `Modules::registerRoutesUsing()` in provider register().
 
 ### Config keys
@@ -70,6 +72,7 @@ Custom: call `Modules::routeGroup()` / `Modules::registerRoutesUsing()` in provi
 | models.namespace | Models\\ | model sub-namespace |
 | factories.namespace | Database\\Factories\\ | factory sub-namespace |
 | policies.namespace | Policies\\ | policy sub-namespace |
+| livewire-components.view_path | Resources/views/livewire | SFC/MFC view directory (relative to module root) |
 | modules.{Name}.active | true | enable/disable specific module |
 | modules.{Name}.order | 0 | load order (lower=earlier) |
 
@@ -94,7 +97,6 @@ PHPStan: `phpstan.php` with `...glob(__DIR__.'/Modules/*', GLOB_ONLYDIR)` in pat
 | Nova | `vendor/mozex/laravel-modules/docs/features/nova-resources.md` |
 | Policies | `vendor/mozex/laravel-modules/docs/features/policies.md` |
 | Routes | `vendor/mozex/laravel-modules/docs/features/routes.md` |
-| Schedules | `vendor/mozex/laravel-modules/docs/features/schedules.md` |
 | Seeders | `vendor/mozex/laravel-modules/docs/features/seeders.md` |
 | Service Providers | `vendor/mozex/laravel-modules/docs/features/service-providers.md` |
 | Translations | `vendor/mozex/laravel-modules/docs/features/translations.md` |

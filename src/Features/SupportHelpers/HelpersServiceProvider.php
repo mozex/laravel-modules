@@ -4,6 +4,7 @@ namespace Mozex\Modules\Features\SupportHelpers;
 
 use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\Features\Feature;
+use Override;
 
 class HelpersServiceProvider extends Feature
 {
@@ -12,6 +13,7 @@ class HelpersServiceProvider extends Feature
         return AssetType::Helpers;
     }
 
+    #[Override]
     public function register(): void
     {
         static::asset()->scout()->collect()

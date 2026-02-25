@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use Mozex\Modules\Contracts\ModuleClassScout;
 use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\ExtendsDiscoverCondition;
+use Override;
 use Spatie\StructureDiscoverer\Discover;
 
 class CommandsScout extends ModuleClassScout
@@ -15,6 +16,7 @@ class CommandsScout extends ModuleClassScout
         return AssetType::Commands;
     }
 
+    #[Override]
     protected function definition(): Discover
     {
         return parent::definition()

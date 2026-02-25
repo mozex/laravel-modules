@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Gate;
 use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\Facades\Modules;
 use Mozex\Modules\Features\Feature;
+use Override;
 use ReflectionMethod;
 use ReflectionProperty;
 
@@ -17,6 +18,7 @@ class PoliciesServiceProvider extends Feature
         return AssetType::Policies;
     }
 
+    #[Override]
     public function boot(): void
     {
         Gate::guessPolicyNamesUsing(function (string $modelName) {

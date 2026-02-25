@@ -2,6 +2,8 @@
 
 namespace Modules\Second\Console\Commands;
 
+use Override;
+
 use function Laravel\Prompts\info;
 
 class ChainedCommand extends BaseCommand
@@ -10,6 +12,7 @@ class ChainedCommand extends BaseCommand
 
     protected $description = 'Chained Command';
 
+    #[Override]
     public function handle(): void
     {
         info('Chained Command');

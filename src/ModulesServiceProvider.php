@@ -36,7 +36,6 @@ class ModulesServiceProvider extends PackageServiceProvider
             Features\SupportFactories\FactoriesServiceProvider::class,
             Features\SupportPolicies\PoliciesServiceProvider::class,
             Features\SupportRoutes\RoutesServiceProvider::class,
-            Features\SupportSchedules\SchedulesServiceProvider::class,
             Features\SupportListeners\ListenersServiceProvider::class,
             Features\SupportEvents\EventsServiceProvider::class,
             Features\SupportLivewire\LivewireServiceProvider::class,

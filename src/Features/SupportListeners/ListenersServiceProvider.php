@@ -6,6 +6,7 @@ use Illuminate\Foundation\Events\DiscoverEvents;
 use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\Facades\Modules;
 use Mozex\Modules\Features\Feature;
+use Override;
 use ReflectionMethod;
 use ReflectionProperty;
 use SplFileInfo;
@@ -17,6 +18,7 @@ class ListenersServiceProvider extends Feature
         return AssetType::Listeners;
     }
 
+    #[Override]
     public function boot(): void
     {
         DiscoverEvents::guessClassNamesUsing(function (SplFileInfo $file, string $basePath) {

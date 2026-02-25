@@ -3,6 +3,7 @@
 namespace Modules\First\Console\Commands;
 
 use App\Console\Commands\AppCommand;
+use Override;
 
 use function Laravel\Prompts\info;
 
@@ -12,6 +13,7 @@ class ExtendedCommand extends AppCommand
 
     protected $description = 'Extended Command';
 
+    #[Override]
     public function handle(): void
     {
         info('Extended Command');
