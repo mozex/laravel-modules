@@ -2,6 +2,12 @@
 
 All notable changes to `laravel-modules` will be documented in this file.
 
+## 3.0.1 - 2026-02-26
+
+* Update composer.json
+
+**Full Changelog**: https://github.com/mozex/laravel-modules/compare/3.0.0...3.0.1
+
 ## 2.8.1 - 2026-02-26
 
 * Update composer.json
@@ -29,6 +35,7 @@ Place SFCs and MFCs in your module's `Resources/views/livewire/` directory and t
 ```blade
 <livewire:blog::counter />  {{-- SFC --}}
 <livewire:blog::toggle />   {{-- MFC --}}
+
 
 
 ```
@@ -61,6 +68,7 @@ Add `view_path` to the `livewire-components` section if you've published the con
     ],
     'view_path' => 'Resources/views/livewire', // New in v3
 ],
+
 
 
 ```
