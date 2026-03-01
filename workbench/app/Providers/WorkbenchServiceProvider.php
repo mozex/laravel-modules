@@ -15,6 +15,11 @@ class WorkbenchServiceProvider extends ServiceProvider
     {
         Modules::setBasePath(dirname(__DIR__, 2));
 
+        $this->app['config']->set(
+            'livewire.component_namespaces.layouts',
+            dirname(__DIR__, 2).'/resources/views/layouts'
+        );
+
         Modules::routeGroup(
             name: 'custom',
             prefix: 'custom',
