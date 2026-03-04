@@ -2,6 +2,12 @@
 
 All notable changes to `laravel-modules` will be documented in this file.
 
+## 2.8.2 - 2026-03-01
+
+* add conflict to composer.json
+
+**Full Changelog**: https://github.com/mozex/laravel-modules/compare/2.8.1...2.8.2
+
 ## 3.0.1 - 2026-02-26
 
 * Update composer.json
@@ -38,6 +44,7 @@ Place SFCs and MFCs in your module's `Resources/views/livewire/` directory and t
 
 
 
+
 ```
 ##### Namespace-Based Registration
 
@@ -68,6 +75,7 @@ Add `view_path` to the `livewire-components` section if you've published the con
     ],
     'view_path' => 'Resources/views/livewire', // New in v3
 ],
+
 
 
 
