@@ -2,6 +2,7 @@
 
 namespace Mozex\Modules\Features\SupportLivewire;
 
+use Livewire\Finder\Finder;
 use Livewire\Livewire;
 use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\Features\Feature;
@@ -22,16 +23,24 @@ class LivewireServiceProvider extends Feature
     }
 
     #[Override]
+    public function register(): void
+    {
+        // Workaround: https://github.com/livewire/livewire/pull/10076
+        // Livewire's generateNameFromClass() doesn't prepend namespace prefix for
+        // components registered via addNamespace(), breaking Route::livewire() with
+        // class references. This override fixes the method until the upstream PR is merged.
+        $this->app->extend('livewire.finder', function (Finder $finder): NamespacedFinder {
+            return new NamespacedFinder($finder);
+        });
+    }
+
+    #[Override]
     public function boot(): void
     {
         $config = static::asset()->config();
-        $namespaces = [];
 
         static::asset()->scout()->collect()
-            ->each(function (array $asset) use ($config, &$namespaces): void {
-                $namespace = $this->getName($asset['module']);
-                $namespaces[] = $namespace;
-
+            ->each(function (array $asset) use ($config): void {
                 $viewDirectory = sprintf(
                     '%s/%s',
                     dirname($asset['path']),
@@ -39,33 +48,12 @@ class LivewireServiceProvider extends Feature
                 );
 
                 Livewire::addNamespace(
-                    namespace: $namespace,
+                    namespace: $this->getName($asset['module']),
                     viewPath: $viewDirectory,
                     classNamespace: $asset['namespace'],
                     classPath: $asset['path'],
                     classViewPath: $viewDirectory,
                 );
             });
-
-        // Workaround: https://github.com/livewire/livewire/pull/10076
-        if ($namespaces) {
-            Livewire::resolveMissingComponent(function (string $name) use ($namespaces): ?string {
-                if (str_contains($name, '::')) {
-                    return null;
-                }
-
-                $finder = app('livewire.finder');
-
-                foreach ($namespaces as $namespace) {
-                    $class = $finder->resolveClassComponentClassName($namespace.'::'.$name);
-
-                    if ($class !== null) {
-                        return $class;
-                    }
-                }
-
-                return null;
-            });
-        }
     }
 }
