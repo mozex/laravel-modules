@@ -2,6 +2,12 @@
 
 All notable changes to `laravel-modules` will be documented in this file.
 
+## 3.0.3 - 2026-03-08
+
+* Fix Route::livewire() failing with class references for components registered via addNamespace()
+
+**Full Changelog**: https://github.com/mozex/laravel-modules/compare/3.0.2...3.0.3
+
 ## 3.0.2 - 2026-03-08
 
 * Fixed Route::livewire() not resolving module components when referenced by class (e.g., Teams::class) — workaround for
@@ -53,6 +59,7 @@ Place SFCs and MFCs in your module's `Resources/views/livewire/` directory and t
 
 
 
+
 ```
 ##### Namespace-Based Registration
 
@@ -83,6 +90,7 @@ Add `view_path` to the `livewire-components` section if you've published the con
     ],
     'view_path' => 'Resources/views/livewire', // New in v3
 ],
+
 
 
 
