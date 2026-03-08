@@ -211,7 +211,7 @@ it('can resolve components via Route::livewire() with class reference', function
 })->with([
     'without cache' => false,
     'with cache' => true,
-])->skip('Livewire::addNamespace() does not currently support class-based registration with Route::livewire() — awaiting upstream support.');
+]);
 
 it('can resolve components via Route::livewire() with name string', function (bool $cache): void {
     $discoverer = LivewireComponentsScout::create();
