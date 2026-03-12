@@ -2,9 +2,17 @@
     "name": "mozex/laravel-modules",
     "description": "Module Management For Laravel",
     "keywords": [
-        "mozex",
         "laravel",
-        "laravel-modules"
+        "modules",
+        "module",
+        "modular",
+        "modular-architecture",
+        "package",
+        "hmvc",
+        "domain-driven-design",
+        "ddd",
+        "separation-of-concerns",
+        "eloquent"
     ],
     "homepage": "https://github.com/mozex/laravel-modules",
     "license": "MIT",
