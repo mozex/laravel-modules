@@ -18,7 +18,7 @@ jobs:
         id: branch
         run: |
           TAG="${{ github.event.release.tag_name }}"
-          if [[ "$TAG" == v2.* ]]; then
+          if [[ "$TAG" == 2.* ]]; then
             echo "name=2.x" >> $GITHUB_OUTPUT
           else
             echo "name=main" >> $GITHUB_OUTPUT
