@@ -29,6 +29,8 @@ jobs:
         exclude:
           - laravel: "10.*"
             filament: "^4.3.1"
+          - laravel: "13.*"
+            php: "8.2"
 
     name: Tests P${{ matrix.php }} - L${{ matrix.laravel }} - F${{ matrix.filament }} - ${{ matrix.os }} - ${{ matrix.dependency-version }}
     steps:
