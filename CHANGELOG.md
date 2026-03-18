@@ -2,6 +2,12 @@
 
 All notable changes to `laravel-modules` will be documented in this file.
 
+## 2.9.0 - 2026-03-18
+
+* add laravel 13 support
+
+**Full Changelog**: https://github.com/mozex/laravel-modules/compare/2.8.2...2.9.0
+
 ## 3.0.3 - 2026-03-08
 
 * Fix Route::livewire() failing with class references for components registered via addNamespace()
@@ -61,6 +67,7 @@ Place SFCs and MFCs in your module's `Resources/views/livewire/` directory and t
 
 
 
+
 ```
 ##### Namespace-Based Registration
 
@@ -91,6 +98,7 @@ Add `view_path` to the `livewire-components` section if you've published the con
     ],
     'view_path' => 'Resources/views/livewire', // New in v3
 ],
+
 
 
 
