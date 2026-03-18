@@ -2,15 +2,6 @@
 
 All notable changes to `laravel-modules` will be documented in this file.
 
-## 2.9.0 - 2026-03-18
-
-### What's Changed
-
-* Bump ramsey/composer-install from 3 to 4 by @dependabot[bot] in https://github.com/mozex/laravel-modules/pull/21
-* add laravel 13 support
-
-**Full Changelog**: https://github.com/mozex/laravel-modules/compare/3.0.3...2.9.0
-
 ## 3.0.3 - 2026-03-08
 
 * Fix Route::livewire() failing with class references for components registered via addNamespace()
