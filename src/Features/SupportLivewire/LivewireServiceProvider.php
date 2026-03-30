@@ -2,7 +2,6 @@
 
 namespace Mozex\Modules\Features\SupportLivewire;
 
-use Livewire\Finder\Finder;
 use Livewire\Livewire;
 use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\Features\Feature;
@@ -20,18 +19,6 @@ class LivewireServiceProvider extends Feature
     {
         return parent::shouldRegisterFeature()
             && class_exists(Livewire::class);
-    }
-
-    #[Override]
-    public function register(): void
-    {
-        // Workaround: https://github.com/livewire/livewire/pull/10076
-        // Livewire's generateNameFromClass() doesn't prepend namespace prefix for
-        // components registered via addNamespace(), breaking Route::livewire() with
-        // class references. This override fixes the method until the upstream PR is merged.
-        $this->app->extend('livewire.finder', function (Finder $finder): NamespacedFinder {
-            return new NamespacedFinder($finder);
-        });
     }
 
     #[Override]
