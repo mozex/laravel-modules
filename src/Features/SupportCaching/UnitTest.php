@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Artisan;
 use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\Features\SupportCaching\CacheCommand;
 use Mozex\Modules\Features\SupportCaching\ClearCommand;
+use Mozex\Modules\Features\SupportCaching\ListCommand;
 use Pest\Expectation;
 
 it('can cache', function () {
@@ -34,4 +35,53 @@ it('can clear', function () {
 
     expect($scouts)
         ->each(fn (Expectation $scout) => $scout->isCached()->toBeFalse());
+});
+
+it('can list modules', function (): void {
+    Artisan::call(ListCommand::class);
+    $output = Artisan::output();
+
+    expect($output)
+        ->toContain('First')
+        ->toContain('Second')
+        ->toContain('PWA')
+        ->toContain('Enabled');
+});
+
+it('shows modules in correct order', function (): void {
+    Artisan::call(ListCommand::class);
+    $output = Artisan::output();
+
+    $secondPosition = strpos($output, 'Second');
+    $firstPosition = strpos($output, 'First');
+
+    expect($secondPosition)->toBeLessThan($firstPosition);
+});
+
+it('shows disabled modules', function (): void {
+    config()->set('modules.modules.First.active', false);
+
+    Artisan::call(ListCommand::class);
+    $output = Artisan::output();
+
+    expect($output)->toContain('Disabled');
+});
+
+it('shows warning when no modules found', function (): void {
+    config()->set('modules.modules_directory', 'NonExistent');
+
+    Artisan::call(ListCommand::class);
+    $output = Artisan::output();
+
+    expect($output)->toContain('No modules found');
+});
+
+it('shows asset counts per module', function (): void {
+    Artisan::call(ListCommand::class);
+    $output = Artisan::output();
+
+    expect($output)
+        ->toContain('Commands')
+        ->toContain('Views')
+        ->toContain('Routes');
 });

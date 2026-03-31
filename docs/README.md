@@ -20,6 +20,7 @@ Feature-by-feature documentation for the `mozex/laravel-modules` package.
   - [Service Providers](./features/service-providers.md)
   - [Translations](./features/translations.md)
   - [Caching](./features/caching.md)
+  - [Listing Modules](./features/listing.md) — module status dashboard
   - [Livewire Components](./features/livewire-components.md)
   - [Filament](./features/filament.md) — Resources, Pages, Widgets, Clusters
   - [Nova Resources](./features/nova-resources.md)

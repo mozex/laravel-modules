@@ -3,7 +3,7 @@
 
 Auto-discovers module assets from `Modules/` (not `app/Modules`). Namespace: `Modules\{Module}\...`
 Requires PHP ^8.3, Laravel ^11.29|^12|^13. Optional: Livewire ^4, Filament ^5.
-Config: `config/modules.php`. Cache: `php artisan modules:cache` / `modules:clear` (avoid caching in local dev).
+Config: `config/modules.php`. Cache: `php artisan modules:cache` / `modules:clear` (avoid caching in local dev). List: `php artisan modules:list` (shows status, order, discovered asset counts per module).
 PSR-4 setup: add `"Modules\\": "Modules/"` to project's `composer.json` autoload.
 
 ### Module config
