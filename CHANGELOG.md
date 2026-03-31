@@ -2,6 +2,12 @@
 
 All notable changes to `laravel-modules` will be documented in this file.
 
+## 2.10.0 - 2026-03-31
+
+* add modules:list command
+
+**Full Changelog**: https://github.com/mozex/laravel-modules/compare/2.9.0...2.10.0
+
 ## 3.0.4 - 2026-03-30
 
 ### What's Changed
@@ -79,6 +85,7 @@ Place SFCs and MFCs in your module's `Resources/views/livewire/` directory and t
 
 
 
+
 ```
 ##### Namespace-Based Registration
 
@@ -109,6 +116,7 @@ Add `view_path` to the `livewire-components` section if you've published the con
     ],
     'view_path' => 'Resources/views/livewire', // New in v3
 ],
+
 
 
 
