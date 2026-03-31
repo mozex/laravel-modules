@@ -4,6 +4,7 @@ namespace Mozex\Modules;
 
 use Mozex\Modules\Features\SupportCaching\CacheCommand;
 use Mozex\Modules\Features\SupportCaching\ClearCommand;
+use Mozex\Modules\Features\SupportCaching\ListCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -15,7 +16,8 @@ class ModulesServiceProvider extends PackageServiceProvider
             ->name('laravel-modules')
             ->hasConfigFile()
             ->hasCommand(CacheCommand::class)
-            ->hasCommand(ClearCommand::class);
+            ->hasCommand(ClearCommand::class)
+            ->hasCommand(ListCommand::class);
     }
 
     /**

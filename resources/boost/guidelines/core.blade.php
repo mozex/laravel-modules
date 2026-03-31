@@ -2,7 +2,7 @@
 ## mozex/laravel-modules
 
 Auto-discovers module assets from `Modules/` (not `app/Modules`). Namespace: `Modules\{Module}\...`
-Config: `config/modules.php`. Cache: `php artisan modules:cache` / `modules:clear` (avoid caching in local dev).
+Config: `config/modules.php`. Cache: `php artisan modules:cache` / `modules:clear` (avoid caching in local dev). List: `php artisan modules:list` (shows status, order, discovered asset counts per module).
 
 ### Module config
 ```php
