@@ -82,17 +82,6 @@ Place SFCs and MFCs in your module's `Resources/views/livewire/` directory and t
 ```blade
 <livewire:blog::counter />  {{-- SFC --}}
 <livewire:blog::toggle />   {{-- MFC --}}
-
-
-
-
-
-
-
-
-
-
-
 ```
 ##### Namespace-Based Registration
 
@@ -123,17 +112,6 @@ Add `view_path` to the `livewire-components` section if you've published the con
     ],
     'view_path' => 'Resources/views/livewire', // New in v3
 ],
-
-
-
-
-
-
-
-
-
-
-
 ```
 #### Upgrading
 
