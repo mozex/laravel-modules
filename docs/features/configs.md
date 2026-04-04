@@ -1,4 +1,7 @@
-# Configs
+---
+title: Configs
+weight: 4
+---
 
 ## Overview
 

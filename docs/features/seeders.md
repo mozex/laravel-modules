@@ -1,4 +1,7 @@
-# Seeders
+---
+title: Seeders
+weight: 6
+---
 
 ## Overview
 

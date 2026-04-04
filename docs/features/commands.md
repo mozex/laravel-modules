@@ -1,4 +1,7 @@
-# Commands
+---
+title: Commands
+weight: 7
+---
 
 ## Overview
 

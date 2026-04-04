@@ -1,4 +1,7 @@
-# Nova Resources
+---
+title: Nova Resources
+weight: 19
+---
 
 ## Overview
 

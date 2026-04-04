@@ -1,4 +1,7 @@
-# Pest Integration
+---
+title: Pest
+weight: 3
+---
 
 ## Overview
 

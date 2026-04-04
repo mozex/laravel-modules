@@ -1,4 +1,7 @@
-# Caching
+---
+title: Caching
+weight: 14
+---
 
 ## Overview
 

@@ -1,4 +1,7 @@
-# PHPUnit Integration
+---
+title: PHPUnit
+weight: 2
+---
 
 ## Overview
 

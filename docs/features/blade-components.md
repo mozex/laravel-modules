@@ -1,4 +1,7 @@
-# Blade Components
+---
+title: Blade Components
+weight: 1
+---
 
 ## Overview
 

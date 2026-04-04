@@ -1,4 +1,7 @@
-# Helpers
+---
+title: Helpers
+weight: 8
+---
 
 ## Overview
 

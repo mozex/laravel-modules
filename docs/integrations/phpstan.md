@@ -1,4 +1,7 @@
-# PHPStan Integration
+---
+title: PHPStan
+weight: 1
+---
 
 ## Overview
 

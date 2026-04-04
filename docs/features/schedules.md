@@ -1,4 +1,7 @@
-# Schedules
+---
+title: Schedules
+weight: 16
+---
 
 ## Overview
 

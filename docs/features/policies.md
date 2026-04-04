@@ -1,4 +1,7 @@
-# Policies
+---
+title: Policies
+weight: 10
+---
 
 ## Overview
 

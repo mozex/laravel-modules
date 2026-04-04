@@ -1,4 +1,7 @@
-# Translations
+---
+title: Translations
+weight: 13
+---
 
 ## Overview
 

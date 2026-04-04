@@ -1,4 +1,7 @@
-# Migrations
+---
+title: Migrations
+weight: 5
+---
 
 ## Overview
 
