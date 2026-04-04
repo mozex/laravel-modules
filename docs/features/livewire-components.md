@@ -1,4 +1,7 @@
-# Livewire Components
+---
+title: Livewire Components
+weight: 17
+---
 
 ## Overview
 

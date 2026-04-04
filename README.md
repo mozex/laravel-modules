@@ -41,12 +41,6 @@ Business sponsors get logo placement in package READMEs. [**See sponsorship tier
 
 Detailed documentation, including examples and best practices, lives in the `docs` directory.
 
-### Index
-
-- Start here: [docs/README.md](./docs/README.md)
-
-### Feature guides
-
 - [Blade Components: class-based components](./docs/features/blade-components.md)
 - [Views: namespacing and anonymous components](./docs/features/views.md)
 - [Routes: groups, broadcasting, console routes](./docs/features/routes.md)
@@ -198,7 +192,7 @@ Modules::routeGroup('admin', ...);            // Define custom route group
 Modules::registerRoutesUsing('name', fn);     // Custom route registration
 ```
 
-See [docs/README.md](./docs/README.md) for the complete API reference.
+See the [full documentation](./docs/introduction.md) for detailed guides and API reference.
 
 ## Features
 

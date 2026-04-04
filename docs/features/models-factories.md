@@ -1,4 +1,7 @@
-# Models & Factories
+---
+title: "Models & Factories"
+weight: 9
+---
 
 ## Overview
 

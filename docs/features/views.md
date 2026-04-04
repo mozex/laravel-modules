@@ -1,4 +1,7 @@
-# Views
+---
+title: Views
+weight: 2
+---
 
 ## Overview
 

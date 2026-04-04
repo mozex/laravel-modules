@@ -1,4 +1,7 @@
-# Events & Listeners
+---
+title: "Events & Listeners"
+weight: 11
+---
 
 ## Overview
 
