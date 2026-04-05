@@ -14,20 +14,10 @@ jobs:
     timeout-minutes: 5
 
     steps:
-      - name: Determine target branch
-        id: branch
-        run: |
-          TAG="${{ github.event.release.tag_name }}"
-          if [[ "$TAG" == 2.* ]]; then
-            echo "name=2.x" >> $GITHUB_OUTPUT
-          else
-            echo "name=main" >> $GITHUB_OUTPUT
-          fi
-
       - name: Checkout code
         uses: actions/checkout@v6
         with:
-          ref: ${{ steps.branch.outputs.name }}
+          ref: ${{ github.event.release.target_commitish }}
 
       - name: Update Changelog
         uses: stefanzweifel/changelog-updater-action@v1
@@ -38,6 +28,6 @@ jobs:
       - name: Commit updated CHANGELOG
         uses: stefanzweifel/git-auto-commit-action@v7
         with:
-          branch: ${{ steps.branch.outputs.name }}
+          branch: ${{ github.event.release.target_commitish }}
           commit_message: Update CHANGELOG
           file_pattern: CHANGELOG.md
