@@ -8,12 +8,6 @@ All notable changes to `laravel-modules` will be documented in this file.
 
 **Full Changelog**: https://github.com/mozex/laravel-modules/compare/3.0.4...3.1.0
 
-## 2.10.0 - 2026-03-31
-
-* add modules:list command
-
-**Full Changelog**: https://github.com/mozex/laravel-modules/compare/2.9.0...2.10.0
-
 ## 3.0.4 - 2026-03-30
 
 ### What's Changed
@@ -23,12 +17,6 @@ All notable changes to `laravel-modules` will be documented in this file.
 * remove livewire workaround
 
 **Full Changelog**: https://github.com/mozex/laravel-modules/compare/3.0.3...3.0.4
-
-## 2.9.0 - 2026-03-18
-
-* add laravel 13 support
-
-**Full Changelog**: https://github.com/mozex/laravel-modules/compare/2.8.2...2.9.0
 
 ## 3.0.3 - 2026-03-08
 
@@ -43,23 +31,11 @@ All notable changes to `laravel-modules` will be documented in this file.
 
 **Full Changelog**: https://github.com/mozex/laravel-modules/compare/3.0.1...3.0.2
 
-## 2.8.2 - 2026-03-01
-
-* add conflict to composer.json
-
-**Full Changelog**: https://github.com/mozex/laravel-modules/compare/2.8.1...2.8.2
-
 ## 3.0.1 - 2026-02-26
 
 * Update composer.json
 
 **Full Changelog**: https://github.com/mozex/laravel-modules/compare/3.0.0...3.0.1
-
-## 2.8.1 - 2026-02-26
-
-* Update composer.json
-
-**Full Changelog**: https://github.com/mozex/laravel-modules/compare/2.8.0...2.8.1
 
 ## 3.0.0 - 2026-02-25
 
