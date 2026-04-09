@@ -2,79 +2,72 @@
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/mozex/laravel-modules.svg?style=flat-square)](https://packagist.org/packages/mozex/laravel-modules)
 [![GitHub Tests Workflow Status](https://img.shields.io/github/actions/workflow/status/mozex/laravel-modules/tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/mozex/laravel-modules/actions/workflows/tests.yml)
+[![Docs](https://img.shields.io/badge/docs-mozex.dev-10B981?style=flat-square)](https://mozex.dev/docs/laravel-modules/v3)
 [![License](https://img.shields.io/github/license/mozex/laravel-modules.svg?style=flat-square)](https://packagist.org/packages/mozex/laravel-modules)
 [![Total Downloads](https://img.shields.io/packagist/dt/mozex/laravel-modules.svg?style=flat-square)](https://packagist.org/packages/mozex/laravel-modules)
 
-Laravel Modules brings a clean, zero‑config modular structure to your Laravel app. Place your modules under the project root `Modules/` directory and this package will auto‑discover and wire their assets: configs, service providers, helpers, artisan commands, migrations, translations, views, Blade components, routes (web/api/console/broadcasting), schedules, listeners/events, Livewire, Filament, Nova, and more.
+A zero-config modular architecture package for Laravel. Create a `Modules/` directory, drop in your module folders, and the package auto-discovers and registers everything: configs, routes, views, Blade components, migrations, seeders, commands, service providers, helpers, translations, models, factories, policies, events, listeners, Livewire components, Filament resources, and Nova resources.
 
-> Sensible conventions: namespaces, view/component aliases, and route groups are derived automatically.
-> 
-> Fine‑grained control: enable/disable modules, control load order, and override discovery patterns from `config/modules.php`.
-> 
-> Fast by default: built‑in caching makes discovery quick in all environments.
+> **[Read the full documentation at mozex.dev](https://mozex.dev/docs/laravel-modules/v3)**: searchable docs, version requirements, detailed changelog, and more.
 
+## Table of Contents
 
-- [Support This Project](#support-this-project)
-- [Documentation](#documentation)
-- [Requirements](#requirements)
-- [Installation](#installation)
-- [Quick start](#quick-start)
-- [Configuration overview](#configuration-overview)
-- [Features](#features)
-- [Caching](#caching)
-- [Testing](#testing)
-- [Changelog](#changelog)
-- [Contributing](#contributing)
-- [Security Vulnerabilities](#security-vulnerabilities)
-- [Credits](#credits)
-- [License](#license)
+- [Introduction](https://mozex.dev/docs/laravel-modules/v3)
+- Features
+  - [Blade Components](https://mozex.dev/docs/laravel-modules/v3/features/blade-components)
+  - [Views](https://mozex.dev/docs/laravel-modules/v3/features/views)
+  - [Routes](https://mozex.dev/docs/laravel-modules/v3/features/routes)
+  - [Configs](https://mozex.dev/docs/laravel-modules/v3/features/configs)
+  - [Migrations](https://mozex.dev/docs/laravel-modules/v3/features/migrations)
+  - [Seeders](https://mozex.dev/docs/laravel-modules/v3/features/seeders)
+  - [Commands](https://mozex.dev/docs/laravel-modules/v3/features/commands)
+  - [Helpers](https://mozex.dev/docs/laravel-modules/v3/features/helpers)
+  - [Models & Factories](https://mozex.dev/docs/laravel-modules/v3/features/models-factories)
+  - [Policies](https://mozex.dev/docs/laravel-modules/v3/features/policies)
+  - [Events & Listeners](https://mozex.dev/docs/laravel-modules/v3/features/events-listeners)
+  - [Service Providers](https://mozex.dev/docs/laravel-modules/v3/features/service-providers)
+  - [Translations](https://mozex.dev/docs/laravel-modules/v3/features/translations)
+  - [Caching](https://mozex.dev/docs/laravel-modules/v3/features/caching)
+  - [Listing Modules](https://mozex.dev/docs/laravel-modules/v3/features/listing)
+  - [Livewire Components](https://mozex.dev/docs/laravel-modules/v3/features/livewire-components)
+  - [Filament](https://mozex.dev/docs/laravel-modules/v3/features/filament)
+  - [Nova Resources](https://mozex.dev/docs/laravel-modules/v3/features/nova-resources)
+- Integrations
+  - [PHPStan](https://mozex.dev/docs/laravel-modules/v3/integrations/phpstan)
+  - [PHPUnit](https://mozex.dev/docs/laravel-modules/v3/integrations/phpunit)
+  - [Pest](https://mozex.dev/docs/laravel-modules/v3/integrations/pest)
 
 ## Support This Project
 
-I maintain this package along with [several other open-source PHP packages](https://github.com/mozex?tab=repositories&q=&type=source) used by thousands of developers every day.
+I maintain this package along with [several other open-source PHP packages](https://mozex.dev/docs) used by thousands of developers every day.
 
 If my packages save you time or help your business, consider [**sponsoring my work on GitHub Sponsors**](https://github.com/sponsors/mozex). Your support lets me keep these packages updated, respond to issues quickly, and ship new features.
 
 Business sponsors get logo placement in package READMEs. [**See sponsorship tiers →**](https://github.com/sponsors/mozex)
 
-## Documentation
+## What You Get
 
-Detailed documentation, including examples and best practices, lives in the `docs` directory.
+**Convention over configuration.** Module directory names become view namespaces, Blade component prefixes, and translation keys. `Modules/Blog/` gives you `view('blog::home')`, `<x-blog::card />`, and `__('blog::messages.welcome')` with no setup.
 
-- [Blade Components: class-based components](./docs/features/blade-components.md)
-- [Views: namespacing and anonymous components](./docs/features/views.md)
-- [Routes: groups, broadcasting, console routes](./docs/features/routes.md)
-- [Configs: merge strategy and priority](./docs/features/configs.md)
-- [Migrations](./docs/features/migrations.md)
-- [Seeders](./docs/features/seeders.md)
-- [Commands](./docs/features/commands.md)
-- [Helpers](./docs/features/helpers.md)
-- [Models & Factories](./docs/features/models-factories.md)
-- [Policies](./docs/features/policies.md)
-- [Events & Listeners](./docs/features/events-listeners.md)
-- [Schedules](./docs/features/schedules.md)
-- [Livewire Components](./docs/features/livewire-components.md)
-- [Filament Resources/Pages/Widgets/Clusters](./docs/features/filament.md)
-- [Nova Resources](./docs/features/nova-resources.md)
+**Everything auto-discovered.** Routes load with the right middleware groups based on filename (`web.php` gets `web` middleware, `api.php` gets `api` prefix and middleware). Service providers register themselves. Commands appear in Artisan. Migrations run with `php artisan migrate`. Factories and policies resolve from models automatically.
 
-## Requirements
+**Full Livewire v4 support.** Class-based components, single-file components (SFC), and multi-file components (MFC) all work with namespaced aliases like `<livewire:blog::editor />`.
 
-- PHP: ^8.3
-- Laravel: ^11.29 | ^12.0 | ^13.0
-- Livewire: ^4.0 (optional)
-- Filament: ^5.0 (optional)
+**Filament v5 integration.** Resources, pages, widgets, and clusters register with panels based on directory structure. Put a resource in `Filament/Admin/Resources/` and it shows up in the `admin` panel.
 
-> **Need older versions?** If your application uses PHP 8.2, Laravel 10, Livewire v3, or Filament v3/v4, use the [2.x branch](https://github.com/mozex/laravel-modules/tree/2.x) instead.
+**Fine-grained control when you need it.** Enable or disable individual modules, set load order, toggle specific features, and override discovery patterns. All from `config/modules.php`.
+
+**Production-ready caching.** One command (`php artisan modules:cache`) caches all discovery results. No scanning on every request.
 
 ## Installation
 
-Install via Composer:
+> **Requires [PHP 8.3+](https://php.net/releases/)** - see [all version requirements](https://mozex.dev/docs/laravel-modules/v3/requirements)
 
 ```bash
 composer require mozex/laravel-modules
 ```
 
-Register the `Modules` namespace in your project's `composer.json` so PHP can autoload module classes:
+Register the `Modules` namespace in your project's `composer.json`:
 
 ```json
 {
@@ -87,170 +80,54 @@ Register the `Modules` namespace in your project's `composer.json` so PHP can au
 }
 ```
 
-Then regenerate the autoloader:
+Regenerate the autoloader:
 
 ```bash
 composer dump-autoload
 ```
 
-> If you use a custom `modules_directory` or `modules_namespace` in the config, adjust the path and namespace above accordingly.
-
-Publish the config file (optional, only if you want to tweak defaults):
+Optionally publish the config to change defaults:
 
 ```bash
 php artisan vendor:publish --tag=laravel-modules-config
 ```
 
-This will publish `config/modules.php`.
+## Quick Start
 
-## Quick start
-
-By default, modules live under the project root `Modules/` directory. Each module contains a conventional structure, for example:
+Create a module with a route and a view:
 
 ```
-project-root/
-├── app/
-├── bootstrap/
-├── config/
-├── database/
-├── Modules/
-│   ├── Blog/
-│   │   ├── Config/
-│   │   ├── Console/
-│   │   ├── Database/
-│   │   │   ├── Factories/
-│   │   │   ├── Migrations/
-│   │   │   └── Seeders/
-│   │   ├── Filament/
-│   │   ├── Lang/
-│   │   ├── Listeners/
-│   │   ├── Models/
-│   │   ├── Policies/
-│   │   ├── Providers/
-│   │   ├── Resources/
-│   │   │   └── views/
-│   │   ├── Routes/
-│   │   └── View/
-│   │       └── Components/
-│   └── Shop/
-│       └── ...
-└── vendor/
+Modules/
+└── Blog/
+    ├── Routes/
+    │   └── web.php
+    └── Resources/
+        └── views/
+            └── index.blade.php
 ```
 
-Out of the box, the package will automatically discover and register the following assets inside your modules: configs, service providers, helpers, artisan commands, migrations, translations, views, Blade components, models, factories, policies, routes, schedules, listeners/events, Livewire, Filament, and Nova resources.
-
-Use your assets via namespaced conventions:
-
-- Views: `view('blog::post.show')` maps to `Modules/Blog/Resources/views/post/show.blade.php`
-- Class-based Blade components: `<x-blog::post.card/>` for `Modules/Blog/View/Components/Post/Card.php`
-- Anonymous Blade components (from views): `<x-blog::button.primary/>` for `Modules/Blog/Resources/views/components/button/primary.blade.php`
-- Routes: drop files under `Modules/*/Routes/*.php` and they will be loaded under sensible groups (web, api). See the Routes feature docs for customization.
-
-Note for contributors: the test workbench lives in `workbench/` and follows the same conventions (`workbench/Modules/*`).
-
-## Configuration overview
-
-All options live in `config/modules.php`.
-
-- modules_directory: default `Modules` (relative to the project base path). Change where your modules are stored.
-- modules_namespace: default `Modules\\`. Change the PSR-4 base namespace for your modules.
-- modules: per-module activation and ordering. Example:
-  ```php
-  'modules' => [
-      'Shared' => [
-          'active' => true,
-          'order' => 1, // lower loads earlier
-      ],
-  ],
-  ```
-- Per-asset sections: each feature can be enabled/disabled and configured with glob patterns and other options. For example, Blade Components:
-  ```php
-  'blade-components' => [
-      'active' => true,
-      'patterns' => [
-          '*/View/Components',
-      ],
-  ],
-  ```
-- Configs merging priority: when `'configs.priority' => true`, values from your modules override the app config; when false, app config wins and modules provide defaults.
-
-You can disable any feature by setting `'active' => false` in its section.
-
-### Modules Facade
-
-The `Mozex\Modules\Facades\Modules` facade provides utility methods:
+The route file works like any Laravel route file:
 
 ```php
-use Mozex\Modules\Facades\Modules;
+use Illuminate\Support\Facades\Route;
 
-Modules::basePath('path');                    // Get base path with suffix
-Modules::modulesPath('Blog/Config');          // Get modules directory path
-Modules::moduleNameFromNamespace($class);     // Extract module name from namespace
-Modules::moduleNameFromPath($path);           // Extract module name from file path
-Modules::seeders();                           // Get all module seeder classes
-Modules::routeGroup('admin', ...);            // Define custom route group
-Modules::registerRoutesUsing('name', fn);     // Custom route registration
+Route::get('/blog', fn () => view('blog::index'));
 ```
 
-See the [full documentation](./docs/introduction.md) for detailed guides and API reference.
+That's a working module. The route loads with the `web` middleware group (because the file is named `web.php`) and the view is accessible through the `blog::` namespace. Add more directories as you need them: `Models/`, `Livewire/`, `Filament/Admin/Resources/`, and so on. The package picks up each one based on the conventions documented in the feature guides.
 
-## Features
+For a complete module structure, configuration reference, facade API, and detailed feature documentation, visit the [documentation site](https://mozex.dev/docs/laravel-modules/v3).
 
-This package discovers and wires many module assets. We’ll document them in depth, one by one. Suggested reading order:
+## Resources
 
-1) Blade Components (class-based)
-2) Views (namespaces, anonymous components)
-3) Routes (groups, api/web, broadcasting, commands)
-4) Configs (merging strategy, priority)
-5) Migrations
-6) Seeders
-7) Commands
-8) Helpers
-9) Models & Factories
-10) Policies
-11) Events & Listeners
-12) Schedules
-13) Livewire Components
-14) Filament (Resources, Pages, Widgets, Clusters)
-15) Nova Resources
+Visit the [documentation site](https://mozex.dev/docs/laravel-modules/v3) for searchable docs auto-updated from this repository.
 
-## Caching
-
-This package supports a single discovery cache that speeds up scanning your Modules directory. Use these commands:
-
-- Build the discovery cache:
-  ```bash
-  php artisan modules:cache
-  ```
-- Clear the discovery cache:
-  ```bash
-  php artisan modules:clear
-  ```
-
-Tip: after adding, renaming, or moving module assets, clear any relevant Laravel caches and rebuild the modules discovery cache as needed.
-
-## Testing
-
-```bash
-composer test
-```
-
-## Changelog
-
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
-
-## Contributing
-
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
-
-## Security Vulnerabilities
-
-Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
-
-## Credits
-
-- [Mozex](https://github.com/mozex)
-- [All Contributors](../../contributors)
+- **[AI Integration](https://mozex.dev/docs/laravel-modules/v3/ai-integration)**: Use this package with AI coding assistants via Context7 and Laravel Boost
+- **[Requirements](https://mozex.dev/docs/laravel-modules/v3/requirements)**: PHP, Laravel, and dependency versions
+- **[Changelog](https://mozex.dev/docs/laravel-modules/v3/changelog)**: Release history with linked pull requests and diffs
+- **[Contributing](https://mozex.dev/docs/laravel-modules/v3/contributing)**: Development setup, code quality, and PR guidelines
+- **[Questions & Issues](https://mozex.dev/docs/laravel-modules/v3/questions-and-issues)**: Bug reports, feature requests, and help
+- **[Security](mailto:hello@mozex.dev)**: Report vulnerabilities directly via email
 
 ## License
 
