@@ -39,15 +39,9 @@ abstract class Feature extends ServiceProvider
 
     protected function getName(string $name): string
     {
-        $str = str($name);
-
-        if ($name === $str->upper()->toString()) {
-            return $str->lower()->toString();
-        }
-
-        return $str
-            ->replaceMatches('/(?<! )[A-Z]/', '-$0')
-            ->replaceFirst('-', '')
+        return str($name)
+            ->replaceMatches('/([A-Z]+)([A-Z][a-z])/', '$1-$2')
+            ->replaceMatches('/([a-z])([A-Z])/', '$1-$2')
             ->lower()
             ->toString();
     }
