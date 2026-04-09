@@ -1,4 +1,13 @@
 {
+    "$schema": "https://context7.com/schema/context7.json",
     "url": "https://context7.com/mozex/laravel-modules",
-    "public_key": "pk_2dXAZIEpHP6qQeGGTuyQt"
+    "public_key": "pk_2dXAZIEpHP6qQeGGTuyQt",
+    "projectTitle": "Laravel Modules",
+    "description": "Full-featured module system for Laravel — auto-discovery, isolated tests, Livewire & Filament support, zero config.",
+    "folders": [],
+    "previousVersions": [
+        {
+            "branch": "2.x"
+        }
+    ]
 }
