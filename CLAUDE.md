@@ -81,7 +81,7 @@ Scouts use `FileDiscoverCacheDriver` writing to `bootstrap/cache/modules-{asset-
 
 ## CI matrix
 
-Tests run on PHP 8.2/8.3/8.4 × Laravel 10/11/12 × prefer-lowest/prefer-stable on both Ubuntu and Windows.
+Tests run on PHP 8.2/8.3/8.4 × Laravel 10/11/12/13 × prefer-lowest/prefer-stable on both Ubuntu and Windows.
 
 ## Adding a new feature
 
