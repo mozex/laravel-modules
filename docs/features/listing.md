@@ -3,9 +3,7 @@ title: Listing Modules
 weight: 15
 ---
 
-## Overview
-
-The `modules:list` command gives you a quick overview of every module in your project: which ones are active, their load order, and how many assets each one has discovered.
+The `modules:list` Artisan command shows every module in your project with its status, load order, and a count of discovered assets by type.
 
 ## Usage
 
@@ -13,9 +11,7 @@ The `modules:list` command gives you a quick overview of every module in your pr
 php artisan modules:list
 ```
 
-Each module is displayed as its own section, sorted by load order. The header shows the module name, status (Enabled/Disabled), and configured order. Below it, a compact table lists only the asset types that have at least one discovery.
-
-Example output:
+The output groups information by module, sorted by load order. Each module's header shows whether it's enabled or disabled and its configured order number. Below that, a table lists only the asset types where at least one item was found.
 
 ```
   Shared [Enabled | Order: 1]
@@ -42,15 +38,17 @@ Example output:
   No assets discovered
 ```
 
-Disabled modules show no assets because discovery skips them entirely.
+Disabled modules show "No assets discovered" because the package skips them entirely during scanning.
 
-## When to use
+## When it's useful
 
-- After adding a new module, to confirm it's being picked up.
-- When debugging missing assets (a zero count, or missing asset type, tells you the scout found nothing).
-- To get a bird's-eye view of how your modules are structured.
+**After creating a new module**: Run the command to confirm the package is picking it up. If the module doesn't appear, check that the directory is inside the configured modules directory and that the module isn't set to `active: false`.
+
+**When something isn't loading**: If a route file, view directory, or command class isn't working, check the list output. A zero count (or a missing asset type row) tells you the discovery scanner didn't find anything matching the configured patterns for that feature.
+
+**For an overview of your project**: On a project with many modules, the command gives you a quick summary of what each module contains without having to browse the file system.
 
 ## Related commands
 
-- [`modules:cache`](./caching.md) caches discovery results for production.
-- [`modules:clear`](./caching.md) clears the discovery cache.
+- `php artisan modules:cache` caches the discovery results for production use. See [Caching](./caching).
+- `php artisan modules:clear` removes the discovery cache so the next request scans fresh.
