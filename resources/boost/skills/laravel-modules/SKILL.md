@@ -1,6 +1,6 @@
 ---
 name: laravel-modules
-description: Detailed implementation patterns for mozex/laravel-modules. Activate when working with module routes (especially custom route groups or registrars), Livewire components inside modules (class/SFC/MFC), Filament resources/pages/widgets/clusters across panels, module-level model factories or policies, config merging between modules and the app, overriding module views from the host application, event listener auto-discovery, Blade components inside modules, seeder wiring via Modules::seeders(), or when setting up PHPStan/Pest/PHPUnit for a modular Laravel project. Also covers the full Mozex\Modules\Facades\Modules API.
+description: Detailed implementation patterns for mozex/laravel-modules. Activate when working with module routes (custom route groups, custom registrars, inline Route::localized, route file organization by third-party concern like fortify.php), Livewire components inside modules (class/SFC/MFC), Filament resources/pages/widgets/clusters across panels, module-level model factories or policies, config merging between modules and the app, overriding module views from the host application, event listener auto-discovery, Blade components inside modules, seeder wiring via Modules::seeders(), module service providers for morph maps and third-party model policies, when setting up PHPStan/Pest/PHPUnit for a modular Laravel project, or when organizing Inertia frontend assets per module with Vue or React (Vite alias, Inertia page resolver, cross-module imports, typed props from PHP via Spatie TypeScript Transformer). Also covers the full Mozex\Modules\Facades\Modules API.
 ---
 
 # laravel-modules development
@@ -10,15 +10,17 @@ description: Detailed implementation patterns for mozex/laravel-modules. Activat
 Activate this skill when the current task involves a specific laravel-modules feature beyond the basics covered in the guideline. The guideline already covers the PSR-4 setup, module directory structure, namespace prefixing, module activation and load order, and the three `modules:*` Artisan commands. This skill picks up from there with the detailed patterns.
 
 Common triggers:
-- Writing or customizing module routes (especially custom file types like `admin.php`, `localized.php`)
+- Writing or customizing module routes (custom file types like `admin.php`, `localized.php`, or organizing by concern like `fortify.php`)
 - Creating Livewire components inside a module (class-based, SFC, or MFC)
 - Registering Filament resources, pages, widgets, or clusters with specific panels
 - Wiring up model factories and policies that live inside modules
+- Writing a module service provider for morph maps or third-party model policies
 - Adding event listeners that need auto-discovery
 - Overriding a module view without editing the module itself
 - Setting up config merging between a module and the application
 - Writing seeders and calling them from the host app
 - Configuring PHPStan, Pest, or PHPUnit for a modular project
+- Organizing Inertia frontend assets per module with Vue or React (Vite alias, Inertia page resolver, cross-module imports, typed props from PHP)
 - Reaching for the `Mozex\Modules\Facades\Modules` facade
 
 ## Modules facade API
@@ -124,6 +126,51 @@ Modules::registerRoutesUsing('localized', function (array $attributes, $routes) 
 
 Modules::routeGroup('localized', middleware: ['web'], as: 'localized.');
 ```
+
+### Inline `Route::localized()` alternative
+
+A custom registrar wraps every route in a file. When you only need the wrapping for some routes, call the helper directly inside a regular route file:
+
+```php
+// Modules/Landing/Routes/web.php
+use Illuminate\Support\Facades\Route;
+use Modules\Landing\Livewire\BecomeASeller;
+
+Route::get('/terms', [TermsController::class, 'show'])->name('terms');
+
+Route::localized(function () {
+    Route::get('become-a-seller', BecomeASeller::class)->name('landing.become-a-seller');
+});
+```
+
+`/terms` stays plain, `become-a-seller` gets wrapped. No custom registrar needed. Reach for the custom registrar when every route in a dedicated file should share the same wrapping logic.
+
+### Organizing route files by concern
+
+Since every `.php` file inside `Routes/` is discovered, split routes by what they relate to rather than HTTP concerns. A `User` module integrating Jetstream and Fortify might have:
+
+```
+Modules/User/Routes/
+├── fortify.php    // Fortify login, registration, password reset
+├── jetstream.php  // Jetstream team management
+└── web.php        // module's own public routes
+```
+
+Each file defines its own `Route::group()` internally with the middleware the third-party package needs:
+
+```php
+// Modules/User/Routes/fortify.php
+Route::group([
+    'middleware' => config('fortify.middleware', ['web']),
+    'prefix' => 'dashboard',
+], function () {
+    Route::livewire('/login', Login::class)
+        ->middleware(['guest:'.config('fortify.guard')])
+        ->name('login');
+});
+```
+
+`fortify.php` and `jetstream.php` don't match any defined route group, so the package loads each file without wrapping. The `Route::group()` inside each file does the real work. No facade-level route group needed.
 
 ### Console routes
 
@@ -461,7 +508,43 @@ Helpers load in module order, then alphabetically within each module. If `functi
 
 Any class extending `Illuminate\Support\ServiceProvider` in a module's `Providers/` directory is auto-registered during the application's `register()` phase. Don't list them in `bootstrap/providers.php`.
 
-Use module service providers for: container bindings, macro definitions, third-party integration configuration, manual event subscriber registration (`Event::subscribe()`), or custom boot logic. Don't write one just to register routes, views, or commands; those are already handled by the package.
+Use module service providers for: container bindings, morph map entries for the module's models, policies for third-party models (the package's auto-guessing only covers models inside modules), macro definitions, manual event subscriber registration (`Event::subscribe()`), third-party SDK configuration, or custom boot logic. Don't write one just to register routes, views, or commands; those are already handled by the package.
+
+### Real-world example
+
+A `User` module that registers morph map entries for its own models and adds policies for Spatie Permission's `Role` and `Permission` models (which live in a third-party package, so they don't benefit from the package's model-to-policy auto-guessing):
+
+```php
+namespace Modules\User\Providers;
+
+use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\ServiceProvider;
+use Modules\User\Models\EmployeeTeam;
+use Modules\User\Models\User;
+use Modules\User\Policies\PermissionPolicy;
+use Modules\User\Policies\RolePolicy;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+
+class UserServiceProvider extends ServiceProvider
+{
+    public function boot(): void
+    {
+        Relation::enforceMorphMap([
+            'user' => User::class,
+            'employee-team' => EmployeeTeam::class,
+            'role' => Role::class,
+            'permission' => Permission::class,
+        ]);
+
+        Gate::policy(Role::class, RolePolicy::class);
+        Gate::policy(Permission::class, PermissionPolicy::class);
+    }
+}
+```
+
+The policy classes live inside the module (`Modules/User/Policies/RolePolicy.php`) next to the module's own policies, even though they map to third-party models.
 
 ## Caching workflow
 
@@ -560,6 +643,237 @@ For different traits per Tests subdirectory, split the calls:
 uses(TestCase::class, RefreshDatabase::class)->in('../Modules/*/Tests/Feature/*');
 uses(TestCase::class)->in('../Modules/*/Tests/Unit/*');
 ```
+
+## Inertia frontend (Vue or React)
+
+The package only handles PHP discovery. Frontend assets inside modules (Vue/React, TypeScript, CSS) are wired up by Vite and your Inertia bootstrap, not by the package. The convention is to put each module's frontend in `Modules/{Name}/Resources/ts/` alongside `Resources/views/`, with Inertia pages under `Resources/ts/Pages/`. The patterns below don't depend on specific Inertia, Vite, Vue, or React versions. Inertia's official Vite plugin auto-resolves pages from `./Pages/`, so module-scoped pages still need the manual `resolve` callback shown below (Inertia's docs explicitly support it as an alternative to the plugin).
+
+### Vite alias (regex, framework-agnostic)
+
+Add a regex alias to `vite.config.ts` so every module resolves without per-module config. The alias itself is identical for Vue and React; only the framework plugin changes:
+
+```ts
+// Vue
+import vue from '@vitejs/plugin-vue';
+
+export default defineConfig({
+    plugins: [laravel({ input: ['resources/ts/app.ts'] }), vue()],
+    resolve: {
+        alias: [
+            { find: /^@\//, replacement: '/resources/ts/' },
+            { find: /^@Modules\/([^\/]+)\/(.*)$/, replacement: '/Modules/$1/Resources/ts/$2' },
+        ],
+    },
+});
+```
+
+```ts
+// React
+import react from '@vitejs/plugin-react';
+
+export default defineConfig({
+    plugins: [laravel({ input: ['resources/ts/app.tsx'] }), react()],
+    resolve: {
+        alias: [
+            { find: /^@\//, replacement: '/resources/ts/' },
+            { find: /^@Modules\/([^\/]+)\/(.*)$/, replacement: '/Modules/$1/Resources/ts/$2' },
+        ],
+    },
+});
+```
+
+Components can then import across modules:
+
+```ts
+// Vue
+import ForumLayout from '@Modules/Forum/Layouts/ForumLayout.vue';
+import Button from '@Modules/Shared/Components/Button.vue';
+
+// React
+import ForumLayout from '@Modules/Forum/Layouts/ForumLayout';
+import Button from '@Modules/Shared/Components/Button';
+```
+
+### Inertia page resolver
+
+Extend Inertia's resolver to handle the `@Modules/` prefix. The logic is identical for both frameworks; only the Inertia adapter package and file extension change.
+
+```ts
+// Vue: resources/ts/app.ts
+import type { DefineComponent } from 'vue';
+import { createApp, h } from 'vue';
+import { createInertiaApp } from '@inertiajs/vue3';
+import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
+
+type Glob = Record<string, () => Promise<DefineComponent>>;
+
+const appPages = import.meta.glob<DefineComponent>('./Pages/**/*.vue');
+const modulePages = import.meta.glob<DefineComponent>('../../Modules/**/Resources/ts/Pages/**/*.vue');
+
+function resolveInertiaPage(name: string): [string, Glob] {
+    if (name.startsWith('@Modules/')) {
+        const withoutPrefix = name.replace('@Modules/', '');
+        const module = withoutPrefix.substring(0, withoutPrefix.indexOf('/'));
+        const pagePath = withoutPrefix.slice(module.length + 1);
+        return [`../../Modules/${module}/Resources/ts/Pages/${pagePath}.vue`, modulePages];
+    }
+    return [`./Pages/${name}.vue`, appPages];
+}
+
+createInertiaApp({
+    resolve: (name) => resolvePageComponent(...resolveInertiaPage(name)),
+    setup({ el, App, props, plugin }) {
+        createApp({ render: () => h(App, props) }).use(plugin).mount(el);
+    },
+});
+```
+
+```tsx
+// React: resources/ts/app.tsx
+import type { ResolvedComponent } from '@inertiajs/react';
+import { createInertiaApp } from '@inertiajs/react';
+import { createRoot } from 'react-dom/client';
+import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
+
+type Glob = Record<string, () => Promise<ResolvedComponent>>;
+
+const appPages = import.meta.glob<ResolvedComponent>('./Pages/**/*.tsx');
+const modulePages = import.meta.glob<ResolvedComponent>('../../Modules/**/Resources/ts/Pages/**/*.tsx');
+
+function resolveInertiaPage(name: string): [string, Glob] {
+    if (name.startsWith('@Modules/')) {
+        const withoutPrefix = name.replace('@Modules/', '');
+        const module = withoutPrefix.substring(0, withoutPrefix.indexOf('/'));
+        const pagePath = withoutPrefix.slice(module.length + 1);
+        return [`../../Modules/${module}/Resources/ts/Pages/${pagePath}.tsx`, modulePages];
+    }
+    return [`./Pages/${name}.tsx`, appPages];
+}
+
+createInertiaApp({
+    resolve: (name) => resolvePageComponent(...resolveInertiaPage(name)),
+    setup({ el, App, props }) {
+        createRoot(el).render(<App {...props} />);
+    },
+});
+```
+
+### Controller usage
+
+Framework-agnostic (PHP side):
+
+```php
+return inertia(
+    component: '@Modules/Blog/Post/Show',
+    props: PostShowResource::from($post),
+);
+```
+
+`@Modules/Blog/Post/Show` resolves to `Modules/Blog/Resources/ts/Pages/Post/Show.vue` (Vue) or `.tsx` (React). Inline Inertia routes work the same way:
+
+```php
+Route::inertia('/coming-soon', '@Modules/Shared/ComingSoon');
+```
+
+### TypeScript paths (one entry per module)
+
+Vite's regex alias handles the bundle, but TypeScript's `paths` doesn't support regex. One entry per module in `tsconfig.json`. Include both `.vue` and `.tsx` in the `include` globs if you use both, otherwise keep only what you need:
+
+```json
+{
+    "compilerOptions": {
+        "paths": {
+            "@/*": ["./resources/ts/*"],
+            "@Modules/Blog/*":   ["./Modules/Blog/Resources/ts/*"],
+            "@Modules/Forum/*":  ["./Modules/Forum/Resources/ts/*"],
+            "@Modules/Shared/*": ["./Modules/Shared/Resources/ts/*"]
+        }
+    },
+    "include": [
+        "resources/ts/**/*.ts",
+        "resources/ts/**/*.d.ts",
+        "resources/ts/**/*.vue",
+        "resources/ts/**/*.tsx",
+        "Modules/*/Resources/ts/**/*.ts",
+        "Modules/*/Resources/ts/**/*.d.ts",
+        "Modules/*/Resources/ts/**/*.vue",
+        "Modules/*/Resources/ts/**/*.tsx"
+    ]
+}
+```
+
+`include` uses globs and needs no per-module update. Only `paths` does. Add an entry whenever creating a module with frontend code.
+
+### Auto-generated types from PHP classes
+
+Pair `spatie/laravel-typescript-transformer` with `spatie/laravel-data` to get TypeScript interfaces from PHP Resource/Data classes. PHP-side setup is framework-agnostic:
+
+```php
+// config/typescript-transformer.php
+'auto_discover_types' => [
+    app_path(),
+    base_path('Modules/*'),
+],
+```
+
+Output the types to `resources/ts/types/backend.d.ts`. The frontend side differs between Vue and React.
+
+**Vue**: Vue SFC compiler macros like `defineProps<T>()` run at compile time and don't automatically see external `.d.ts` files. Register the file on the Vue plugin via `script.globalTypeFiles` (valid option since Vue 3.3):
+
+```ts
+vue({
+    script: {
+        globalTypeFiles: ['resources/ts/types/backend.d.ts'],
+    },
+}),
+```
+
+Vue pages then type props directly:
+
+```vue
+<script lang="ts" setup>
+const props = defineProps<PostShowResource>();
+</script>
+```
+
+**React**: React uses plain TypeScript with no SFC compiler, so no plugin config is needed. Any `declare interface` in a `.d.ts` file that's part of `tsconfig.json`'s `include` array is globally available automatically. Type props by destructuring the function parameter against the generated interface:
+
+```tsx
+export default function Show({ post, replies }: PostShowResource) {
+    return <article><h1>{post.title}</h1></article>;
+}
+```
+
+Or via Inertia's `usePage` hook with a generic when you also need shared props or page metadata:
+
+```tsx
+import { usePage } from '@inertiajs/react';
+
+export default function Show() {
+    const { props } = usePage<PostShowResource>();
+    return <article><h1>{props.post.title}</h1></article>;
+}
+```
+
+Both are shown in Inertia's official TypeScript guide. Destructured parameters give you page-specific props only; `usePage<T>()` also exposes shared props from middleware, flash messages, errors, and page metadata.
+
+Change a property on the PHP Resource, regenerate types, and TypeScript catches any component that breaks.
+
+### Module CSS imports
+
+To import module stylesheets into `resources/css/app.css` without awkward `/../` paths, alias `Resources/` directly (broader than `Resources/ts/`):
+
+```ts
+{ find: /^@Modules\/([^\/]+)\/(.*)$/, replacement: '/Modules/$1/Resources/$2' },
+```
+
+Then:
+
+```css
+@import '@Modules/Forum/css/forum.css';
+```
+
+Tradeoff: TS imports become `@Modules/Forum/ts/Components/X.vue` (Vue) or `@Modules/Forum/ts/Components/X` (React) instead of `@Modules/Forum/Components/X`. Pick one shape and stay consistent.
 
 ## Common gotchas
 

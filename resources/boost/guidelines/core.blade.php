@@ -65,5 +65,5 @@ Modules not listed here default to `active: true` with order `9999`.
 
 ### Detailed usage
 
-For the full Modules facade API, custom route groups and registrars, Livewire component types (class/SFC/MFC), Filament panel mapping, model-factory-policy name guessing, config merging strategy, view overriding, event listener discovery, and PHPStan/Pest/PHPUnit setup, activate the `laravel-modules` skill. It covers the detailed implementation patterns that aren't needed on every session.
+For the full Modules facade API, custom route groups and registrars, route file organization by concern, Livewire component types (class/SFC/MFC), Filament panel mapping, model-factory-policy name guessing, config merging strategy, view overriding, event listener discovery, real-world service provider patterns (morph maps, third-party model policies), Inertia with Vue or React frontend setup, and PHPStan/Pest/PHPUnit setup, activate the `laravel-modules` skill. It covers the detailed implementation patterns that aren't needed on every session.
 @endverbatim
