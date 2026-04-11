@@ -78,7 +78,11 @@ project-root/
 │   │   ├── Filament/
 │   │   │   └── Admin/
 │   │   │       └── Resources/
-│   │   │           └── PostResource.php
+│   │   │           └── Posts/
+│   │   │               ├── PostResource.php
+│   │   │               ├── Pages/
+│   │   │               ├── Schemas/
+│   │   │               └── Tables/
 │   │   ├── Helpers/
 │   │   │   └── formatting.php
 │   │   ├── Lang/
