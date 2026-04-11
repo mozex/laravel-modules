@@ -6,6 +6,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\ServiceProvider;
 use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\Facades\Modules;
+use Override;
 
 abstract class Feature extends ServiceProvider
 {
@@ -25,6 +26,7 @@ abstract class Feature extends ServiceProvider
         return false;
     }
 
+    #[Override]
     public function register(): void
     {
         //
@@ -37,15 +39,9 @@ abstract class Feature extends ServiceProvider
 
     protected function getName(string $name): string
     {
-        $str = str($name);
-
-        if ($name === $str->upper()->toString()) {
-            return $str->lower()->toString();
-        }
-
-        return $str
-            ->replaceMatches('/(?<! )[A-Z]/', '-$0')
-            ->replaceFirst('-', '')
+        return str($name)
+            ->replaceMatches('/([A-Z]+)([A-Z][a-z])/', '$1-$2')
+            ->replaceMatches('/([a-z])([A-Z])/', '$1-$2')
             ->lower()
             ->toString();
     }
