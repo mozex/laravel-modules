@@ -3,9 +3,9 @@ title: Views
 weight: 2
 ---
 
-## Overview
+Each module's view directory is registered as a namespaced view location, using the same `namespace::view` syntax that Laravel packages use. The module name becomes a kebab-case namespace prefix: `Blog` maps to `blog`, `UserAdmin` maps to `user-admin`, `PWA` maps to `pwa`.
 
-Auto-discovers view directories within modules and registers each as a view namespace. Supports both named views (`view('module::path')`) and anonymous Blade components from `Resources/views/components/`.
+This feature also gives you anonymous Blade components for free. Any `.blade.php` file in a module's `Resources/views/components/` directory becomes a usable `<x-module::name />` component without writing a PHP class.
 
 ## Default configuration
 
@@ -18,65 +18,105 @@ Auto-discovers view directories within modules and registers each as a view name
 ],
 ```
 
-## Naming
-
-Module name → kebab-case namespace: `Blog` → `blog`, `PWA` → `pwa`, `UserAdmin` → `user-admin`.
-
 ## Directory layout
 
 ```
 Modules/Blog/
 └── Resources/
     └── views/
-        ├── home.blade.php              // view('blog::home')
+        ├── home.blade.php
         ├── pages/
-        │   └── show.blade.php          // view('blog::pages.show')
+        │   ├── index.blade.php
+        │   └── show.blade.php
+        ├── partials/
+        │   └── sidebar.blade.php
         └── components/
-            ├── filter.blade.php        // <x-blog::filter />
+            ├── alert.blade.php
             └── form/
-                └── input.blade.php     // <x-blog::form.input />
-
-Modules/PWA/
-└── Resources/
-    └── views/
-        ├── head.blade.php              // view('pwa::head')
-        └── components/
-            └── manifest.blade.php      // <x-pwa::manifest />
+                └── input.blade.php
 ```
 
-## Usage
+## Rendering views
 
-Views:
+Use the `namespace::path` syntax anywhere you'd normally reference a view:
 
 ```php
-view('blog::home')
-view('blog::pages.show')
+// In a controller
+return view('blog::home');
+return view('blog::pages.show', ['post' => $post]);
+
+// In a route closure
+Route::get('/blog', fn () => view('blog::pages.index'));
 ```
 
-Blade includes:
+The path maps directly to the file structure inside `Resources/views/`. Dots replace directory separators: `blog::pages.show` resolves to `Modules/Blog/Resources/views/pages/show.blade.php`.
+
+## Blade directives
+
+All Blade directives work with namespaced views:
 
 ```blade
 @include('blog::partials.sidebar')
+@extends('blog::layouts.app')
+@each('blog::partials.post-card', $posts, 'post')
+
+@section('content')
+    {{-- content here --}}
+@endsection
 ```
 
-Anonymous components (from `Resources/views/components/`):
+You can also reference views across modules. A Shop module's layout can include a Shared module's partial:
 
 ```blade
-<x-blog::filter />
-<x-blog::form.input />
-<x-pwa::manifest />
+{{-- Modules/Shop/Resources/views/checkout.blade.php --}}
+@extends('shared::layouts.main')
+@include('shared::partials.footer')
 ```
 
-## Configuration
+## Anonymous Blade components
 
-- Set `'views.active' => false` to disable view namespace registration.
-- Edit `'views.patterns'` to change discovery directories.
+Files inside `Resources/views/components/` work as anonymous Blade components. No PHP class needed.
 
-## Troubleshooting
+```
+Modules/Blog/
+└── Resources/
+    └── views/
+        └── components/
+            ├── alert.blade.php           // <x-blog::alert />
+            ├── badge.blade.php           // <x-blog::badge />
+            └── form/
+                ├── input.blade.php       // <x-blog::form.input />
+                └── select.blade.php      // <x-blog::form.select />
+```
 
-- **View not found**: verify the namespaced key matches the file path — `blog::pages.show` for `Modules/Blog/Resources/views/pages/show.blade.php`.
-- **Anonymous component not found**: ensure it's under `Resources/views/components/` and use `<x-module::path />`.
+Use them in any Blade template:
 
-## See also
+```blade
+<x-blog::alert type="warning" message="Draft post" />
+<x-blog::form.input name="title" label="Post Title" />
+```
 
-- [Blade Components](./blade-components.md)
+Define props at the top of the anonymous component file, just like any Laravel anonymous component:
+
+```blade
+{{-- Modules/Blog/Resources/views/components/alert.blade.php --}}
+@props(['type' => 'info', 'message'])
+
+<div class="alert alert-{{ $type }}">
+    {{ $message }}
+</div>
+```
+
+This is different from class-based Blade components (covered in the [Blade Components](./blade-components.md) docs). Anonymous components live in the view directory and don't need a backing PHP class. Class-based components live in `View/Components/` and have a dedicated PHP class with a `render()` method.
+
+## View overriding
+
+You can override any module view without editing the module itself. Drop a file at `resources/views/vendor/{module}/{view}.blade.php` (using the kebab-cased module name) and Laravel will use that file instead of the one inside the module.
+
+This is handled by Laravel's `loadViewsFrom()` helper, which the package uses to register each module's view namespace. Before pointing the namespace at the module directory, `loadViewsFrom()` checks whether `resources/views/vendor/{namespace}/` exists and, if so, registers it as a higher-priority path for the same namespace. The view finder walks paths in order and returns the first match, so the override wins.
+
+For example, to override `blog::pages.show` without touching the Blog module, create `resources/views/vendor/blog/pages/show.blade.php`. A call to `view('blog::pages.show')` will now render the override file.
+
+## Disabling
+
+Set `'views.active' => false` to stop registering module view namespaces. Adjust `'views.patterns'` if your modules use a different directory for views.

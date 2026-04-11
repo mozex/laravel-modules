@@ -3,9 +3,7 @@ title: Commands
 weight: 7
 ---
 
-## Overview
-
-Discovers module Artisan command classes and registers them automatically. Any non-abstract class extending `Illuminate\Console\Command` that matches configured patterns is added to Artisan.
+Artisan command classes inside modules are discovered and registered automatically. Any non-abstract class extending `Illuminate\Console\Command` that lives under a configured path becomes available in Artisan.
 
 ## Default configuration
 
@@ -24,28 +22,64 @@ Discovers module Artisan command classes and registers them automatically. Any n
 Modules/Blog/
 └── Console/
     └── Commands/
-        ├── PublishPosts.php          // extends Command (discovered)
-        └── BaseCommand.php           // abstract (ignored)
+        ├── PublishPosts.php          // discovered (extends Command)
+        ├── PruneDrafts.php           // discovered (extends Command)
+        └── BaseCommand.php           // ignored (abstract class)
 ```
 
-## Usage
+## Writing a module command
 
-Commands are available via Artisan as soon as they are discovered:
+Module commands work exactly like application commands. Define a `$signature`, a `$description`, and a `handle()` method:
+
+```php
+namespace Modules\Blog\Console\Commands;
+
+use Illuminate\Console\Command;
+
+class PublishPosts extends Command
+{
+    protected $signature = 'blog:publish-posts
+                            {--dry-run : Show what would be published without making changes}';
+
+    protected $description = 'Publish all scheduled posts that are past their publish date';
+
+    public function handle(): int
+    {
+        $query = Post::where('publish_at', '<=', now())
+            ->where('status', 'draft');
+
+        if ($this->option('dry-run')) {
+            $this->info("Would publish {$query->count()} posts.");
+            return self::SUCCESS;
+        }
+
+        $count = $query->update(['status' => 'published']);
+        $this->info("Published {$count} posts.");
+
+        return self::SUCCESS;
+    }
+}
+```
+
+Run it:
 
 ```bash
 php artisan blog:publish-posts
+php artisan blog:publish-posts --dry-run
 ```
 
-## Console routes
+## What gets discovered
 
-If you define module `Routes/console.php` files and your Laravel version supports command route paths (Laravel 10+), those commands are also registered. See [Routes](./routes.md).
+The scanner finds all non-abstract classes that extend `Illuminate\Console\Command` (directly or through intermediate classes). Abstract base commands are skipped, so you can create shared base classes without them showing up in `php artisan list`.
 
-## Configuration
+## Signature collisions
 
-- Set `'commands.active' => false` to disable auto-registration.
-- Edit `'commands.patterns'` to change discovery directories.
+Each command's `$signature` must be unique across your entire application, including all modules. If two modules register a command with the same signature, the second one overwrites the first. Use a module-specific prefix (like `blog:`, `shop:`) to avoid collisions.
 
-## Troubleshooting
+## Console routes vs. command classes
 
-- **Command not found**: ensure it extends `Illuminate\Console\Command`, has a `$signature`, and is under a discovered path.
-- **Duplicate signature**: ensure unique `$signature` values across modules.
+You can also define closure-based Artisan commands in `Routes/console.php` files (see the [Routes](./routes.md) docs). Use command classes when you want a dedicated class with its own tests and dependency injection. Use console routes for quick, one-off commands that don't need much structure.
+
+## Disabling
+
+Set `'commands.active' => false` to stop auto-registering module commands. Adjust `'commands.patterns'` if your modules use a different directory for commands.

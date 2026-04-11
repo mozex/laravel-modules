@@ -3,9 +3,11 @@ title: Nova Resources
 weight: 19
 ---
 
-## Overview
+Nova resource classes inside modules are discovered and registered during Nova's `serving` event. This means they only load when someone accesses the Nova admin panel, not on every application request.
 
-Discovers Nova resources inside modules and registers them during Nova's `serving` event. Classes extending `Laravel\Nova\Actions\ActionResource` are excluded.
+Classes extending `Laravel\Nova\Actions\ActionResource` are automatically excluded from discovery, since those are internal to Nova's action system.
+
+Like Livewire and Filament, this feature is conditional. If Nova isn't installed, the package skips it entirely.
 
 ## Default configuration
 
@@ -23,23 +25,58 @@ Discovers Nova resources inside modules and registers them during Nova's `servin
 ```
 Modules/Blog/
 └── Nova/
-    └── Post.php               // extends Laravel\Nova\Resource (discovered)
+    ├── Post.php
+    └── Category.php
 
 Modules/Shop/
 └── Nova/
-    └── Product.php            // discovered
+    ├── Product.php
+    └── Order.php
 ```
 
-## Usage
+## Writing Nova resources
 
-Define Nova resource classes under `Modules/{Module}/Nova`. They are registered automatically.
+Module Nova resources are standard Nova resource classes. The only difference is the namespace:
 
-## Configuration
+```php
+namespace Modules\Blog\Nova;
 
-- Set `'nova-resources.active' => false` to disable discovery.
-- Edit `'nova-resources.patterns'` to change discovery directories.
+use Laravel\Nova\Resource;
+use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\Markdown;
+use Laravel\Nova\Http\Requests\NovaRequest;
+use Modules\Blog\Models\Post;
 
-## See also
+class Post extends Resource
+{
+    public static $model = Post::class;
 
-- [Models & Factories](./models-factories.md)
-- [Policies](./policies.md)
+    public static $title = 'title';
+
+    public static $search = ['id', 'title'];
+
+    public function fields(NovaRequest $request): array
+    {
+        return [
+            ID::make()->sortable(),
+            Text::make('Title')->sortable()->rules('required'),
+            Markdown::make('Body')->rules('required'),
+        ];
+    }
+}
+```
+
+The resource appears in the Nova sidebar alongside your application's resources. No manual registration needed.
+
+## Model and policy resolution
+
+Nova resources in modules work with the [Models & Factories](./models-factories.md) and [Policies](./policies.md) features. A `Modules\Blog\Nova\Post` resource pointing to `Modules\Blog\Models\Post` will automatically find `Modules\Blog\Policies\PostPolicy` for authorization.
+
+## Registration timing
+
+Nova resources are registered inside a `Nova::serving()` callback. They don't load during normal web requests or Artisan commands, only when Nova's routes are being served. This keeps the overhead at zero for non-Nova requests.
+
+## Disabling
+
+Set `'nova-resources.active' => false` to disable discovery. Adjust `'nova-resources.patterns'` if your Nova resources live in a different directory.
