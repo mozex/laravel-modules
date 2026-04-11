@@ -294,7 +294,7 @@ If you want to discover a different route file type, say `admin.php` or `localiz
 // Now every module's Routes/admin.php file loads with these attributes
 Modules::routeGroup('admin',
     prefix: 'admin',
-    middleware: ['web', 'auth'],
+    middleware: ['web', 'auth', 'is-admin'],
     as: 'admin.',
 );
 ```
