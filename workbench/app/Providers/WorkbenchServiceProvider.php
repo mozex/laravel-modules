@@ -6,12 +6,22 @@ use Closure;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Mozex\Modules\Facades\Modules;
+use Override;
 
 class WorkbenchServiceProvider extends ServiceProvider
 {
+    #[Override]
     public function register(): void
     {
         Modules::setBasePath(dirname(__DIR__, 2));
+
+        $this->app['config']->set(
+            'view.paths',
+            [
+                dirname(__DIR__, 2).'/resources/views',
+                ...$this->app['config']->get('view.paths', []),
+            ]
+        );
 
         Modules::routeGroup(
             name: 'custom',

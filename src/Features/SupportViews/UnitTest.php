@@ -57,7 +57,7 @@ it('can load views', function (bool $cache): void {
     $discoverer->collect()
         ->each(function (array $asset) use ($views): void {
             expect($views)->toHaveKey(strtolower($asset['module']))
-                ->and($views[strtolower($asset['module'])])->toHaveCount(1)->toContain($asset['path']);
+                ->and($views[strtolower($asset['module'])])->toContain($asset['path']);
         });
 
     expect(view('first::first')->render())
@@ -88,6 +88,54 @@ it('can load views', function (bool $cache): void {
             deleteCachedView: true
         ))
         ->toContain('Submit Component');
+
+    if ($cache) {
+        $discoverer->clear();
+    }
+})->with([
+    'without cache' => false,
+    'with cache' => true,
+]);
+
+it('lets application views override module views', function (bool $cache): void {
+    $discoverer = ViewsScout::create();
+
+    if ($cache) {
+        $discoverer->cache();
+    }
+
+    $hints = app('view')->getFinder()->getHints();
+
+    expect($hints)->toHaveKey('first');
+
+    $firstHints = collect($hints['first'])
+        ->map(fn (string $path): string => str_replace('\\', '/', $path))
+        ->values()
+        ->all();
+
+    $overridePath = str_replace(
+        '\\',
+        '/',
+        realpath(__DIR__.'/../../../workbench/resources/views/vendor/first')
+    );
+    $modulePath = str_replace(
+        '\\',
+        '/',
+        realpath(Modules::modulesPath('First/Resources/views'))
+    );
+
+    expect($firstHints)
+        ->toContain($overridePath)
+        ->toContain($modulePath)
+        ->and(array_search($overridePath, $firstHints, true))
+        ->toBeLessThan(array_search($modulePath, $firstHints, true));
+
+    expect(view('first::override-target')->render())
+        ->toContain('Overridden App View')
+        ->not->toContain('Original Module View');
+
+    expect(view('first::first')->render())
+        ->toContain('First Page');
 
     if ($cache) {
         $discoverer->clear();
