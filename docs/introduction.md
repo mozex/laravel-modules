@@ -122,6 +122,8 @@ project-root/
 
 You don't need all of these directories. Only create what your module needs. A module with just a `Routes/web.php` and a `Resources/views/` directory is perfectly valid.
 
+Mature modules also tend to grow directories the package doesn't touch but that have become common Laravel conventions: `Actions/`, `Concerns/` (for traits), `Data/` or `DataTransferObjects/`, `Enums/`, `Exceptions/`, `Http/Controllers/`, `Http/Middleware/`, `Http/Requests/`, `Jobs/`, `Mail/`, `Notifications/`, `Settings/`, `Support/`, and so on. None of these are auto-discovered. They're just file locations that follow Laravel naming conventions, so the classes inside them autoload through the module's PSR-4 mapping like any other class. Use them the same way you'd use their `app/` counterparts.
+
 ## Quick start
 
 Once installed, create your first module:
