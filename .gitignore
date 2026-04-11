@@ -6,4 +6,6 @@ coverage
 phpunit.xml
 phpstan.neon
 vendor
+!workbench/resources/views/vendor
+!workbench/resources/views/vendor/**
 node_modules

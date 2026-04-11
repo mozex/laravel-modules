@@ -20,6 +20,14 @@ class WorkbenchServiceProvider extends ServiceProvider
             dirname(__DIR__, 2).'/resources/views/layouts'
         );
 
+        $this->app['config']->set(
+            'view.paths',
+            [
+                dirname(__DIR__, 2).'/resources/views',
+                ...$this->app['config']->get('view.paths', []),
+            ]
+        );
+
         Modules::routeGroup(
             name: 'custom',
             prefix: 'custom',
