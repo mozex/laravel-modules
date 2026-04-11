@@ -3,14 +3,9 @@ title: Blade Components
 weight: 1
 ---
 
-## Overview
+Class-based Blade components in modules are discovered and registered with namespaced aliases. A component class at `Modules/Blog/View/Components/Card.php` becomes `<x-blog::card />`. Nested directories become dot-separated paths: `Post/Card.php` becomes `<x-blog::post.card />`.
 
-Auto-discovers class-based Blade components within modules and registers them with namespaced aliases using the `<x-module::path.to.component/>` syntax.
-
-## What gets discovered
-
-- Non-abstract classes extending `Illuminate\View\Component`
-- Located in directories matching configured patterns (default: `*/View/Components`)
+The package scans for non-abstract classes that extend `Illuminate\View\Component`. Abstract base classes and interfaces are ignored.
 
 ## Default configuration
 
@@ -29,49 +24,95 @@ Auto-discovers class-based Blade components within modules and registers them wi
 Modules/Blog/
 └── View/
     └── Components/
-        ├── Post/
-        │   └── Card.php          // <x-blog::post.card />
+        ├── Card.php              // <x-blog::card />
         ├── Filter.php            // <x-blog::filter />
-        └── WithoutView.php       // <x-blog::without-view />
+        └── Post/
+            ├── Card.php          // <x-blog::post.card />
+            └── Summary.php       // <x-blog::post.summary />
 ```
 
-## Naming rules
+## Writing a component
 
-- Module name → kebab-case prefix: `Blog` → `blog`, `UserAdmin` → `user-admin`
-- Path segments under the matched pattern → kebab-cased and dot-joined: `Post/Card.php` → `post.card`
-- Fallback: if no path segments can be derived, the alias uses the lowercase class basename
-
-## Usage
-
-```blade
-<x-blog::filter :name="$name" />
-<x-blog::post.card :post="$post" />
-```
-
-Components can return any view from their `render()` method:
+Module Blade components work exactly like regular Laravel Blade components. Extend `Illuminate\View\Component`, accept data through the constructor, and return a view from `render()`:
 
 ```php
-class Card extends \Illuminate\View\Component
+namespace Modules\Blog\View\Components;
+
+use Illuminate\View\Component;
+
+class Card extends Component
 {
-    public function __construct(public $post) {}
+    public function __construct(
+        public string $title,
+        public string $excerpt,
+        public ?string $image = null,
+    ) {}
 
     public function render()
     {
-        return view('blog::components.post.card');
+        return view('blog::components.card');
     }
 }
 ```
 
-## Configuration
+The view file lives in the module's view directory:
 
-- Set `'blade-components.active' => false` to disable auto-registration.
-- Edit `'blade-components.patterns'` to change discovery directories.
+```blade
+{{-- Modules/Blog/Resources/views/components/card.blade.php --}}
+<div class="card">
+    @if($image)
+        <img src="{{ $image }}" alt="{{ $title }}">
+    @endif
+    <h3>{{ $title }}</h3>
+    <p>{{ $excerpt }}</p>
+</div>
+```
+
+Then use it in any Blade template:
+
+```blade
+<x-blog::card title="My Post" excerpt="A short summary" />
+```
+
+## Alias naming
+
+The alias follows two rules:
+
+1. The module directory name is converted to kebab-case and used as the namespace prefix: `Blog` becomes `blog`, `UserAdmin` becomes `user-admin`.
+2. The path segments under `View/Components/` are kebab-cased and joined with dots: `Post/Card.php` becomes `post.card`.
+
+Some examples:
+
+| Class location | Alias |
+|---|---|
+| `Blog/View/Components/Filter.php` | `<x-blog::filter />` |
+| `Blog/View/Components/Post/Card.php` | `<x-blog::post.card />` |
+| `Blog/View/Components/UI/Button/Primary.php` | `<x-blog::ui.button.primary />` |
+| `PWA/View/Components/Icons.php` | `<x-pwa::icons />` |
+
+## Inline rendering
+
+Components don't need a separate view file. You can return inline HTML from `render()`:
+
+```php
+public function render()
+{
+    return <<<'blade'
+        <span class="badge badge-{{ $type }}">{{ $label }}</span>
+    blade;
+}
+```
+
+## Blade Components vs. Anonymous Components
+
+This feature handles class-based components in `View/Components/`. If you want simple components without a PHP class, use anonymous components instead. Those are `.blade.php` files placed in `Resources/views/components/` and are covered by the [Views](./views) feature.
+
+Both can coexist in the same module. Use class-based components when you need constructor logic, computed properties, or methods. Use anonymous components for simpler presentational markup.
 
 ## Troubleshooting
 
-- **Unknown tag**: clear compiled views (`php artisan view:clear`) and confirm the alias matches the kebab-cased path.
-- **Alias collision**: if two classes across modules map to the same alias, rename one or adjust directory structure.
+**"Unable to locate component" error**: Run `php artisan view:clear` to clear compiled views. Check that the class extends `Component` (not just any class) and lives under a directory matching the configured patterns.
 
-## See also
+## Disabling
 
-- [Views & Anonymous Components](./views.md)
+Set `'blade-components.active' => false` to stop auto-registration. Adjust `'blade-components.patterns'` if your components live in a different directory.
