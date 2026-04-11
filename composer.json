@@ -1,6 +1,6 @@
 {
     "name": "mozex/laravel-modules",
-    "description": "Full-featured module system for Laravel — auto-discovery, isolated tests, Livewire & Filament support, zero config.",
+    "description": "Laravel package that auto-discovers and registers module assets (configs, routes, views, migrations, commands, Livewire, Filament, Nova, and more) from a Modules/ directory at the project root.",
     "keywords": [
         "laravel",
         "laravel-modules",

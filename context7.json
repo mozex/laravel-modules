@@ -3,7 +3,7 @@
     "url": "https://context7.com/mozex/laravel-modules",
     "public_key": "pk_2dXAZIEpHP6qQeGGTuyQt",
     "projectTitle": "Laravel Modules",
-    "description": "Full-featured module system for Laravel — auto-discovery, isolated tests, Livewire & Filament support, zero config.",
+    "description": "Laravel package that auto-discovers and registers module assets (configs, routes, views, migrations, commands, Livewire, Filament, Nova, and more) from a Modules/ directory at the project root.",
     "folders": [],
     "previousVersions": [
         {
