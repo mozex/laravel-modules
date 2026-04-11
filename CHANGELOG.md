@@ -2,6 +2,29 @@
 
 All notable changes to `laravel-modules` will be documented in this file.
 
+## 3.2.0 - 2026-04-11
+
+### What's changed
+
+#### Fixes
+
+- **Module name kebab-casing now handles acronyms correctly.** Names with consecutive uppercase letters no longer split into individual segments. `MyAPI` → `my-api` (was `my-a-p-i`), `HTMLParser` → `html-parser`, `IOStream` → `io-stream`. All-uppercase names (`PWA`, `CRM`) and standard PascalCase (`Blog`, `UserAdmin`) are unchanged. If you have a module with consecutive uppercase letters in its name, double-check your view, Blade component, Livewire, and translation references after upgrading.
+  
+- **`modules:list` reports real file counts for directory-based asset types.** Migrations, views, translations, listeners, Livewire components, and Filament assets were showing `1` per module. The command now counts files recursively inside each matched directory.
+  
+
+#### New
+
+- **Laravel Boost skill.** Ships at `resources/boost/skills/laravel-modules/SKILL.md` and loads automatically on `php artisan boost:install`. Covers the full facade API, route customization, Livewire/Filament patterns, name guessing, Inertia (Vue and React), and testing setup. The existing Boost guideline has been rewritten to stay lean and focused.
+
+#### Documentation
+
+- Complete rewrite of every feature page and integration guide.
+- New **Inertia** integration guide covering Vue and React: Vite alias with regex, Inertia page resolver for module-scoped pages, controller usage, TypeScript paths config, typed props via Spatie TypeScript Transformer (including the `script.globalTypeFiles` trick for Vue and the plain-TypeScript flow for React), and module CSS imports.
+- Updated package descriptions in `composer.json` and `context7.json`.
+
+**Full Changelog**: https://github.com/mozex/laravel-modules/compare/3.1.0...3.2.0
+
 ## 3.1.0 - 2026-03-31
 
 * add modules:list command
@@ -58,6 +81,7 @@ Place SFCs and MFCs in your module's `Resources/views/livewire/` directory and t
 ```blade
 <livewire:blog::counter />  {{-- SFC --}}
 <livewire:blog::toggle />   {{-- MFC --}}
+
 ```
 ##### Namespace-Based Registration
 
@@ -88,6 +112,7 @@ Add `view_path` to the `livewire-components` section if you've published the con
     ],
     'view_path' => 'Resources/views/livewire', // New in v3
 ],
+
 ```
 #### Upgrading
 
