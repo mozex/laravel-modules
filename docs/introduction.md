@@ -347,3 +347,12 @@ Here's everything the package discovers and registers:
 Livewire, Filament, and Nova features are only active when their respective packages are installed. You don't need to configure anything to skip them.
 
 Each feature has its own documentation page with detailed configuration, directory layout, usage examples, and troubleshooting tips. Browse them in the sidebar.
+
+## Integrations
+
+Beyond the features the package discovers, there are integration guides for common tools you'll pair with a modular Laravel project:
+
+- [Inertia](./integrations/inertia.md): module-scoped Inertia pages for Vue or React, Vite alias setup, TypeScript configuration, and typed props generated from PHP via Spatie TypeScript Transformer.
+- [PHPStan](./integrations/phpstan.md): configuring PHPStan to analyse every module directory, plus composer scripts for the common commands.
+- [PHPUnit](./integrations/phpunit.md): wiring module tests into your PHPUnit test suite.
+- [Pest](./integrations/pest.md): applying Pest's TestCase and traits to module tests.
