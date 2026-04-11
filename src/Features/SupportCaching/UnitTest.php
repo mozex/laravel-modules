@@ -85,3 +85,14 @@ it('shows asset counts per module', function (): void {
         ->toContain('Views')
         ->toContain('Routes');
 });
+
+it('counts files inside directory-based asset scouts', function (): void {
+    Artisan::call(ListCommand::class);
+    $output = preg_replace('/\e\[[0-9;]*m/', '', (string) Artisan::output());
+
+    $secondStart = strpos((string) $output, 'Second');
+    $pwaStart = strpos((string) $output, 'PWA');
+    $secondSection = substr((string) $output, (int) $secondStart, (int) $pwaStart - (int) $secondStart);
+
+    expect($secondSection)->toMatch('/\|\s*Migrations\s*\|\s*2\s*\|/');
+});
