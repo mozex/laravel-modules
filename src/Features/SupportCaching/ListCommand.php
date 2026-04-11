@@ -3,6 +3,8 @@
 namespace Mozex\Modules\Features\SupportCaching;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\File;
+use Mozex\Modules\Contracts\ModuleDirectoryScout;
 use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\Facades\Modules;
 
@@ -106,9 +108,15 @@ class ListCommand extends Command
                 continue;
             }
 
+            $isDirectoryScout = $scout instanceof ModuleDirectoryScout;
+
             foreach ($scout->collect() as $asset) {
                 $module = $asset['module'];
-                $counts[$module][$type->value] = ($counts[$module][$type->value] ?? 0) + 1;
+                $increment = $isDirectoryScout && is_dir($asset['path'])
+                    ? count(File::allFiles($asset['path']))
+                    : 1;
+
+                $counts[$module][$type->value] = ($counts[$module][$type->value] ?? 0) + $increment;
             }
         }
 
