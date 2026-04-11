@@ -4,7 +4,8 @@ use Mozex\Modules\Features\Feature;
 
 function getNameViaReflection(string $name): string
 {
-    $feature = new class(app()) extends Feature {
+    $feature = new class(app()) extends Feature
+    {
         public static function asset(): never
         {
             throw new RuntimeException('Not implemented');
