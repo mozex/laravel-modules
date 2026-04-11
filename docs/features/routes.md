@@ -122,6 +122,53 @@ With this setup, every module's `Routes/localized.php` file is loaded inside a `
 
 Call both `routeGroup()` and `registerRoutesUsing()` from your service provider's `register()` method.
 
+### Inline alternative
+
+A custom registrar wraps every route in a file with the same logic. When you only need the wrapping for some routes, it's often simpler to call the helper directly inside a regular route file:
+
+```php
+// Modules/Landing/Routes/web.php
+use Illuminate\Support\Facades\Route;
+use Modules\Landing\Livewire\BecomeASeller;
+
+Route::get('/terms', [TermsController::class, 'show'])->name('terms');
+
+Route::localized(function () {
+    Route::get('become-a-seller', BecomeASeller::class)->name('landing.become-a-seller');
+});
+```
+
+Here `/terms` is a plain route and `become-a-seller` is wrapped in `Route::localized()`. No custom registrar or extra file needed. Reach for the custom registrar approach when every route in a dedicated file should share the same wrapping logic.
+
+## Organizing by concern
+
+Since every `.php` file inside `Routes/` is discovered, you can split routes by what they relate to rather than by HTTP concerns. A `User` module that integrates Jetstream and Fortify might have:
+
+```
+Modules/User/
+└── Routes/
+    ├── fortify.php    // Fortify login, registration, password reset routes
+    ├── jetstream.php  // Jetstream team management routes
+    └── web.php        // the module's own public routes
+```
+
+Each file defines its own `Route::group()` internally with whatever middleware the third-party package needs:
+
+```php
+// Modules/User/Routes/fortify.php
+Route::group([
+    'middleware' => config('fortify.middleware', ['web']),
+    'prefix' => 'dashboard',
+], function () {
+    Route::livewire('/login', Login::class)
+        ->middleware(['guest:'.config('fortify.guard')])
+        ->name('login');
+    // ...
+});
+```
+
+The filenames `fortify.php` and `jetstream.php` don't match any defined route group, so the package loads each file without wrapping. The `Route::group()` call inside each file does the real work. This keeps routes organized by the third-party concern they belong to without requiring you to register a route group on the facade level.
+
 ## Console routes
 
 Files listed in the `commands_filenames` config (default: `['console']`) are handled specially. Instead of loading into a route group, they're registered with Laravel's console kernel via `addCommandRoutePaths()`.
