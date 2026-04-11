@@ -1,18 +1,25 @@
 {
     "name": "mozex/laravel-modules",
-    "description": "Module Management For Laravel",
+    "description": "Laravel package that auto-discovers and registers module assets (configs, routes, views, migrations, commands, Livewire, Filament, Nova, and more) from a Modules/ directory at the project root.",
     "keywords": [
         "laravel",
+        "laravel-modules",
+        "laravel-package",
         "modules",
         "module",
         "modular",
         "modular-architecture",
         "package",
+        "package-structure",
         "hmvc",
         "domain-driven-design",
         "ddd",
+        "auto-discovery",
+        "livewire",
+        "filament",
         "separation-of-concerns",
-        "eloquent"
+        "eloquent",
+        "mozex"
     ],
     "homepage": "https://github.com/mozex/laravel-modules",
     "license": "MIT",
