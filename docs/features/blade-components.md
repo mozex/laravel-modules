@@ -105,7 +105,7 @@ public function render()
 
 ## Blade Components vs. Anonymous Components
 
-This feature handles class-based components in `View/Components/`. If you want simple components without a PHP class, use anonymous components instead. Those are `.blade.php` files placed in `Resources/views/components/` and are covered by the [Views](./views) feature.
+This feature handles class-based components in `View/Components/`. If you want simple components without a PHP class, use anonymous components instead. Those are `.blade.php` files placed in `Resources/views/components/` and are covered by the [Views](./views.md) feature.
 
 Both can coexist in the same module. Use class-based components when you need constructor logic, computed properties, or methods. Use anonymous components for simpler presentational markup.
 

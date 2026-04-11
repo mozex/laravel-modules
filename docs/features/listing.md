@@ -50,5 +50,5 @@ Disabled modules show "No assets discovered" because the package skips them enti
 
 ## Related commands
 
-- `php artisan modules:cache` caches the discovery results for production use. See [Caching](./caching).
+- `php artisan modules:cache` caches the discovery results for production use. See [Caching](./caching.md).
 - `php artisan modules:clear` removes the discovery cache so the next request scans fresh.

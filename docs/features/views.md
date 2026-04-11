@@ -107,7 +107,7 @@ Define props at the top of the anonymous component file, just like any Laravel a
 </div>
 ```
 
-This is different from class-based Blade components (covered in the [Blade Components](./blade-components) docs). Anonymous components live in the view directory and don't need a backing PHP class. Class-based components live in `View/Components/` and have a dedicated PHP class with a `render()` method.
+This is different from class-based Blade components (covered in the [Blade Components](./blade-components.md) docs). Anonymous components live in the view directory and don't need a backing PHP class. Class-based components live in `View/Components/` and have a dedicated PHP class with a `render()` method.
 
 ## View overriding
 

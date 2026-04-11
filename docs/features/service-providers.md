@@ -60,7 +60,7 @@ The package already handles discovery and registration for configs, routes, view
 Module service providers are useful for:
 
 - **Container bindings**: binding interfaces to implementations, registering singletons
-- **Event subscribers**: registering subscriber classes via `Event::subscribe()`. Subscribers (classes with a `subscribe()` method that wires multiple event-listener mappings at once) aren't auto-discovered by Laravel or this package, so they need a manual registration call. This is different from the [Events & Listeners](./events-listeners) feature, which covers listener classes with typed `handle()` methods.
+- **Event subscribers**: registering subscriber classes via `Event::subscribe()`. Subscribers (classes with a `subscribe()` method that wires multiple event-listener mappings at once) aren't auto-discovered by Laravel or this package, so they need a manual registration call. This is different from the [Events & Listeners](./events-listeners.md) feature, which covers listener classes with typed `handle()` methods.
 - **Morph map entries**: registering the module's models with `Relation::enforceMorphMap()` so polymorphic relations use stable string keys instead of full class names.
 - **Policies for third-party models**: registering policies for models that live in other packages (for example, `Gate::policy(Spatie\Permission\Models\Role::class, RolePolicy::class)`). The package's automatic model-to-policy guessing only covers models inside modules, so third-party models need manual wiring here.
 - **Macro definitions**: adding macros to Laravel classes

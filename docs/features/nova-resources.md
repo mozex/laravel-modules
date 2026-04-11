@@ -71,7 +71,7 @@ The resource appears in the Nova sidebar alongside your application's resources.
 
 ## Model and policy resolution
 
-Nova resources in modules work with the [Models & Factories](./models-factories) and [Policies](./policies) features. A `Modules\Blog\Nova\Post` resource pointing to `Modules\Blog\Models\Post` will automatically find `Modules\Blog\Policies\PostPolicy` for authorization.
+Nova resources in modules work with the [Models & Factories](./models-factories.md) and [Policies](./policies.md) features. A `Modules\Blog\Nova\Post` resource pointing to `Modules\Blog\Models\Post` will automatically find `Modules\Blog\Policies\PostPolicy` for authorization.
 
 ## Registration timing
 

@@ -5,7 +5,7 @@ weight: 10
 
 Laravel's authorization system uses `Gate::guessPolicyNamesUsing` to find the policy class for a given model. Out of the box, it only looks in the `App\Policies` namespace. This feature adds a module-aware resolver so that `Modules\Blog\Models\Post` automatically maps to `Modules\Blog\Policies\PostPolicy`.
 
-Like the [Models & Factories](./models-factories) feature, this is a namespace-based resolver with no runtime scanning.
+Like the [Models & Factories](./models-factories.md) feature, this is a namespace-based resolver with no runtime scanning.
 
 ## Default configuration
 

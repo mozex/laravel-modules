@@ -188,7 +188,7 @@ The package converts your module's directory name to a kebab-case prefix for all
 | `CRM` | `crm` | `__('crm::messages.welcome')` |
 | `MyAPI` | `my-api` | `view('my-api::dashboard')` |
 
-This prefix applies to views, Blade components, anonymous components, Livewire components, and translations. Routes use the filename for grouping instead (see the [Routes](./features/routes) docs).
+This prefix applies to views, Blade components, anonymous components, Livewire components, and translations. Routes use the filename for grouping instead (see the [Routes](./features/routes.md) docs).
 
 ## Configuration
 
@@ -327,22 +327,22 @@ Here's everything the package discovers and registers:
 
 | Feature | What it does | Config key |
 |---|---|---|
-| [Configs](./features/configs) | Merges module config files into Laravel's config | `configs` |
-| [Service Providers](./features/service-providers) | Registers module service providers | `service-providers` |
-| [Helpers](./features/helpers) | Loads helper function files via `require_once` | `helpers` |
-| [Commands](./features/commands) | Registers Artisan commands | `commands` |
-| [Migrations](./features/migrations) | Adds migration paths to Laravel's migrator | `migrations` |
-| [Seeders](./features/seeders) | Discovers module database seeders | `seeders` |
-| [Translations](./features/translations) | Registers namespaced and JSON translations | `translations` |
-| [Views](./features/views) | Registers view namespaces and anonymous components | `views` |
-| [Blade Components](./features/blade-components) | Registers class-based Blade components | `blade-components` |
-| [Routes](./features/routes) | Loads route files with group-based middleware | `routes` |
-| [Models & Factories](./features/models-factories) | Wires model-factory name guessing | `models`, `factories` |
-| [Policies](./features/policies) | Wires model-policy name guessing | `policies` |
-| [Events & Listeners](./features/events-listeners) | Enables event auto-discovery in modules | `listeners` |
-| [Livewire](./features/livewire-components) | Registers Livewire components (class, SFC, MFC) | `livewire-components` |
-| [Filament](./features/filament) | Registers resources, pages, widgets, clusters per panel | `filament-*` |
-| [Nova](./features/nova-resources) | Registers Nova resources | `nova-resources` |
+| [Configs](./features/configs.md) | Merges module config files into Laravel's config | `configs` |
+| [Service Providers](./features/service-providers.md) | Registers module service providers | `service-providers` |
+| [Helpers](./features/helpers.md) | Loads helper function files via `require_once` | `helpers` |
+| [Commands](./features/commands.md) | Registers Artisan commands | `commands` |
+| [Migrations](./features/migrations.md) | Adds migration paths to Laravel's migrator | `migrations` |
+| [Seeders](./features/seeders.md) | Discovers module database seeders | `seeders` |
+| [Translations](./features/translations.md) | Registers namespaced and JSON translations | `translations` |
+| [Views](./features/views.md) | Registers view namespaces and anonymous components | `views` |
+| [Blade Components](./features/blade-components.md) | Registers class-based Blade components | `blade-components` |
+| [Routes](./features/routes.md) | Loads route files with group-based middleware | `routes` |
+| [Models & Factories](./features/models-factories.md) | Wires model-factory name guessing | `models`, `factories` |
+| [Policies](./features/policies.md) | Wires model-policy name guessing | `policies` |
+| [Events & Listeners](./features/events-listeners.md) | Enables event auto-discovery in modules | `listeners` |
+| [Livewire](./features/livewire-components.md) | Registers Livewire components (class, SFC, MFC) | `livewire-components` |
+| [Filament](./features/filament.md) | Registers resources, pages, widgets, clusters per panel | `filament-*` |
+| [Nova](./features/nova-resources.md) | Registers Nova resources | `nova-resources` |
 
 Livewire, Filament, and Nova features are only active when their respective packages are installed. You don't need to configure anything to skip them.
 

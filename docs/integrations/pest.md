@@ -3,7 +3,7 @@ title: Pest
 weight: 3
 ---
 
-Pest runs on top of PHPUnit, so you'll need the [PHPUnit configuration](./phpunit) in place first (the `Modules` test suite in `phpunit.xml`). On top of that, Pest needs a `tests/Pest.php` file that tells it which base class and traits to apply to module tests.
+Pest runs on top of PHPUnit, so you'll need the [PHPUnit configuration](./phpunit.md) in place first (the `Modules` test suite in `phpunit.xml`). On top of that, Pest needs a `tests/Pest.php` file that tells it which base class and traits to apply to module tests.
 
 ## Setup
 

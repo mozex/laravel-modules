@@ -78,7 +78,7 @@ Each command's `$signature` must be unique across your entire application, inclu
 
 ## Console routes vs. command classes
 
-You can also define closure-based Artisan commands in `Routes/console.php` files (see the [Routes](./routes) docs). Use command classes when you want a dedicated class with its own tests and dependency injection. Use console routes for quick, one-off commands that don't need much structure.
+You can also define closure-based Artisan commands in `Routes/console.php` files (see the [Routes](./routes.md) docs). Use command classes when you want a dedicated class with its own tests and dependency injection. Use console routes for quick, one-off commands that don't need much structure.
 
 ## Disabling
 
