@@ -36,6 +36,7 @@ A zero-config modular architecture package for Laravel. Create a `Modules/` dire
   - [PHPStan](https://mozex.dev/docs/laravel-modules/v3/integrations/phpstan)
   - [PHPUnit](https://mozex.dev/docs/laravel-modules/v3/integrations/phpunit)
   - [Pest](https://mozex.dev/docs/laravel-modules/v3/integrations/pest)
+  - [Inertia](https://mozex.dev/docs/laravel-modules/v3/integrations/inertia)
 
 ## Support This Project
 
