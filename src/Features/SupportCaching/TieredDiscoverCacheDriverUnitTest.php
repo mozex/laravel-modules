@@ -132,3 +132,16 @@ it('subsequent get() after warming hits the static layer without touching persis
 
     expect($this->driver->get('id'))->toBe(['once']);
 });
+
+it('persist() writes through to both the static and persistent layers', function (): void {
+    $this->driver->persist('id', ['both']);
+
+    expect($this->static->has('id'))->toBeTrue()
+        ->and($this->static->get('id'))->toBe(['both'])
+        ->and($this->persistent->has('id'))->toBeTrue()
+        ->and($this->persistent->get('id'))->toBe(['both']);
+});
+
+it('implements the Persistable interface', function (): void {
+    expect($this->driver)->toBeInstanceOf(\Mozex\Modules\Features\SupportCaching\Persistable::class);
+});

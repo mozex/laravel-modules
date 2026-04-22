@@ -2,7 +2,6 @@
 
 namespace Mozex\Modules\Features\SupportCaching;
 
-use Illuminate\Contracts\Foundation\Application;
 use Mozex\Modules\Contracts\BaseScout;
 use Spatie\StructureDiscoverer\Cache\FileDiscoverCacheDriver;
 use Spatie\StructureDiscoverer\Cache\StaticDiscoverCacheDriver;
@@ -26,7 +25,7 @@ use Spatie\StructureDiscoverer\Cache\StaticDiscoverCacheDriver;
  */
 class RuntimeCache
 {
-    public static function install(Application $app): void
+    public static function install(): void
     {
         BaseScout::useCacheDriverFactory(
             fn (BaseScout $scout): TieredDiscoverCacheDriver => new TieredDiscoverCacheDriver(

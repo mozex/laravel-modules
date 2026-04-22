@@ -8,9 +8,9 @@ namespace Mozex\Modules\Features\SupportCaching;
  *
  * Drivers that cache in memory only (or use `put()` to populate both layers)
  * don't need to implement this. The tiered driver intentionally makes `put()`
- * an in-memory-only operation to prevent runtime auto-populate from creating
- * disk files, so callers that want the result persisted (like `modules:cache`
- * and the test-session coordinator) go through `persist()` instead.
+ * an in-memory-only operation so runtime auto-populate never creates disk
+ * files; explicit persistence goes through `persist()` instead — see
+ * `BaseScout::cache()` for the call site.
  */
 interface Persistable
 {

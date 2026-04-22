@@ -49,7 +49,7 @@ class ModulesServiceProvider extends PackageServiceProvider
 
     public function packageRegistered(): void
     {
-        RuntimeCache::install($this->app);
+        RuntimeCache::install();
 
         $this->registerFeatures();
     }

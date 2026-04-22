@@ -8,10 +8,16 @@ use Spatie\StructureDiscoverer\Cache\StaticDiscoverCacheDriver;
 /**
  * Two-layer cache driver: an in-memory static layer in front of any persistent driver.
  *
- * - Reads check the static layer first; on miss, read-through loads from the persistent
- *   driver and warms the static layer so future reads in this process are O(1).
- * - Writes only populate the static layer. The persistent layer is treated as read-only
- *   here (owned by `php artisan modules:cache`), so test runs never disrupt its contents.
+ * - `get()` checks the static layer first; on miss, read-through loads from the
+ *   persistent driver and warms the static layer so subsequent reads in the
+ *   same process are O(1).
+ * - `put()` only populates the static layer. This keeps runtime auto-populate
+ *   paths (like `BaseScout::get()` on a cache miss) from silently writing disk
+ *   files behind the user's back.
+ * - `persist()` is the explicit "write through to both layers" operation —
+ *   used by `BaseScout::cache()` (the `php artisan modules:cache` code path).
+ * - `forget()` clears both layers. Asymmetric with `put()` by design: runtime
+ *   writes stay in-memory; explicit clears remove everything.
  */
 class TieredDiscoverCacheDriver implements DiscoverCacheDriver, Persistable
 {
@@ -49,8 +55,9 @@ class TieredDiscoverCacheDriver implements DiscoverCacheDriver, Persistable
     public function put(string $id, array $discovered): void
     {
         // Only populate the static layer. The persistent layer is deployer-owned
-        // (populated by `modules:cache`) and we intentionally never write to it here
-        // to avoid polluting dev/production cache during tests.
+        // and updated exclusively through the explicit `persist()` path (i.e.
+        // `php artisan modules:cache`). This prevents runtime auto-populate
+        // from silently creating disk cache files.
         $this->static->put($id, $discovered);
     }
 
@@ -65,9 +72,9 @@ class TieredDiscoverCacheDriver implements DiscoverCacheDriver, Persistable
      *
      * `put()` intentionally only populates the in-memory layer so that runtime
      * scout access (discovery → auto-populate) never creates disk cache files.
-     * Callers that genuinely want to persist to the file layer — for example,
-     * `php artisan modules:cache` or the test-session coordinator — should use
-     * this method instead.
+     * Callers that genuinely want to persist to the file layer — such as
+     * `BaseScout::cache()` invoked by `php artisan modules:cache` — use this
+     * method instead.
      *
      * @param  array<mixed>  $discovered
      */

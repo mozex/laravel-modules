@@ -61,7 +61,7 @@ afterEach(function (): void {
     // Restore production factory so other suites aren't left with a stale scout driver.
     BaseScout::clearInstances();
     StaticDiscoverCacheDriver::clear();
-    RuntimeCache::install(app());
+    RuntimeCache::install();
 });
 
 /*

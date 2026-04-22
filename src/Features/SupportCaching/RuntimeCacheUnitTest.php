@@ -31,7 +31,7 @@ afterEach(function (): void {
 // ---------------------------------------------------------------------------
 
 it('installs a tiered cache driver factory on BaseScout', function (): void {
-    RuntimeCache::install(app());
+    RuntimeCache::install();
 
     $scout = ConfigsScout::create();
 
@@ -40,7 +40,7 @@ it('installs a tiered cache driver factory on BaseScout', function (): void {
 });
 
 it('points the tiered persistent layer at cachePath', function (): void {
-    RuntimeCache::install(app());
+    RuntimeCache::install();
 
     $scout = ConfigsScout::create();
     $persistent = persistentLayerOf($scout->cacheDriver());
@@ -62,7 +62,7 @@ it('useCacheDriverFactory replaces the default driver for scouts', function (): 
     expect(ConfigsScout::create()->cacheDriver())->toBe($custom);
 
     // Re-install the production factory so the rest of the suite works as expected.
-    RuntimeCache::install(app());
+    RuntimeCache::install();
 });
 
 it('useCacheDriverFactory(null) falls back to the default FileDiscoverCacheDriver', function (): void {
@@ -73,7 +73,7 @@ it('useCacheDriverFactory(null) falls back to the default FileDiscoverCacheDrive
 
     expect($scout->cacheDriver())->toBeInstanceOf(FileDiscoverCacheDriver::class);
 
-    RuntimeCache::install(app());
+    RuntimeCache::install();
 });
 
 it('passes the scout instance into the factory closure', function (): void {
@@ -91,7 +91,7 @@ it('passes the scout instance into the factory closure', function (): void {
 
     expect($received)->toBe($scout);
 
-    RuntimeCache::install(app());
+    RuntimeCache::install();
 });
 
 it('caches the resolved driver per scout instance', function (): void {
@@ -119,7 +119,7 @@ it('get() populates the active cache driver after discovery', function (): void 
 
     expect($static->has($scout->identifier()))->toBeTrue();
 
-    RuntimeCache::install(app());
+    RuntimeCache::install();
 });
 
 // ---------------------------------------------------------------------------
