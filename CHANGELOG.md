@@ -2,6 +2,39 @@
 
 All notable changes to `laravel-modules` will be documented in this file.
 
+## 3.3.0 - 2026-04-22
+
+### What's new
+
+**In-memory cache layer.** Scout discovery results now live in memory for the lifetime of the PHP process. The first access in a process discovers (or reads the `modules:cache` file if one exists); every access after that returns from memory. No effect on PHP-FPM or `php artisan serve`, which start a fresh process per request. Repeat scout access becomes free on Octane, Vapor, and long-running queue workers.
+
+**Custom cache drivers via `BaseScout::useCacheDriverFactory()`.** You can now swap the default driver at runtime with a factory closure:
+
+```php
+use Mozex\Modules\Contracts\BaseScout;
+use Spatie\StructureDiscoverer\Cache\DiscoverCacheDriver;
+
+BaseScout::useCacheDriverFactory(
+    fn (BaseScout $scout): DiscoverCacheDriver => new YourDriver($scout->cacheFile())
+);
+
+```
+Any class implementing Spatie's `DiscoverCacheDriver` works. Pass `null` to restore the default. See the [caching docs](https://mozex.dev/docs/laravel-modules/v3/features/caching#custom-cache-drivers) for details.
+
+**`Persistable` interface.** Drivers that need to separate runtime caching (`put()`) from explicit deploy-time persistence can implement `Mozex\Modules\Features\SupportCaching\Persistable`. When a driver implements it, `BaseScout::cache()` calls `persist()`; otherwise it falls back to `put()`. The default tiered driver uses this split so runtime cache warming stays in memory while `modules:cache` writes to disk.
+
+### Changes
+
+- Default driver is now `TieredDiscoverCacheDriver` (in-memory over file), installed by `RuntimeCache::install()` during package registration.
+- `BaseScout::get()` auto-populates the cache driver on a discovery miss, so the in-memory layer warms up naturally on first read.
+- `BaseScout::cache()` routes through `persist()` for drivers implementing `Persistable`, `put()` otherwise.
+
+### Docs
+
+- Added "Custom cache drivers" section to the caching guide and the Boost skill.
+
+**Full Changelog**: https://github.com/mozex/laravel-modules/compare/3.2.0...3.3.0
+
 ## 3.2.0 - 2026-04-11
 
 ### What's changed
@@ -82,6 +115,7 @@ Place SFCs and MFCs in your module's `Resources/views/livewire/` directory and t
 <livewire:blog::counter />  {{-- SFC --}}
 <livewire:blog::toggle />   {{-- MFC --}}
 
+
 ```
 ##### Namespace-Based Registration
 
@@ -112,6 +146,7 @@ Add `view_path` to the `livewire-components` section if you've published the con
     ],
     'view_path' => 'Resources/views/livewire', // New in v3
 ],
+
 
 ```
 #### Upgrading
