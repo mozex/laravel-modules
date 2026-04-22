@@ -2,9 +2,11 @@
 
 namespace Mozex\Modules\Contracts;
 
+use Closure;
 use Illuminate\Support\Collection;
 use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\Facades\Modules;
+use Mozex\Modules\Features\SupportCaching\Persistable;
 use Spatie\StructureDiscoverer\Cache\DiscoverCacheDriver;
 use Spatie\StructureDiscoverer\Cache\FileDiscoverCacheDriver;
 use Spatie\StructureDiscoverer\Data\DiscoveredClass;
@@ -13,6 +15,9 @@ abstract class BaseScout
 {
     /** @var array<class-string, static> */
     protected static array $instances = [];
+
+    /** @var (Closure(self): DiscoverCacheDriver)|null */
+    protected static ?Closure $cacheDriverFactory = null;
 
     protected ?DiscoverCacheDriver $cacheDriverInstance = null;
 
@@ -31,6 +36,25 @@ abstract class BaseScout
         self::$instances = [];
     }
 
+    /**
+     * Register a custom cache driver factory for every scout, or clear it (null)
+     * to fall back to the default `FileDiscoverCacheDriver`.
+     *
+     * Note: scouts cache their resolved driver in `$cacheDriverInstance` per
+     * instance. If any scout singletons have already resolved their driver
+     * before you call this, also call `BaseScout::clearInstances()` so the next
+     * scout access picks up the new factory.
+     *
+     * `self::` is deliberate so the single `BaseScout::$cacheDriverFactory`
+     * slot is always targeted, regardless of which subclass invokes the call.
+     *
+     * @param  (Closure(self): DiscoverCacheDriver)|null  $factory
+     */
+    public static function useCacheDriverFactory(?Closure $factory): void
+    {
+        self::$cacheDriverFactory = $factory;
+    }
+
     public function identifier(): string
     {
         return static::class;
@@ -38,7 +62,15 @@ abstract class BaseScout
 
     public function cacheDriver(): DiscoverCacheDriver
     {
-        return $this->cacheDriverInstance ??= new FileDiscoverCacheDriver(
+        if ($this->cacheDriverInstance !== null) {
+            return $this->cacheDriverInstance;
+        }
+
+        if (self::$cacheDriverFactory instanceof Closure) {
+            return $this->cacheDriverInstance = (self::$cacheDriverFactory)($this);
+        }
+
+        return $this->cacheDriverInstance = new FileDiscoverCacheDriver(
             directory: $this->cachePath(),
             serialize: false,
             filename: $this->cacheFile(),
@@ -73,7 +105,17 @@ abstract class BaseScout
             );
         }
 
-        return $this->getWithoutCache();
+        $discovered = $this->getWithoutCache();
+
+        // Populate the active cache so subsequent accesses in this process
+        // are served from memory. Tiered drivers write only to the in-memory
+        // layer here — file persistence remains explicit via `modules:cache`.
+        $this->cacheDriver()->put(
+            $this->identifier(),
+            $discovered
+        );
+
+        return $discovered;
     }
 
     /**
@@ -95,10 +137,18 @@ abstract class BaseScout
 
         $structures = $this->getWithoutCache();
 
-        $this->cacheDriver()->put(
-            $this->identifier(),
-            $structures
-        );
+        $driver = $this->cacheDriver();
+
+        // Drivers may suppress writes-to-disk during runtime auto-populate — the
+        // tiered driver, for instance, only touches its in-memory layer on
+        // `put()`. `cache()` is the explicit persistence call, so drivers that
+        // advertise `Persistable` get their `persist()` method (write through to
+        // all layers) instead of `put()`.
+        if ($driver instanceof Persistable) {
+            $driver->persist($this->identifier(), $structures);
+        } else {
+            $driver->put($this->identifier(), $structures);
+        }
 
         return $structures;
     }
