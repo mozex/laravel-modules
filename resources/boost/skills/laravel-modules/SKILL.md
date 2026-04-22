@@ -558,6 +558,23 @@ php artisan modules:cache
 
 Don't cache in local development. Fresh discovery means new files show up immediately. Cache failures usually indicate a PHP error in a newly added class; fix the error first, then retry caching.
 
+### Custom cache drivers
+
+To swap the default file-backed driver (e.g., for a Redis-backed cache shared across workers), call `BaseScout::useCacheDriverFactory()` from a service provider's `register()`:
+
+```php
+use Mozex\Modules\Contracts\BaseScout;
+use Spatie\StructureDiscoverer\Cache\DiscoverCacheDriver;
+
+BaseScout::useCacheDriverFactory(
+    fn (BaseScout $scout): DiscoverCacheDriver => new YourDriver($scout->cacheFile())
+);
+```
+
+Any class implementing Spatie's `DiscoverCacheDriver` works. Pass `null` to restore the default. If the factory is swapped after the package boots, call `BaseScout::clearInstances()` so scout singletons re-resolve.
+
+If the driver needs to separate runtime caching from deploy-time persistence, implement `Mozex\Modules\Features\SupportCaching\Persistable` alongside `DiscoverCacheDriver`. `BaseScout::cache()` calls `persist()` when the driver implements it, `put()` otherwise.
+
 ## PHPStan setup
 
 PHPStan needs to know about module directories. A PHP config file (`phpstan.php`) lets you `glob()` them at runtime so new modules are picked up automatically.

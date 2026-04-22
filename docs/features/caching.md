@@ -62,3 +62,28 @@ Cache files are plain PHP arrays stored in `bootstrap/cache/`. Each file is name
 **New files aren't being discovered**: You probably have a stale cache. Run `php artisan modules:clear` and then `php artisan modules:cache` if you're in production, or just `modules:clear` if you're developing locally.
 
 **Error during caching**: The cache command loads and reflects on your module classes. If a class has a syntax error or missing dependency, caching will fail. Fix the PHP error first, then retry.
+
+## Custom cache drivers
+
+By default, scouts store discovery results through a file-backed driver at `bootstrap/cache/`. Most projects never need to change this. But if you want to use something else, say a Redis-backed cache shared across workers, swap the driver at runtime with a factory closure:
+
+```php
+use Mozex\Modules\Contracts\BaseScout;
+use Spatie\StructureDiscoverer\Cache\DiscoverCacheDriver;
+
+BaseScout::useCacheDriverFactory(
+    fn (BaseScout $scout): DiscoverCacheDriver => new YourDriver($scout->cacheFile())
+);
+```
+
+Any class implementing Spatie's `DiscoverCacheDriver` interface works. Call this from a service provider's `register()` method so it's in place before scouts resolve their drivers.
+
+If your driver needs to separate runtime caching (`put()`) from explicit deploy-time persistence, implement `Mozex\Modules\Features\SupportCaching\Persistable` alongside `DiscoverCacheDriver`. When a driver implements it, `BaseScout::cache()` calls `persist()`; otherwise it falls back to `put()`. The package's own default driver uses this split so runtime cache warming stays in memory while `modules:cache` writes to disk.
+
+Pass `null` to go back to the default:
+
+```php
+BaseScout::useCacheDriverFactory(null);
+```
+
+If you swap the factory after the package has booted, call `BaseScout::clearInstances()` so scout singletons pick up the new driver on their next access.
