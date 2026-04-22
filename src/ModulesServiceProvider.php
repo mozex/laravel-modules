@@ -5,6 +5,7 @@ namespace Mozex\Modules;
 use Mozex\Modules\Features\SupportCaching\CacheCommand;
 use Mozex\Modules\Features\SupportCaching\ClearCommand;
 use Mozex\Modules\Features\SupportCaching\ListCommand;
+use Mozex\Modules\Features\SupportCaching\RuntimeCache;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -49,6 +50,8 @@ class ModulesServiceProvider extends PackageServiceProvider
 
     public function packageRegistered(): void
     {
+        RuntimeCache::install();
+
         $this->registerFeatures();
     }
 

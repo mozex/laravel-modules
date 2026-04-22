@@ -2,9 +2,11 @@
 
 namespace Mozex\Modules\Contracts;
 
+use Closure;
 use Illuminate\Support\Collection;
 use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\Facades\Modules;
+use Mozex\Modules\Features\SupportCaching\Persistable;
 use Spatie\StructureDiscoverer\Cache\DiscoverCacheDriver;
 use Spatie\StructureDiscoverer\Cache\FileDiscoverCacheDriver;
 use Spatie\StructureDiscoverer\Data\DiscoveredClass;
@@ -13,6 +15,9 @@ abstract class BaseScout
 {
     /** @var array<class-string, static> */
     protected static array $instances = [];
+
+    /** @var (Closure(self): DiscoverCacheDriver)|null */
+    protected static ?Closure $cacheDriverFactory = null;
 
     protected ?DiscoverCacheDriver $cacheDriverInstance = null;
 
@@ -31,6 +36,18 @@ abstract class BaseScout
         self::$instances = [];
     }
 
+    /**
+     * Scouts memoize their resolved driver per instance. If any singletons have
+     * already resolved, call clearInstances() so the next access picks up the
+     * new factory.
+     *
+     * @param  (Closure(self): DiscoverCacheDriver)|null  $factory
+     */
+    public static function useCacheDriverFactory(?Closure $factory): void
+    {
+        self::$cacheDriverFactory = $factory;
+    }
+
     public function identifier(): string
     {
         return static::class;
@@ -38,7 +55,15 @@ abstract class BaseScout
 
     public function cacheDriver(): DiscoverCacheDriver
     {
-        return $this->cacheDriverInstance ??= new FileDiscoverCacheDriver(
+        if ($this->cacheDriverInstance !== null) {
+            return $this->cacheDriverInstance;
+        }
+
+        if (self::$cacheDriverFactory instanceof Closure) {
+            return $this->cacheDriverInstance = (self::$cacheDriverFactory)($this);
+        }
+
+        return $this->cacheDriverInstance = new FileDiscoverCacheDriver(
             directory: $this->cachePath(),
             serialize: false,
             filename: $this->cacheFile(),
@@ -73,7 +98,14 @@ abstract class BaseScout
             );
         }
 
-        return $this->getWithoutCache();
+        $discovered = $this->getWithoutCache();
+
+        $this->cacheDriver()->put(
+            $this->identifier(),
+            $discovered
+        );
+
+        return $discovered;
     }
 
     /**
@@ -95,10 +127,13 @@ abstract class BaseScout
 
         $structures = $this->getWithoutCache();
 
-        $this->cacheDriver()->put(
-            $this->identifier(),
-            $structures
-        );
+        $driver = $this->cacheDriver();
+
+        if ($driver instanceof Persistable) {
+            $driver->persist($this->identifier(), $structures);
+        } else {
+            $driver->put($this->identifier(), $structures);
+        }
 
         return $structures;
     }
