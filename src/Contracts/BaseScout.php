@@ -37,16 +37,9 @@ abstract class BaseScout
     }
 
     /**
-     * Register a custom cache driver factory for every scout, or clear it (null)
-     * to fall back to the default `FileDiscoverCacheDriver`.
-     *
-     * Note: scouts cache their resolved driver in `$cacheDriverInstance` per
-     * instance. If any scout singletons have already resolved their driver
-     * before you call this, also call `BaseScout::clearInstances()` so the next
-     * scout access picks up the new factory.
-     *
-     * `self::` is deliberate so the single `BaseScout::$cacheDriverFactory`
-     * slot is always targeted, regardless of which subclass invokes the call.
+     * Scouts memoize their resolved driver per instance. If any singletons have
+     * already resolved, call clearInstances() so the next access picks up the
+     * new factory.
      *
      * @param  (Closure(self): DiscoverCacheDriver)|null  $factory
      */
@@ -107,9 +100,6 @@ abstract class BaseScout
 
         $discovered = $this->getWithoutCache();
 
-        // Populate the active cache so subsequent accesses in this process
-        // are served from memory. Tiered drivers write only to the in-memory
-        // layer here — file persistence remains explicit via `modules:cache`.
         $this->cacheDriver()->put(
             $this->identifier(),
             $discovered
@@ -139,11 +129,6 @@ abstract class BaseScout
 
         $driver = $this->cacheDriver();
 
-        // Drivers may suppress writes-to-disk during runtime auto-populate — the
-        // tiered driver, for instance, only touches its in-memory layer on
-        // `put()`. `cache()` is the explicit persistence call, so drivers that
-        // advertise `Persistable` get their `persist()` method (write through to
-        // all layers) instead of `put()`.
         if ($driver instanceof Persistable) {
             $driver->persist($this->identifier(), $structures);
         } else {

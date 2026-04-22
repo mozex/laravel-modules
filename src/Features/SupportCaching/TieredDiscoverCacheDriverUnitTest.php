@@ -1,5 +1,6 @@
 <?php
 
+use Mozex\Modules\Features\SupportCaching\Persistable;
 use Mozex\Modules\Features\SupportCaching\TieredDiscoverCacheDriver;
 use Spatie\StructureDiscoverer\Cache\DiscoverCacheDriver;
 use Spatie\StructureDiscoverer\Cache\StaticDiscoverCacheDriver;
@@ -143,5 +144,5 @@ it('persist() writes through to both the static and persistent layers', function
 });
 
 it('implements the Persistable interface', function (): void {
-    expect($this->driver)->toBeInstanceOf(\Mozex\Modules\Features\SupportCaching\Persistable::class);
+    expect($this->driver)->toBeInstanceOf(Persistable::class);
 });

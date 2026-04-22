@@ -14,16 +14,14 @@ use Spatie\StructureDiscoverer\Cache\StaticDiscoverCacheDriver;
 function persistentLayerOf(TieredDiscoverCacheDriver $driver): DiscoverCacheDriver
 {
     $property = (new ReflectionClass($driver))->getProperty('persistent');
-    $property->setAccessible(true);
 
     return $property->getValue($driver);
 }
 
 afterEach(function (): void {
-    // Keep scout singletons isolated between tests so cached driver instances
-    // don't leak across assertions.
     BaseScout::clearInstances();
     StaticDiscoverCacheDriver::clear();
+    RuntimeCache::install();
 });
 
 // ---------------------------------------------------------------------------
@@ -60,9 +58,6 @@ it('useCacheDriverFactory replaces the default driver for scouts', function (): 
     BaseScout::clearInstances();
 
     expect(ConfigsScout::create()->cacheDriver())->toBe($custom);
-
-    // Re-install the production factory so the rest of the suite works as expected.
-    RuntimeCache::install();
 });
 
 it('useCacheDriverFactory(null) falls back to the default FileDiscoverCacheDriver', function (): void {
@@ -72,14 +67,12 @@ it('useCacheDriverFactory(null) falls back to the default FileDiscoverCacheDrive
     $scout = ConfigsScout::create();
 
     expect($scout->cacheDriver())->toBeInstanceOf(FileDiscoverCacheDriver::class);
-
-    RuntimeCache::install();
 });
 
 it('passes the scout instance into the factory closure', function (): void {
     $received = null;
 
-    BaseScout::useCacheDriverFactory(function (BaseScout $scout) use (&$received) {
+    BaseScout::useCacheDriverFactory(function (BaseScout $scout) use (&$received): StaticDiscoverCacheDriver {
         $received = $scout;
 
         return new StaticDiscoverCacheDriver;
@@ -90,8 +83,6 @@ it('passes the scout instance into the factory closure', function (): void {
     $scout->cacheDriver();
 
     expect($received)->toBe($scout);
-
-    RuntimeCache::install();
 });
 
 it('caches the resolved driver per scout instance', function (): void {
@@ -118,8 +109,6 @@ it('get() populates the active cache driver after discovery', function (): void 
     $scout->get();
 
     expect($static->has($scout->identifier()))->toBeTrue();
-
-    RuntimeCache::install();
 });
 
 // ---------------------------------------------------------------------------

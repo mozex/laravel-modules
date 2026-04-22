@@ -1,6 +1,7 @@
 <?php
 
 use Mozex\Modules\Contracts\BaseScout;
+use Mozex\Modules\Features\SupportCaching\Persistable;
 use Mozex\Modules\Features\SupportCaching\RuntimeCache;
 use Mozex\Modules\Features\SupportCaching\TieredDiscoverCacheDriver;
 use Mozex\Modules\Features\SupportConfigs\ConfigsScout;
@@ -301,7 +302,7 @@ it('accepts any DiscoverCacheDriver implementation through the factory', functio
 });
 
 it('cache() routes through persist() for any driver that implements Persistable', function (): void {
-    $driver = new class implements DiscoverCacheDriver, \Mozex\Modules\Features\SupportCaching\Persistable
+    $driver = new class implements DiscoverCacheDriver, Persistable
     {
         public array $putCalls = [];
 
