@@ -39,7 +39,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        php: [8.2, 8.3, 8.4]
+        php: [8.3, 8.4, 8.5]
         laravel: [13.*, 12.*, 11.*]
         filament: ["^3.3.0", "^4.11.0"]
         dependency-version: [prefer-lowest, prefer-stable]
@@ -54,8 +54,6 @@ jobs:
             testbench: "^11.0"
             carbon: "^3.8.4"
         exclude:
-          - laravel: "13.*"
-            php: "8.2"
           - laravel: "13.*"
             filament: "^3.3.0"
     steps:
