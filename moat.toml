@@ -1,3 +1,10 @@
 # Treat the 2.x maintenance branch as a protected release branch alongside the default branch (main),
 # so Moat audits branch protection, signed commits, and linear history on both.
 release_branches = ["2.x"]
+
+# The changelog workflow pushes CHANGELOG.md straight to the release branch as a verified,
+# GitHub-API-signed commit, so the "require a pull request" rule is intentionally dropped on
+# this repo. Silence the matching Moat check; signed-commit, force-push and deletion
+# protection all remain enforced.
+[checks]
+repositories_pull_requests_require_reviews = "off"
