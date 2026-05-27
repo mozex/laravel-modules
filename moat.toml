@@ -1,0 +1,3 @@
+# Treat the 2.x maintenance branch as a protected release branch alongside the default branch (main),
+# so Moat audits branch protection, signed commits, and linear history on both.
+release_branches = ["2.x"]

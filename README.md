@@ -1,7 +1,7 @@
 # Laravel Modules
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/mozex/laravel-modules.svg?style=flat-square)](https://packagist.org/packages/mozex/laravel-modules)
-[![GitHub Tests Workflow Status](https://img.shields.io/github/actions/workflow/status/mozex/laravel-modules/tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/mozex/laravel-modules/actions/workflows/tests.yml)
+[![GitHub Checks Workflow Status](https://img.shields.io/github/actions/workflow/status/mozex/laravel-modules/checks.yml?branch=main&label=checks&style=flat-square)](https://github.com/mozex/laravel-modules/actions/workflows/checks.yml)
 [![Docs](https://img.shields.io/badge/docs-mozex.dev-10B981?style=flat-square)](https://mozex.dev/docs/laravel-modules/v3)
 [![License](https://img.shields.io/github/license/mozex/laravel-modules.svg?style=flat-square)](https://packagist.org/packages/mozex/laravel-modules)
 [![Total Downloads](https://img.shields.io/packagist/dt/mozex/laravel-modules.svg?style=flat-square)](https://packagist.org/packages/mozex/laravel-modules)

@@ -42,7 +42,6 @@ class RoutesServiceProvider extends Feature
 
         $this->callAfterResolving(Kernel::class, function (Kernel $kernel) use ($commands): void {
             // Compatibility with Laravel 10
-            /** @phpstan-ignore-next-line */
             if (method_exists($kernel, 'addCommandRoutePaths')) {
                 $kernel->addCommandRoutePaths(
                     $commands->pluck('path')->all()
