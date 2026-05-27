@@ -40,13 +40,10 @@ jobs:
       fail-fast: true
       matrix:
         php: [8.2, 8.3, 8.4]
-        laravel: [13.*, 12.*, 11.*, 10.*]
-        filament: ["^3.3.0", "^4.3.1"]
+        laravel: [13.*, 12.*, 11.*]
+        filament: ["^3.3.0", "^4.11.0"]
         dependency-version: [prefer-lowest, prefer-stable]
         include:
-          - laravel: "10.*"
-            testbench: "^8.21"
-            carbon: "^2.72.6"
           - laravel: "11.*"
             testbench: "^9.2"
             carbon: "^3.8.4"
@@ -57,8 +54,6 @@ jobs:
             testbench: "^11.0"
             carbon: "^3.8.4"
         exclude:
-          - laravel: "10.*"
-            filament: "^4.3.1"
           - laravel: "13.*"
             php: "8.2"
           - laravel: "13.*"
