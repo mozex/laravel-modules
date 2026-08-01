@@ -550,13 +550,17 @@ The policy classes live inside the module (`Modules/User/Policies/RolePolicy.php
 
 The package scans the modules directory on every request unless cached. Cache files live at `bootstrap/cache/modules-{asset-type}.php`, one per asset type.
 
+The cache commands are registered with Laravel's optimize system, so `php artisan optimize` and `php artisan optimize:clear` cover them. To run them individually:
+
 ```bash
 # Production deploy
 php artisan modules:clear
 php artisan modules:cache
 ```
 
-Don't cache in local development. Fresh discovery means new files show up immediately. Cache failures usually indicate a PHP error in a newly added class; fix the error first, then retry caching.
+Also run `php artisan event:cache` on deploy (or rely on `optimize`): module listener discovery reflects on every listener class per request without it.
+
+Don't cache in local development. Fresh discovery means new files show up immediately. Rebuild the cache after upgrading the package, since the cached data format can change between releases. Cache failures usually indicate a PHP error in a newly added class; fix the error first, then retry caching.
 
 ### Custom cache drivers
 

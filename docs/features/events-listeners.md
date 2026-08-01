@@ -124,6 +124,10 @@ PostPublished::dispatch($post);
 
 Subdirectories inside `Listeners/` are scanned recursively. A listener at `Listeners/Analytics/TrackPageView.php` is discovered and mapped to the namespace `Modules\Blog\Listeners\Analytics\TrackPageView`.
 
+## Caching in production
+
+Listener discovery scans the listener directories and reflects on every class it finds. Without Laravel's event cache, that work repeats on every request. Run `php artisan event:cache` on deploy (or `php artisan optimize`, which includes it) so the scan happens once. Rebuild the cache whenever listeners change.
+
 ## Disabling
 
 Set `'listeners.active' => false` to disable event listener discovery for modules entirely. This also disables the `shouldDiscoverEvents()` override, so Laravel falls back to its default discovery behavior (which only scans the application's `Listeners/` directory).
