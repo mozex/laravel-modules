@@ -2,8 +2,10 @@
 
 namespace Mozex\Modules\Features\SupportCommands;
 
+use Illuminate\Console\Application as Artisan;
 use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\Features\Feature;
+use Override;
 
 class CommandsServiceProvider extends Feature
 {
@@ -12,12 +14,16 @@ class CommandsServiceProvider extends Feature
         return AssetType::Commands;
     }
 
+    #[Override]
     public function boot(): void
     {
-        $this->commands(
-            static::asset()->scout()->collect()
-                ->pluck('namespace')
-                ->toArray()
-        );
+        // Deferred so web requests never pay for the scout read.
+        Artisan::starting(function (Artisan $artisan): void {
+            $artisan->resolveCommands(
+                static::asset()->scout()->collect()
+                    ->pluck('namespace')
+                    ->all()
+            );
+        });
     }
 }
