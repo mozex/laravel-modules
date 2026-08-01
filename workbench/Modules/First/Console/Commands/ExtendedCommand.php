@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\First\Console\Commands;
 
 use App\Console\Commands\AppCommand;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Mozex\Modules\Tests;
 
 use Orchestra\Testbench\Foundation\Console\Kernel as ConsoleKernel;

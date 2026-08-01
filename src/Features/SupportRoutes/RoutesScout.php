@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Mozex\Modules\Features\SupportRoutes;
 
 use Mozex\Modules\Contracts\ModuleFileScout;

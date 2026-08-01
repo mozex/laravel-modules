@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Mozex\Modules\Enums\AssetType;
 
 return [

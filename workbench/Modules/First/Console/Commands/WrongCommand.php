@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\First\Console\Commands;
 
 use function Laravel\Prompts\info;
