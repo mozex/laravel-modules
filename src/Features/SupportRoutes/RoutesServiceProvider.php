@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\Facades\Modules;
 use Mozex\Modules\Features\Feature;
+use Override;
 
 class RoutesServiceProvider extends Feature
 {
@@ -18,6 +19,7 @@ class RoutesServiceProvider extends Feature
         return AssetType::Routes;
     }
 
+    #[Override]
     public function boot(): void
     {
         $config = static::asset()->config();
@@ -26,7 +28,7 @@ class RoutesServiceProvider extends Feature
             ->partition(
                 fn (array $asset) => in_array(
                     File::name($asset['path']),
-                    $config['commands_filenames']
+                    $config['commands_filenames'] ?? ['console']
                 )
             );
 
@@ -34,12 +36,12 @@ class RoutesServiceProvider extends Feature
             ->partition(
                 fn (array $asset) => in_array(
                     File::name($asset['path']),
-                    $config['channels_filenames']
+                    $config['channels_filenames'] ?? ['channels']
                 )
             );
 
         $this->callAfterResolving(Kernel::class, function (Kernel $kernel) use ($commands): void {
-            // Compatibility with Laravel 10
+            // Custom Kernel implementations may not expose this method
             if (method_exists($kernel, 'addCommandRoutePaths')) {
                 $kernel->addCommandRoutePaths(
                     $commands->pluck('path')->all()

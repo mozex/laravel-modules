@@ -6,6 +6,7 @@ use Illuminate\Contracts\Foundation\CachesConfiguration;
 use Illuminate\Support\Facades\File;
 use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\Features\Feature;
+use Override;
 
 class ConfigsServiceProvider extends Feature
 {
@@ -14,6 +15,7 @@ class ConfigsServiceProvider extends Feature
         return AssetType::Configs;
     }
 
+    #[Override]
     public function boot(): void
     {
         if ($this->app instanceof CachesConfiguration && $this->app->configurationIsCached()) {
@@ -28,7 +30,7 @@ class ConfigsServiceProvider extends Feature
 
                 $config->set(
                     key: $key,
-                    value: static::asset()->config()['priority']
+                    value: static::asset()->config()['priority'] ?? true
                         ? array_merge(
                             $config->get($key, []),
                             require $asset['path']
