@@ -54,6 +54,16 @@ test('discovering will work', function (bool $cache): void {
     'with cache' => true,
 ]);
 
+it('defers command discovery until the console application starts', function (): void {
+    config()->set(
+        'modules.'.AssetType::Commands->value.'.active',
+        false
+    );
+
+    expect(collect(Artisan::all())->keys())
+        ->not->toContain((new FirstValidCommand)->getName());
+});
+
 it('can register commands', function (bool $cache): void {
     $discoverer = CommandsScout::create();
 

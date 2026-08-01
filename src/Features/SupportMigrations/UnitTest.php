@@ -44,6 +44,17 @@ test('discovering will work', function (bool $cache): void {
     'with cache' => true,
 ]);
 
+it('defers migration path discovery until the migrator resolves', function (): void {
+    config()->set(
+        'modules.'.AssetType::Migrations->value.'.active',
+        false
+    );
+
+    expect(app('migrator')->paths())
+        ->not->toContain(realpath(Modules::modulesPath('First/Database/Migrations')))
+        ->not->toContain(realpath(Modules::modulesPath('Second/Database/Migrations')));
+});
+
 it('can load migrations', function (bool $cache): void {
     $discoverer = MigrationsScout::create();
 

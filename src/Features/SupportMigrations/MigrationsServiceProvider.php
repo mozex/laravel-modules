@@ -2,6 +2,7 @@
 
 namespace Mozex\Modules\Features\SupportMigrations;
 
+use Illuminate\Database\Migrations\Migrator;
 use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\Features\Feature;
 use Override;
@@ -16,10 +17,13 @@ class MigrationsServiceProvider extends Feature
     #[Override]
     public function boot(): void
     {
-        $this->loadMigrationsFrom(
-            static::asset()->scout()->collect()
-                ->pluck('path')
-                ->toArray()
+        // Deferred so web requests never pay for the scout read.
+        $this->callAfterResolving(
+            'migrator',
+            function (Migrator $migrator): void {
+                static::asset()->scout()->collect()
+                    ->each(fn (array $asset) => $migrator->path($asset['path']));
+            }
         );
     }
 }
