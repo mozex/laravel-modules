@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\ServiceProvider;
 use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\Features\SupportCaching\CacheCommand;
 use Mozex\Modules\Features\SupportCaching\ClearCommand;
@@ -35,6 +36,22 @@ it('can clear', function () {
 
     expect($scouts)
         ->each(fn (Expectation $scout) => $scout->isCached()->toBeFalse());
+});
+
+it('can cache and clear when every asset type is disabled', function (): void {
+    foreach (AssetType::cases() as $type) {
+        config()->set('modules.'.$type->value.'.active', false);
+    }
+
+    expect(Artisan::call(CacheCommand::class))->toBe(0)
+        ->and(Artisan::call(ClearCommand::class))->toBe(0);
+});
+
+it('registers the cache commands with artisan optimize', function (): void {
+    expect(ServiceProvider::$optimizeCommands)
+        ->toContain('modules:cache')
+        ->and(ServiceProvider::$optimizeClearCommands)
+        ->toContain('modules:clear');
 });
 
 it('can list modules', function (): void {
