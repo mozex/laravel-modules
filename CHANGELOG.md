@@ -2,6 +2,41 @@
 
 All notable changes to `laravel-modules` will be documented in this file.
 
+## 2.13.0 - 2026-08-01
+
+### What's new
+
+**`php artisan optimize` now builds the module cache.** The package registers `modules:cache` and `modules:clear` with Laravel's optimize system, so any deploy script that runs `optimize` (or `optimize:clear`) covers module discovery automatically. No more forgetting `modules:cache` in a deploy and silently paying full filesystem discovery on every request. Skip it with `--except=modules` if you need to.
+
+**Blade and Livewire component aliases are computed at cache time.** Both scouts now store each component's alias in the cache payload, so registering components no longer runs `realpath()` and regex work per component on every request. Old cache files without the alias key keep working through a runtime fallback.
+
+> After upgrading, rebuild the module cache (`php artisan modules:cache` or `php artisan optimize`) to pick up the new payload.
+
+**Faster name guessing.** The model, factory, and policy guessers now re-register the same closure instead of rebuilding it after every fallback guess, hoist their reflection lookups, and memoize module-name guesses. Apps that authorize non-module models or build factories in loops no longer pay reflection plus closure allocation per call.
+
+**Leaner web requests.** Command and migration discovery moved inside `Artisan::starting()` and the migrator's resolving hook, so web requests skip that scout work entirely. `Artisan::call()` from HTTP and queue workers behave exactly as before.
+
+**Smaller dependency tree.** Class scanning no longer uses `->parallel()`, which ran on single-process fibers and provided no actual parallelism (measured about 5% slower than the synchronous path). The direct `amphp/parallel` requirement is gone, removing around a dozen transitive packages from your vendor directory.
+
+### Fixes
+
+- Filament scouts with multiple discovery patterns no longer throw "Panel not found" for assets matched by any pattern after the first.
+- Guessing a model name for a non-module factory no longer emits a PHP 8.3 `ReflectionProperty::setValue()` deprecation.
+- The `Modules` service is now pinned into the container as a shared instance, so injecting `Mozex\Modules\Modules` sees the same route groups and registrars as the facade.
+- Config files published before 2.3.0 no longer fatal on the missing `commands_filenames`/`channels_filenames` keys; all config lookups now fall back to the shipped defaults.
+- The module listener class-name resolver installs at register time, so runtime event discovery uses it (it previously ran before the resolver existed).
+
+### Changes
+
+- `modules:cache` and `modules:clear` exit cleanly with an info message when every asset type is disabled instead of throwing.
+- `Feature::getName()` and `Feature::getViewName()` now delegate to `Modules::kebabName()` and `Modules::viewName()`, which are public API on the `Modules` service.
+
+### Docs
+
+- The caching guide now covers the `optimize` integration, recommends `php artisan event:cache` (module listeners are otherwise reflection-scanned on every request), and lists "after upgrading this package" as a cache rebuild trigger.
+
+**Full Changelog**: https://github.com/mozex/laravel-modules/compare/2.12.0...2.13.0
+
 ## 2.12.0 - 2026-04-22
 
 ### What's new
@@ -17,6 +52,7 @@ use Spatie\StructureDiscoverer\Cache\DiscoverCacheDriver;
 BaseScout::useCacheDriverFactory(
     fn (BaseScout $scout): DiscoverCacheDriver => new YourDriver($scout->cacheFile())
 );
+
 
 ```
 Any class implementing Spatie's `DiscoverCacheDriver` works. Pass `null` to restore the default. See the [caching docs](https://mozex.dev/docs/laravel-modules/v2/features/caching#custom-cache-drivers) for details.
