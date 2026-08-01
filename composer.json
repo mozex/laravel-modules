@@ -33,7 +33,6 @@
     ],
     "require": {
         "php": "^8.3",
-        "amphp/parallel": "^2.3",
         "laravel/framework": "^11.29.0|^12.0|^13.0",
         "spatie/laravel-package-tools": "^1.19.0",
         "spatie/php-structure-discoverer": "^2.4.1",

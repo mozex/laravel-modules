@@ -26,7 +26,6 @@ abstract class ModuleClassScout extends BaseScout
     protected function definition(): Discover
     {
         return Discover::in(...$this->patterns())
-            ->parallel()
             ->classes()
             ->full()
             ->custom(fn (DiscoveredClass $structure): bool => ! $structure->isAbstract)
