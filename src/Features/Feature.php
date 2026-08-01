@@ -39,11 +39,7 @@ abstract class Feature extends ServiceProvider
 
     protected function getName(string $name): string
     {
-        return str($name)
-            ->replaceMatches('/([A-Z]+)([A-Z][a-z])/', '$1-$2')
-            ->replaceMatches('/([a-z])([A-Z])/', '$1-$2')
-            ->lower()
-            ->toString();
+        return Modules::kebabName($name);
     }
 
     /**
@@ -51,40 +47,6 @@ abstract class Feature extends ServiceProvider
      */
     protected function getViewName(array $asset, AssetType $type): string
     {
-        foreach ($type->patterns() as $pattern) {
-            $sub = str(realpath($asset['path']))
-                ->replaceFirst(realpath(Modules::modulesPath()), '')
-                ->replace('\\', '/')
-                ->replaceFirst('/', '')
-                ->replaceMatches(
-                    str($pattern)
-                        ->replaceFirst('*', '.*?')
-                        ->replace('/', '\/')
-                        ->prepend('/')
-                        ->append('\//')
-                        ->toString(),
-                    ''
-                )
-                ->before('.php')
-                ->explode('/')
-                ->filter();
-
-            if ($sub->first() === $asset['module'] && $sub->count() > 1) {
-                continue;
-            }
-
-            return sprintf(
-                '%s::%s',
-                $this->getName($asset['module']),
-                $sub->map($this->getName(...))
-                    ->implode('.')
-            );
-        }
-
-        return sprintf(
-            '%s::%s',
-            $this->getName($asset['module']),
-            strtolower(class_basename($asset['namespace']))
-        );
+        return Modules::viewName($asset, $type);
     }
 }

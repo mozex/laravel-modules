@@ -84,6 +84,8 @@ abstract class BaseScout
     }
 
     /**
+     * Concrete scouts may append extra keys (e.g. alias, panel) in transform().
+     *
      * @return array<array-key, array{module: string, path: string, namespace: class-string}>
      */
     public function get(): array

@@ -17,11 +17,12 @@ class BladeComponentsServiceProvider extends Feature
     #[Override]
     public function boot(): void
     {
-        static::asset()->scout()->collect()
+        BladeComponentsScout::instance()->collect()
             ->each(function (array $asset): void {
                 Blade::component(
                     class: $asset['namespace'],
-                    alias: $this->getViewName($asset, static::asset())
+                    // Fallback for cache files built by older package versions.
+                    alias: $asset['alias'] ?? $this->getViewName($asset, static::asset())
                 );
             });
     }
