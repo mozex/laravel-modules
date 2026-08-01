@@ -13,18 +13,21 @@ class LivewireServiceProvider extends Feature
         return AssetType::LivewireComponents;
     }
 
+    #[\Override]
     public static function shouldRegisterFeature(): bool
     {
         return parent::shouldRegisterFeature()
             && class_exists(Livewire::class);
     }
 
+    #[\Override]
     public function boot(): void
     {
-        static::asset()->scout()->collect()
+        LivewireComponentsScout::instance()->collect()
             ->each(function (array $asset): void {
                 Livewire::component(
-                    $this->getViewName($asset, static::asset()),
+                    // Fallback for cache files built by older package versions.
+                    $asset['alias'] ?? $this->getViewName($asset, static::asset()),
                     $asset['namespace']
                 );
             });

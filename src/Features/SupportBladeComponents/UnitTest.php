@@ -7,6 +7,7 @@ use Modules\Second\View\Components\Button\Loading;
 use Modules\Second\View\Components\Search;
 use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\Features\SupportBladeComponents\BladeComponentsScout;
+use Mozex\Modules\Features\SupportBladeComponents\BladeComponentsServiceProvider;
 
 test('scout will not collect when disabled', function (): void {
     config()->set(
@@ -49,6 +50,72 @@ test('discovering will work', function (bool $cache): void {
     'without cache' => false,
     'with cache' => true,
 ]);
+
+test('discovered assets include a precomputed alias', function (): void {
+    $collection = collect(BladeComponentsScout::create()->getWithoutCache());
+
+    expect($collection)
+        ->each->toHaveKey('alias')
+        ->and($collection->firstWhere('namespace', Filter::class)['alias'])
+        ->toBe('first::filter')
+        ->and($collection->firstWhere('namespace', Loading::class)['alias'])
+        ->toBe('second::button.loading');
+});
+
+it('registers aliases from the cache payload', function (): void {
+    $scout = BladeComponentsScout::create();
+
+    $tampered = collect($scout->getWithoutCache())
+        ->map(fn (array $asset): array => [
+            ...$asset,
+            'alias' => 'tampered::'.class_basename($asset['namespace']),
+        ])
+        ->all();
+
+    $scout->cacheDriver()->put($scout->identifier(), $tampered);
+
+    try {
+        (new BladeComponentsServiceProvider(app()))->boot();
+
+        expect(Blade::getClassComponentAliases())
+            ->toHaveKey('tampered::'.class_basename(Filter::class));
+    } finally {
+        $scout->clear();
+    }
+});
+
+it('falls back to computing aliases for cache payloads without an alias key', function (): void {
+    $scout = BladeComponentsScout::create();
+
+    $legacy = collect($scout->getWithoutCache())
+        ->map(function (array $asset): array {
+            unset($asset['alias']);
+
+            return $asset;
+        })
+        ->all();
+
+    $scout->cacheDriver()->put($scout->identifier(), $legacy);
+
+    $warnings = [];
+
+    set_error_handler(function (int $errno, string $errstr) use (&$warnings): bool {
+        $warnings[] = $errstr;
+
+        return true;
+    }, E_WARNING | E_NOTICE);
+
+    try {
+        (new BladeComponentsServiceProvider(app()))->boot();
+    } finally {
+        restore_error_handler();
+        $scout->clear();
+    }
+
+    expect($warnings)->toBeEmpty()
+        ->and(Blade::getClassComponentAliases())
+        ->toHaveKey('first::filter');
+});
 
 it('can load blade components', function (bool $cache): void {
     $discoverer = BladeComponentsScout::create();

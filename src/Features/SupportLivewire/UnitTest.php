@@ -52,6 +52,17 @@ test('discovering will work', function (bool $cache): void {
     'with cache' => true,
 ]);
 
+test('discovered assets include a precomputed alias', function (): void {
+    $collection = collect(LivewireComponentsScout::create()->getWithoutCache());
+
+    expect($collection)
+        ->each->toHaveKey('alias')
+        ->and($collection->firstWhere('namespace', Teams::class)['alias'])
+        ->toBe('first::teams')
+        ->and($collection->firstWhere('namespace', ListUsers::class)['alias'])
+        ->toBe('second::list-users');
+});
+
 it('can register livewire components', function (bool $cache): void {
     $discoverer = LivewireComponentsScout::create();
 
