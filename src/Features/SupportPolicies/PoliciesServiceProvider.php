@@ -13,6 +13,13 @@ use ReflectionProperty;
 
 class PoliciesServiceProvider extends Feature
 {
+    /** @var array<class-string, string> */
+    private array $guesses = [];
+
+    private ?ReflectionProperty $callbackProperty = null;
+
+    private ?ReflectionMethod $guessMethod = null;
+
     public static function asset(): AssetType
     {
         return AssetType::Policies;
@@ -21,19 +28,19 @@ class PoliciesServiceProvider extends Feature
     #[Override]
     public function boot(): void
     {
-        Gate::guessPolicyNamesUsing(function (string $modelName) {
+        $callback = function (string $modelName) use (&$callback) {
             if ($module = Modules::moduleNameFromNamespace($modelName)) {
-                return sprintf(
+                return $this->guesses[$modelName] ??= sprintf(
                     '%s%s\\%s%sPolicy',
                     config('modules.modules_namespace'),
                     $module,
-                    static::asset()->config()['namespace'],
+                    static::asset()->config()['namespace'] ?? 'Policies\\',
                     str($modelName)->after(
                         sprintf(
                             '%s%s\\%s',
                             config('modules.modules_namespace'),
                             $module,
-                            AssetType::Models->config()['namespace']
+                            AssetType::Models->config()['namespace'] ?? 'Models\\'
                         )
                     )
                 );
@@ -42,15 +49,18 @@ class PoliciesServiceProvider extends Feature
             try {
                 $gate = $this->app->make(GateInstance::class);
 
-                (new ReflectionProperty($gate, 'guessPolicyNamesUsingCallback'))
+                ($this->callbackProperty ??= new ReflectionProperty($gate, 'guessPolicyNamesUsingCallback'))
                     ->setValue($gate, null);
 
-                $reflection = (new ReflectionMethod($gate, 'guessPolicyName'));
-
-                return $reflection->invoke($gate, $modelName);
+                return ($this->guessMethod ??= new ReflectionMethod($gate, 'guessPolicyName'))
+                    ->invoke($gate, $modelName);
             } finally {
-                $this->boot();
+                // Re-register the same closure so per-call allocations and
+                // closure-identity churn are avoided on the fallback path.
+                Gate::guessPolicyNamesUsing($callback);
             }
-        });
+        };
+
+        Gate::guessPolicyNamesUsing($callback);
     }
 }

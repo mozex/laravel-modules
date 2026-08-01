@@ -13,15 +13,23 @@ use SplFileInfo;
 
 class ListenersServiceProvider extends Feature
 {
+    private ?ReflectionProperty $callbackProperty = null;
+
+    private ?ReflectionMethod $classFromFileMethod = null;
+
     public static function asset(): AssetType
     {
         return AssetType::Listeners;
     }
 
+    /**
+     * Installed at register time: event discovery runs in the application's
+     * booting callbacks, before any provider's boot() is called.
+     */
     #[Override]
-    public function boot(): void
+    public function register(): void
     {
-        DiscoverEvents::guessClassNamesUsing(function (SplFileInfo $file, string $basePath) {
+        $callback = function (SplFileInfo $file, string $basePath) use (&$callback) {
             if (Modules::moduleNameFromPath($file->getRealPath())) {
                 return str($file->getRealPath())
                     ->after(realpath(Modules::basePath()).DIRECTORY_SEPARATOR)
@@ -34,15 +42,18 @@ class ListenersServiceProvider extends Feature
             try {
                 $discoverEvent = $this->app->make(DiscoverEvents::class);
 
-                (new ReflectionProperty($discoverEvent, 'guessClassNamesUsingCallback'))
+                ($this->callbackProperty ??= new ReflectionProperty($discoverEvent, 'guessClassNamesUsingCallback'))
                     ->setValue(null, null);
 
-                $reflection = (new ReflectionMethod($discoverEvent, 'classFromFile'));
-
-                return $reflection->invoke($discoverEvent, $file, $basePath);
+                return ($this->classFromFileMethod ??= new ReflectionMethod($discoverEvent, 'classFromFile'))
+                    ->invoke($discoverEvent, $file, $basePath);
             } finally {
-                $this->boot();
+                // Re-register the same closure so per-call allocations and
+                // closure-identity churn are avoided on the fallback path.
+                DiscoverEvents::guessClassNamesUsing($callback);
             }
-        });
+        };
+
+        DiscoverEvents::guessClassNamesUsing($callback);
     }
 }

@@ -11,6 +11,11 @@ use ReflectionProperty;
 
 class ModelsServiceProvider extends Feature
 {
+    /** @var array<class-string, string> */
+    private array $guesses = [];
+
+    private ?ReflectionProperty $resolverProperty = null;
+
     public static function asset(): AssetType
     {
         return AssetType::Models;
@@ -19,19 +24,19 @@ class ModelsServiceProvider extends Feature
     #[Override]
     public function boot(): void
     {
-        Factory::guessModelNamesUsing(function (Factory $factory) {
+        $callback = function (Factory $factory) use (&$callback) {
             if ($module = Modules::moduleNameFromNamespace($factory::class)) {
-                return sprintf(
+                return $this->guesses[$factory::class] ??= sprintf(
                     '%s%s\\%s%s',
                     config('modules.modules_namespace'),
                     $module,
-                    static::asset()->config()['namespace'],
+                    static::asset()->config()['namespace'] ?? 'Models\\',
                     str($factory::class)->after(
                         sprintf(
                             '%s%s\\%s',
                             config('modules.modules_namespace'),
                             $module,
-                            AssetType::Factories->config()['namespace']
+                            AssetType::Factories->config()['namespace'] ?? 'Database\\Factories\\'
                         )
                     )->replaceLast('Factory', '')
                 );
@@ -39,26 +44,30 @@ class ModelsServiceProvider extends Feature
 
             try {
                 if (property_exists(Factory::class, 'modelNameResolvers')) {
-                    $property = new ReflectionProperty(Factory::class, 'modelNameResolvers');
+                    $property = $this->resolverProperty ??= new ReflectionProperty(Factory::class, 'modelNameResolvers');
 
                     $value = $property->getValue();
 
                     unset($value[Factory::class]);
                 } else {
-                    // Backward compatibility
-                    $property = (new ReflectionProperty(Factory::class, 'modelNameResolver'));
+                    // Laravel < 11.44 only has the singular resolver property
+                    $property = $this->resolverProperty ??= new ReflectionProperty(Factory::class, 'modelNameResolver');
 
                     $value = null;
 
                 }
 
                 $property
-                    ->setValue($value);
+                    ->setValue(null, $value);
 
                 return $factory->modelName();
             } finally {
-                $this->boot();
+                // Re-register the same closure so per-call allocations and
+                // closure-identity churn are avoided on the fallback path.
+                Factory::guessModelNamesUsing($callback);
             }
-        });
+        };
+
+        Factory::guessModelNamesUsing($callback);
     }
 }
