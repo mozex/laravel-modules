@@ -37,11 +37,21 @@ Rebuild the cache whenever the discovery results would change:
 - After changing discovery patterns in `config/modules.php`
 - After enabling or disabling modules
 - After adding or removing a module entirely
+- After upgrading this package, since the cached data format can change between releases
 
-In a typical deployment workflow, run `modules:cache` as part of your deploy script, right alongside `config:cache`, `route:cache`, and `view:cache`:
+The package registers its cache commands with Laravel's optimize system, so `php artisan optimize` builds the module cache along with config, events, routes, and views. If your deploy script already runs `optimize`, you're covered:
+
+```bash
+php artisan optimize
+```
+
+And `php artisan optimize:clear` removes the module cache along with the rest.
+
+If you cache things individually instead, run `modules:cache` alongside the others. Don't skip `event:cache`: module listeners are discovered by reflecting on every listener class, and without the event cache that scan repeats on every request.
 
 ```bash
 php artisan config:cache
+php artisan event:cache
 php artisan route:cache
 php artisan view:cache
 php artisan modules:cache

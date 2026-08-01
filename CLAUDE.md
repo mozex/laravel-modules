@@ -33,7 +33,7 @@ composer refactor               # rector + pint
 
 ### Core flow
 
-`ModulesServiceProvider` (extends Spatie's `PackageServiceProvider`) registers config, two artisan commands (`modules:cache`, `modules:clear`), then registers all feature service providers in a fixed order via `getFeatures()`.
+`ModulesServiceProvider` (extends Spatie's `PackageServiceProvider`) registers config and three artisan commands (`modules:cache`, `modules:clear`, `modules:list`), hooks the cache commands into `artisan optimize`/`optimize:clear`, pins the `Modules` service into the container as a shared instance, then registers all feature service providers in a fixed order via `getFeatures()`.
 
 ### Feature pattern
 
@@ -51,7 +51,7 @@ Every feature lives in `src/Features/Support{Name}/` and contains exactly three 
 
 ```
 BaseScout (template: get/cache/clear/transform)
-├── ModuleClassScout    → Spatie StructureDiscoverer (parallel PHP class scanning)
+├── ModuleClassScout    → Spatie StructureDiscoverer (token-based PHP class scanning)
 ├── ModuleFileScout     → glob for files
 └── ModuleDirectoryScout → glob for directories (GLOB_ONLYDIR)
 ```
@@ -68,7 +68,7 @@ Each feature section in `config/modules.php` has `active` (bool) and `patterns` 
 
 ### Caching
 
-Scouts use `FileDiscoverCacheDriver` writing to `bootstrap/cache/modules-{asset-type}.php`. The `modules:cache` command calls `cache()` on all active scouts; `modules:clear` calls `clear()`.
+Scouts resolve a `TieredDiscoverCacheDriver`: an in-memory static layer over a `FileDiscoverCacheDriver` at `bootstrap/cache/modules-{asset-type}.php`. Runtime discovery populates only the memory layer (`put()`); `modules:cache` writes through to disk (`persist()`) on all active scouts; `modules:clear` clears both layers. Both commands no-op gracefully when every asset type is disabled and also run as part of `artisan optimize`/`optimize:clear`.
 
 ## Testing
 
@@ -81,7 +81,7 @@ Scouts use `FileDiscoverCacheDriver` writing to `bootstrap/cache/modules-{asset-
 
 ## CI matrix
 
-Tests run on PHP 8.2/8.3/8.4 × Laravel 10/11/12/13 × prefer-lowest/prefer-stable on both Ubuntu and Windows.
+Tests run on PHP 8.3/8.4/8.5 × Laravel 11/12/13 × Filament 3/4 (Laravel 13 × Filament 3 excluded) × prefer-lowest/prefer-stable on Ubuntu.
 
 ## Adding a new feature
 

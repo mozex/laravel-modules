@@ -61,8 +61,8 @@ Modules not listed here default to `active: true` with order `9999`.
 
 ### Commands
 
-- `php artisan modules:cache` - build the discovery cache (run on deploy, skip in local dev)
-- `php artisan modules:clear` - clear the cache
+- `php artisan modules:cache` - build the discovery cache (run on deploy, skip in local dev; `php artisan optimize` includes it)
+- `php artisan modules:clear` - clear the cache (`php artisan optimize:clear` includes it)
 - `php artisan modules:list` - show every module with status, order, and asset counts per type
 
 ### Detailed usage
