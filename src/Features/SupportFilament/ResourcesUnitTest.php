@@ -56,6 +56,23 @@ test('discovering will work', function (bool $cache): void {
     'with cache' => true,
 ]);
 
+test('discovering will work when an earlier pattern does not match', function (): void {
+    config()->set(
+        'modules.'.AssetType::FilamentResources->value.'.patterns',
+        ['*/CustomFilament/*/Resources', '*/Filament/*/Resources']
+    );
+
+    $collection = collect(FilamentResourcesScout::create()->getWithoutCache());
+
+    expect($collection)
+        ->each->toHaveKeys(['module', 'path', 'namespace', 'panel'])
+        ->and($collection->pluck('path'))
+        ->toContain(realpath(Modules::modulesPath('First/Filament/Admin/Resources')))
+        ->and($collection->pluck('panel')->unique())
+        ->toContain('admin')
+        ->toContain('dashboard');
+});
+
 it('can register filament resources', function (bool $cache): void {
     $discoverer = FilamentResourcesScout::create();
 

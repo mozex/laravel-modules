@@ -18,10 +18,10 @@ abstract class FilamentScout extends ModuleDirectoryScout
     {
         return collect(parent::transform($result))
             ->map(function (array $item): array {
-                $panel = null;
+                $panel = '';
 
                 foreach ($this->asset()->patterns() as $pattern) {
-                    $panel ??= Regex::match(
+                    $panel = Regex::match(
                         pattern: str($pattern)
                             ->replace('*', '(.*?)')
                             ->replace('/', '\/')
@@ -31,6 +31,10 @@ abstract class FilamentScout extends ModuleDirectoryScout
                         subject: str(realpath($item['path']))
                             ->replace('\\', '/')
                     )->groupOr(2, '');
+
+                    if ($panel !== '') {
+                        break;
+                    }
                 }
 
                 if (empty($panel)) {
