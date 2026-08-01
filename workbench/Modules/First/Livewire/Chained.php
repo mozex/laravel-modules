@@ -6,6 +6,7 @@ use Illuminate\View\View;
 
 class Chained extends BaseChained
 {
+    #[\Override]
     public function render(): View
     {
         return view('first::livewire.chained', [

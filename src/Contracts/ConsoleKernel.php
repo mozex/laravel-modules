@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Mozex\Modules\Contracts;
 
 use Illuminate\Console\Scheduling\Schedule;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Mozex\Modules\Features\SupportCommands;
 
 use Illuminate\Console\Command;
@@ -15,6 +17,7 @@ class CommandsScout extends ModuleClassScout
         return AssetType::Commands;
     }
 
+    #[\Override]
     protected function definition(): Discover
     {
         return parent::definition()

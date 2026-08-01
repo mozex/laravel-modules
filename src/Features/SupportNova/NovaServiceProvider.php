@@ -13,12 +13,14 @@ class NovaServiceProvider extends Feature
         return AssetType::NovaResources;
     }
 
+    #[\Override]
     public static function shouldRegisterFeature(): bool
     {
         return parent::shouldRegisterFeature()
             && class_exists(Nova::class);
     }
 
+    #[\Override]
     public function boot(): void
     {
         /** @phpstan-ignore class.notFound */

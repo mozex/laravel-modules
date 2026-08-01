@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\First\Console\Commands;
 
 use App\Console\Commands\AppCommand;
@@ -12,6 +14,7 @@ class ExtendedCommand extends AppCommand
 
     protected $description = 'Extended Command';
 
+    #[\Override]
     public function handle(): void
     {
         info('Extended Command');

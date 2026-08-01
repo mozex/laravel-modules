@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\First\Filament\Dashboard\Widgets;
 
 use Filament\Widgets\ChartWidget;

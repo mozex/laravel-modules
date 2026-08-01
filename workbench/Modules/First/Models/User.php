@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\First\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;

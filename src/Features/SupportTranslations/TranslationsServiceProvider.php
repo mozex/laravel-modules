@@ -12,6 +12,7 @@ class TranslationsServiceProvider extends Feature
         return AssetType::Translations;
     }
 
+    #[\Override]
     public function boot(): void
     {
         static::asset()->scout()->collect()

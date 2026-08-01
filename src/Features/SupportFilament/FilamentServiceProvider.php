@@ -22,12 +22,14 @@ class FilamentServiceProvider extends Feature
         ];
     }
 
+    #[\Override]
     public static function shouldRegisterFeature(): bool
     {
         return parent::shouldRegisterFeature()
             && class_exists(Filament::class);
     }
 
+    #[\Override]
     public function register(): void
     {
         $this->callAfterResolving(PanelRegistry::class, function (PanelRegistry $panelRegistry): void {

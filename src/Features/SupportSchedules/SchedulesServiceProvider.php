@@ -13,6 +13,7 @@ class SchedulesServiceProvider extends Feature
         return AssetType::Schedules;
     }
 
+    #[\Override]
     public function boot(): void
     {
         $this->callAfterResolving(Schedule::class, function (Schedule $schedule): void {

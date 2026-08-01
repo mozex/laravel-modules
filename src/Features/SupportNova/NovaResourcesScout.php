@@ -17,6 +17,7 @@ class NovaResourcesScout extends ModuleClassScout
         return AssetType::NovaResources;
     }
 
+    #[\Override]
     protected function definition(): Discover
     {
         return parent::definition()

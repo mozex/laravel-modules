@@ -12,6 +12,7 @@ class RegisterServiceProviders extends Feature
         return AssetType::ServiceProviders;
     }
 
+    #[\Override]
     public function register(): void
     {
         static::asset()->scout()->collect()

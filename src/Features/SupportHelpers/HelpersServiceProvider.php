@@ -12,6 +12,7 @@ class HelpersServiceProvider extends Feature
         return AssetType::Helpers;
     }
 
+    #[\Override]
     public function register(): void
     {
         static::asset()->scout()->collect()

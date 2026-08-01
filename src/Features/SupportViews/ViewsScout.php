@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Mozex\Modules\Features\SupportViews;
 
 use Mozex\Modules\Contracts\ModuleDirectoryScout;

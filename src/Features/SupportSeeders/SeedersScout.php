@@ -17,6 +17,7 @@ class SeedersScout extends ModuleClassScout
         return AssetType::Seeders;
     }
 
+    #[\Override]
     protected function definition(): Discover
     {
         return parent::definition()

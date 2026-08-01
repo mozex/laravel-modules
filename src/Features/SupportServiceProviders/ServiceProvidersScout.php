@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Mozex\Modules\Features\SupportServiceProviders;
 
 use Illuminate\Support\ServiceProvider;
@@ -15,6 +17,7 @@ class ServiceProvidersScout extends ModuleClassScout
         return AssetType::ServiceProviders;
     }
 
+    #[\Override]
     protected function definition(): Discover
     {
         return parent::definition()

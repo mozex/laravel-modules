@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\First\Filament\Admin\Resources;
 
 use App\Filament\Dashboard\Clusters\Test;

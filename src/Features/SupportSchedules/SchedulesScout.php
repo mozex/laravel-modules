@@ -17,6 +17,7 @@ class SchedulesScout extends ModuleClassScout
         return AssetType::Schedules;
     }
 
+    #[\Override]
     protected function definition(): Discover
     {
         return parent::definition()

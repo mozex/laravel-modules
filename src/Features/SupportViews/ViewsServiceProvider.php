@@ -12,6 +12,7 @@ class ViewsServiceProvider extends Feature
         return AssetType::Views;
     }
 
+    #[\Override]
     public function boot(): void
     {
         static::asset()->scout()->collect()

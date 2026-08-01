@@ -7,6 +7,7 @@ use Illuminate\View\View;
 
 abstract class BaseChained extends SimplePage
 {
+    #[\Override]
     public function render(): View
     {
         return view('first::livewire.chained', [

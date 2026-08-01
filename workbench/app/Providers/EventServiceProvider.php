@@ -9,11 +9,13 @@ use Mozex\Modules\Facades\Modules;
 
 class EventServiceProvider extends ServiceProvider
 {
+    #[\Override]
     public function shouldDiscoverEvents(): bool
     {
         return true;
     }
 
+    #[\Override]
     protected function discoverEventsWithin(): array
     {
         return [
@@ -21,6 +23,7 @@ class EventServiceProvider extends ServiceProvider
         ];
     }
 
+    #[\Override]
     protected function eventDiscoveryBasePath(): string
     {
         return realpath(Modules::basePath());
