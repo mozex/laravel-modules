@@ -17,7 +17,11 @@ it('does not emit deprecations when guessing non-module model names', function (
     $deprecations = [];
 
     set_error_handler(function (int $errno, string $errstr) use (&$deprecations): bool {
-        $deprecations[] = $errstr;
+        // Unrelated deprecations can fire from old framework versions on new
+        // PHP; only the reflection call this package makes is under test.
+        if (str_contains($errstr, 'ReflectionProperty::setValue()')) {
+            $deprecations[] = $errstr;
+        }
 
         return true;
     }, E_DEPRECATED | E_USER_DEPRECATED);

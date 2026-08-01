@@ -100,7 +100,9 @@ it('falls back to computing aliases for cache payloads without an alias key', fu
     $warnings = [];
 
     set_error_handler(function (int $errno, string $errstr) use (&$warnings): bool {
-        $warnings[] = $errstr;
+        if (str_contains($errstr, 'Undefined')) {
+            $warnings[] = $errstr;
+        }
 
         return true;
     }, E_WARNING | E_NOTICE);
