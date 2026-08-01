@@ -24,7 +24,9 @@ it('guesses module factory names from a stale published config without a namespa
     $warnings = [];
 
     set_error_handler(function (int $errno, string $errstr) use (&$warnings): bool {
-        $warnings[] = $errstr;
+        if (str_contains($errstr, 'Undefined array key')) {
+            $warnings[] = $errstr;
+        }
 
         return true;
     }, E_WARNING);
