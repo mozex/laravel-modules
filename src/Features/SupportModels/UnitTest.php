@@ -13,6 +13,24 @@ use Modules\Second\Database\Factories\TeamFactory;
 use Modules\Second\Models\Nested\NestedTeam;
 use Modules\Second\Models\Team;
 
+it('does not emit deprecations when guessing non-module model names', function (): void {
+    $deprecations = [];
+
+    set_error_handler(function (int $errno, string $errstr) use (&$deprecations): bool {
+        $deprecations[] = $errstr;
+
+        return true;
+    }, E_DEPRECATED | E_USER_DEPRECATED);
+
+    try {
+        (new TestFactory)->modelName();
+    } finally {
+        restore_error_handler();
+    }
+
+    expect($deprecations)->toBeEmpty();
+});
+
 it('can guess model name', function (): void {
     expect((new TestFactory)->modelName())->toBe(Test::class)
         ->and((new UserFactory)->modelName())->toBe(User::class)

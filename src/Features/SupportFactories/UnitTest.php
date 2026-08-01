@@ -12,6 +12,32 @@ use Modules\Second\Database\Factories\Nested\NestedTeamFactory;
 use Modules\Second\Database\Factories\TeamFactory;
 use Modules\Second\Models\Nested\NestedTeam;
 use Modules\Second\Models\Team;
+use Mozex\Modules\Enums\AssetType;
+
+it('guesses module factory names from a stale published config without a namespace key', function (): void {
+    $config = config('modules.'.AssetType::Factories->value);
+
+    unset($config['namespace']);
+
+    config()->set('modules.'.AssetType::Factories->value, $config);
+
+    $warnings = [];
+
+    set_error_handler(function (int $errno, string $errstr) use (&$warnings): bool {
+        $warnings[] = $errstr;
+
+        return true;
+    }, E_WARNING);
+
+    try {
+        $factory = User::factory();
+    } finally {
+        restore_error_handler();
+    }
+
+    expect($warnings)->toBeEmpty()
+        ->and($factory)->toBeInstanceOf(UserFactory::class);
+});
 
 it('can guess factory name', function (): void {
     expect(Test::factory())->toBeInstanceOf(TestFactory::class)
