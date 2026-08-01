@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Mozex\Modules\Features\SupportCaching;
 
 use Illuminate\Console\Command;
@@ -17,9 +19,17 @@ class ClearCommand extends Command
 
     public function handle(): void
     {
+        $scouts = AssetType::activeScouts();
+
+        if ($scouts->isEmpty()) {
+            $this->components->info('No active module asset types to clear.');
+
+            return;
+        }
+
         progress(
             label: 'Clearing Modules Cache',
-            steps: AssetType::activeScouts(),
+            steps: $scouts,
             callback: function (BaseScout $scout, Progress $progress): void {
                 $progress->label("Clearing {$scout->asset()->title()}");
 

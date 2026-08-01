@@ -49,6 +49,17 @@ class ModulesServiceProvider extends PackageServiceProvider
 
     public function packageRegistered(): void
     {
+        // Pin the facade's instance into the container so injected instances
+        // share state with facade calls made before this provider registered
+        // (e.g. routeGroup() from an app provider).
+        $this->app->instance(Modules::class, Facades\Modules::getFacadeRoot());
+
+        $this->optimizes(
+            optimize: 'modules:cache',
+            clear: 'modules:clear',
+            key: 'modules',
+        );
+
         RuntimeCache::install();
 
         $this->registerFeatures();
