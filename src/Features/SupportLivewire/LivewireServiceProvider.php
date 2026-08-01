@@ -31,7 +31,7 @@ class LivewireServiceProvider extends Feature
                 $viewDirectory = sprintf(
                     '%s/%s',
                     dirname($asset['path']),
-                    $config['view_path']
+                    $config['view_path'] ?? 'Resources/views/livewire'
                 );
 
                 Livewire::addNamespace(

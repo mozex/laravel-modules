@@ -30,7 +30,7 @@ class ConfigsServiceProvider extends Feature
 
                 $config->set(
                     key: $key,
-                    value: static::asset()->config()['priority']
+                    value: static::asset()->config()['priority'] ?? true
                         ? array_merge(
                             $config->get($key, []),
                             require $asset['path']

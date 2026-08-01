@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Mozex\Modules\Enums\AssetType;
 use Mozex\Modules\Facades\Modules;
 use Mozex\Modules\Features\SupportRoutes\RoutesScout;
+use Mozex\Modules\Features\SupportRoutes\RoutesServiceProvider;
 
 test('scout will not collect when disabled', function (): void {
     config()->set(
@@ -20,6 +21,18 @@ test('scout will not collect when disabled', function (): void {
     expect($discoverer->get())->toHaveCount(0);
 
     $discoverer->clear();
+});
+
+test('booting survives a stale published config without filename keys', function (): void {
+    $config = config('modules.'.AssetType::Routes->value);
+
+    unset($config['commands_filenames'], $config['channels_filenames']);
+
+    config()->set('modules.'.AssetType::Routes->value, $config);
+
+    (new RoutesServiceProvider(app()))->boot();
+
+    expect(true)->toBeTrue();
 });
 
 test('discovering will work', function (bool $cache): void {
