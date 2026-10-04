@@ -2,6 +2,14 @@
 
 All notable changes to `laravel-modules` will be documented in this file.
 
+## 2.13.1 - 2026-10-04
+
+### What's Changed
+
+* Improve package setup
+
+**Full Changelog**: https://github.com/mozex/laravel-modules/compare/2.13.0...2.13.1
+
 ## 2.13.0 - 2026-08-01
 
 ### What's new
@@ -52,6 +60,7 @@ use Spatie\StructureDiscoverer\Cache\DiscoverCacheDriver;
 BaseScout::useCacheDriverFactory(
     fn (BaseScout $scout): DiscoverCacheDriver => new YourDriver($scout->cacheFile())
 );
+
 
 
 ```
