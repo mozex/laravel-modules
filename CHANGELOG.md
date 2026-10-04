@@ -2,6 +2,14 @@
 
 All notable changes to `laravel-modules` will be documented in this file.
 
+## 3.4.1 - 2026-10-04
+
+### What's Changed
+
+* Improve package setup
+
+**Full Changelog**: https://github.com/mozex/laravel-modules/compare/3.4.0...3.4.1
+
 ## 3.4.0 - 2026-08-01
 
 ### What's new
@@ -52,6 +60,7 @@ use Spatie\StructureDiscoverer\Cache\DiscoverCacheDriver;
 BaseScout::useCacheDriverFactory(
     fn (BaseScout $scout): DiscoverCacheDriver => new YourDriver($scout->cacheFile())
 );
+
 
 
 ```
@@ -153,6 +162,7 @@ Place SFCs and MFCs in your module's `Resources/views/livewire/` directory and t
 
 
 
+
 ```
 ##### Namespace-Based Registration
 
@@ -183,6 +193,7 @@ Add `view_path` to the `livewire-components` section if you've published the con
     ],
     'view_path' => 'Resources/views/livewire', // New in v3
 ],
+
 
 
 
