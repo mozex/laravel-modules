@@ -46,13 +46,13 @@ composer dump-autoload
 
 That's it. The package auto-registers its service provider through Laravel's package discovery. All features are enabled by default.
 
-If you want to change any defaults (disable features, adjust discovery patterns, set module load order), publish the config file:
+If you want to change any defaults (disable features, adjust discovery patterns, set module load order), run the install command:
 
 ```bash
-php artisan vendor:publish --tag=laravel-modules-config
+php artisan modules:install
 ```
 
-This creates `config/modules.php` with every option documented inline.
+It publishes `config/modules.php` with every option documented inline.
 
 ## Module structure
 

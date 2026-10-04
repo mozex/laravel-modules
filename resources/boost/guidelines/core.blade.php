@@ -47,7 +47,7 @@ Routes don't use this prefix. They're grouped by the route filename: `web.php` g
 
 ### Module activation and load order
 
-`config/modules.php` controls which modules are active and the order they load:
+`config/modules.php` (published by `php artisan modules:install`) controls which modules are active and the order they load:
 
 ```php
 'modules' => [

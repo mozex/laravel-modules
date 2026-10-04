@@ -92,10 +92,10 @@ Regenerate the autoloader:
 composer dump-autoload
 ```
 
-Optionally publish the config to change defaults:
+Optionally run the install command, which publishes `config/modules.php` so you can change the defaults:
 
 ```bash
-php artisan vendor:publish --tag=laravel-modules-config
+php artisan modules:install
 ```
 
 ## Quick Start
