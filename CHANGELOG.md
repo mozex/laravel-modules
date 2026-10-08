@@ -2,6 +2,21 @@
 
 All notable changes to `laravel-modules` will be documented in this file.
 
+## 2.14.0 - 2026-10-08
+
+### What's Changed
+
+* Drop Laravel 11 support
+* Bump minimum `laravel/framework` requirement from `^11.29.0|^12.0|^13.0` to `^12.69.0|^13.30.0`
+* Correct the documented PHP minimum to 8.3, matching `composer.json`
+* Add the package banner and icon
+
+Laravel 11 stopped receiving security fixes on March 12, 2026. Three advisories published since then ([GHSA-5vg9-5847-vvmq](https://github.com/advisories/GHSA-5vg9-5847-vvmq), [GHSA-crmm-hgp2-wgrp](https://github.com/advisories/GHSA-crmm-hgp2-wgrp) and [GHSA-jh5r-qr3c-85q8](https://github.com/advisories/GHSA-jh5r-qr3c-85q8)) affect every Laravel 11 release and were fixed only in Laravel 12 and 13. The new minimums, 12.69.0 and 13.30.0, are the first releases that include all three fixes.
+
+If your app is still on Laravel 11, Composer keeps you on 2.13.1.
+
+**Full Changelog**: https://github.com/mozex/laravel-modules/compare/2.13.1...2.14.0
+
 ## 2.13.1 - 2026-10-04
 
 ### What's Changed
@@ -60,6 +75,7 @@ use Spatie\StructureDiscoverer\Cache\DiscoverCacheDriver;
 BaseScout::useCacheDriverFactory(
     fn (BaseScout $scout): DiscoverCacheDriver => new YourDriver($scout->cacheFile())
 );
+
 
 
 
