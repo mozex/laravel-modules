@@ -1,3 +1,5 @@
+![Laravel Modules](https://raw.githubusercontent.com/mozex/laravel-modules/main/art/banner.png)
+
 # Laravel Modules
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/mozex/laravel-modules.svg?style=flat-square)](https://packagist.org/packages/mozex/laravel-modules)
