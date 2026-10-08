@@ -7,7 +7,7 @@ Laravel Modules gives your Laravel application a modular directory structure wit
 
 No boilerplate. No manual registration arrays. Just follow the conventions and your modules work.
 
-This is the 2.x version of the package. It supports PHP 8.2+, Laravel 10/11/12/13, Livewire v3, and Filament v3/v4. If you need Livewire v4 or Filament v5, use the [3.x version](https://github.com/mozex/laravel-modules) instead.
+This is the 2.x version of the package. It supports PHP 8.3+, Laravel 12/13, Livewire v3, and Filament v3/v4. If you need Livewire v4 or Filament v5, use the [3.x version](https://github.com/mozex/laravel-modules) instead.
 
 ## How it works
 

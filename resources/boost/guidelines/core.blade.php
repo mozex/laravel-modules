@@ -1,7 +1,7 @@
 @verbatim
 ## mozex/laravel-modules
 
-Laravel package that auto-discovers module assets from a `Modules/` directory at the project root. Requires PHP ^8.2 and Laravel ^10.34|^11.29|^12|^13. Optional: Livewire ^3, Filament ^3 or ^4.
+Laravel package that auto-discovers module assets from a `Modules/` directory at the project root. Requires PHP ^8.3 and Laravel ^12.69|^13.30. Optional: Livewire ^3, Filament ^3 or ^4.
 
 This is the 2.x version. If the project uses Livewire v4 or Filament v5, it needs the 3.x version of this package instead.
 

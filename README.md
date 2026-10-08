@@ -69,7 +69,7 @@ Business sponsors get logo placement in package READMEs. [**See sponsorship tier
 
 ## Installation
 
-> **Requires [PHP 8.2+](https://php.net/releases/)** - see [all version requirements](https://mozex.dev/docs/laravel-modules/v2/requirements)
+> **Requires [PHP 8.3+](https://php.net/releases/)** - see [all version requirements](https://mozex.dev/docs/laravel-modules/v2/requirements)
 
 ```bash
 composer require mozex/laravel-modules
