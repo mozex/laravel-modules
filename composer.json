@@ -33,7 +33,7 @@
     ],
     "require": {
         "php": "^8.3.0",
-        "laravel/framework": "^11.29.0|^12.0|^13.0",
+        "laravel/framework": "^12.69.0|^13.30.0",
         "spatie/laravel-package-tools": "^1.19.0",
         "spatie/php-structure-discoverer": "^2.4.1",
         "spatie/regex": "^3.1"
@@ -47,7 +47,7 @@
         "larastan/larastan": "^3.1.0",
         "laravel/pint": "^1.16.1",
         "livewire/livewire": "^4.2.2",
-        "orchestra/testbench": "^9.2|^10.0|^11.0",
+        "orchestra/testbench": "^10.0|^11.0",
         "pestphp/pest": "^3.0.0|^4.0.0|^5.0.0",
         "pestphp/pest-plugin-type-coverage": "^3.0.0|^4.0.0|^5.0.1",
         "phpstan/extension-installer": "^1.1",

@@ -38,13 +38,10 @@ jobs:
       fail-fast: true
       matrix:
         php: [8.3, 8.4, 8.5]
-        laravel: [13.*, 12.*, 11.*]
+        laravel: [13.*, 12.*]
         filament: ["^5.6.0"]
         dependency-version: [prefer-lowest, prefer-stable]
         include:
-          - laravel: "11.*"
-            testbench: "^9.2"
-            carbon: "^3.8.4"
           - laravel: "12.*"
             testbench: "10.*"
             carbon: "^3.8.4"

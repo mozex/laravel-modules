@@ -85,7 +85,7 @@ Scouts resolve a `TieredDiscoverCacheDriver`: an in-memory static layer over a `
 
 ## CI matrix
 
-Tests run on PHP 8.3/8.4/8.5 × Laravel 11/12/13 × prefer-lowest/prefer-stable on Ubuntu.
+Tests run on PHP 8.3/8.4/8.5 × Laravel 12/13 × prefer-lowest/prefer-stable on Ubuntu.
 
 ## Adding a new feature
 

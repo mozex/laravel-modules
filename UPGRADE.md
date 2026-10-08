@@ -7,7 +7,7 @@
 | Dependency | Required Version |
 |---|---|
 | PHP | `^8.3` |
-| Laravel | `^11.29 \| ^12.0 \| ^13.0` |
+| Laravel | `^12.69 \| ^13.30` |
 | Livewire | `^4.0` |
 | Filament | `^5.0` |
 

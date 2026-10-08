@@ -1,7 +1,7 @@
 @verbatim
 ## mozex/laravel-modules
 
-Laravel package that auto-discovers module assets from a `Modules/` directory at the project root. Requires PHP ^8.3 and Laravel ^11.29|^12|^13. Optional: Livewire ^4, Filament ^5.
+Laravel package that auto-discovers module assets from a `Modules/` directory at the project root. Requires PHP ^8.3 and Laravel ^12.69|^13.30. Optional: Livewire ^4, Filament ^5.
 
 Modules live in `Modules/` at the project root (NOT under `app/Modules/`), and every class inside a module uses the `Modules\{ModuleName}\...` namespace. The `Modules\\` PSR-4 mapping is added to the project's `composer.json` once during package installation; don't re-check or re-add it when creating modules.
 
