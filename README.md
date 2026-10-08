@@ -1,4 +1,4 @@
-![Laravel Modules](https://raw.githubusercontent.com/mozex/laravel-modules/main/art/banner.png)
+[![Laravel Modules](https://raw.githubusercontent.com/mozex/laravel-modules/main/art/banner.png)](https://mozex.dev/docs/laravel-modules/v2)
 
 # Laravel Modules
 
