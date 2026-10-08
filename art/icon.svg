@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" fill="none">
+  <defs>
+    <linearGradient id="laravel-modules-tile" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#18181b"/>
+      <stop offset="1" stop-color="#09090b"/>
+    </linearGradient>
+    <radialGradient id="laravel-modules-glow" cx="256" cy="232" r="300" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#10b981" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#10b981" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="laravel-modules-edge" x1="96" y1="0" x2="416" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#34d399" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#34d399" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#34d399" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="laravel-modules-glyph" x1="0" y1="96" x2="0" y2="416" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#34d399"/>
+      <stop offset="1" stop-color="#059669"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="96" fill="url(#laravel-modules-tile)"/>
+  <rect width="512" height="512" rx="96" fill="url(#laravel-modules-glow)"/>
+  <rect x="2" y="2" width="508" height="508" rx="94" stroke="#27272a" stroke-width="4"/>
+  <path d="M96 3H416" stroke="url(#laravel-modules-edge)" stroke-width="2"/>
+  <rect x="112" y="138" width="120" height="120" rx="30" fill="url(#laravel-modules-glyph)"/>
+  <rect x="112" y="286" width="120" height="120" rx="30" fill="url(#laravel-modules-glyph)"/>
+  <rect x="260" y="286" width="120" height="120" rx="30" fill="url(#laravel-modules-glyph)"/>
+  <rect x="282" y="108" width="120" height="120" rx="30" fill="#6ee7b7"/>
+</svg>
